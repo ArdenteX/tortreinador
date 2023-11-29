@@ -173,7 +173,7 @@ class TorchLoop:
     def fit_for_MDN(self, t_l, v_l, criterion: nn.Module = None, optim: str = 'Adam',
                     xavier_init: bool = True, model: nn.Module = None, mixture: nn.Module = None,
                     warmup_epoch: int = None,
-                    lr_milestones: list = None, gamma: float = 0.7, best_r2: float = 0.80):
+                    lr_milestones: list = None, gamma: float = 0.7, best_r2: float = 0.80, m_save_path: str = 'D:\\Resource\\MDN\\'):
 
         # Xavier Init
         if xavier_init:
@@ -294,7 +294,7 @@ class TorchLoop:
 
                 if e >= warmup_epoch:
                     if val_r2_recorder.avg > best_r2:
-                        torch.save(model.state_dict(), 'D:\\Resource\\MDN\\model_best_mdn_normalization.pth')
+                        torch.save(model.state_dict(), '{}model_best_mdn.pth'.format(m_save_path))
                         best_r2 = val_r2_recorder.avg
                         print("Save Best model: R2:{:.4f}, Loss Avg:{:.4f}".format(val_r2_recorder.avg, val_loss.avg))
 
