@@ -14,10 +14,6 @@ from TorchLoop.View import init_weights, visualize_lastlayer, visualize_train_lo
 from tensorboardX import SummaryWriter
 
 
-# Develop in MAC: /Users/xuhongtao/pycharmprojects/resource/Gas_Giants_Core_Earth20W.xlsx
-# Develop in Windows: D:\\Resource\\Gas_Giants_Core_Earth20W.xlsx
-
-
 class TorchLoop:
 
     """
