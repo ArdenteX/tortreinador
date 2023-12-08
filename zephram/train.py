@@ -7,14 +7,14 @@ from torch.utils.data import TensorDataset, DataLoader
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import r2_score
 from tqdm import tqdm
-from TorchLoop.Recorder import Recorder
-from TorchLoop.WarmUpLR import WarmUpLR
+from zephram.Recorder import Recorder
+from zephram.WarmUpLR import WarmUpLR
 
-from TorchLoop.View import init_weights, visualize_lastlayer, visualize_train_loss, visualize_test_loss, split_weights
+from zephram.View import init_weights, visualize_lastlayer, visualize_train_loss, visualize_test_loss
 from tensorboardX import SummaryWriter
 
 
-class TorchLoop:
+class TorchTrainer:
 
     """
         1. Split data, Data Normalization(choose), convert data to tensor
@@ -22,18 +22,17 @@ class TorchLoop:
         3. Implemented the train loop based on pytorch
     """
 
-    def __init__(self, batch_size: int = 512, learning_rate: float = 0.001984, is_gpu: bool = True,
-                 epoch: int = 150, weight_decay: float = None, log_dir: str = "D:\\Resource\\MDN\\Log\\"):
-        self.lr = learning_rate
+    def __init__(self, batch_size: int = 512, is_gpu: bool = True,
+                 epoch: int = 150, weight_decay: float = None, log_dir: str = None):
         self.b_s = batch_size
         self.epoch = epoch
         self.w_d = weight_decay
         self.device = torch.device('cuda' if is_gpu and torch.cuda.is_available() else 'cpu')
-        self.writer = SummaryWriter(log_dir=log_dir)
+        self.writer = eval("{}".format(SummaryWriter(log_dir=log_dir) if log_dir is not None else log_dir))
         # MSE
         self.mse = nn.MSELoss()
 
-        print("Batch size: {}, Learning rate:{}, is GPU: {}".format(self.b_s, self.lr, is_gpu))
+        print("Batch size: {}, Epoch:{}, is GPU: {}".format(self.b_s, self.epoch, is_gpu))
 
     def load_data(self, data: pd.DataFrame, input_parameters: list, output_parameters: list,
                   feature_range=None, train_size: float = 0.8, val_size: float = 0.1, test_size: float = 0.1,
@@ -43,7 +42,7 @@ class TorchLoop:
         :return:
             Train DataLoader, Validation DataLoader, Test X, Test Y, Scaler X, Scaler Y
         """
-        if (train_size + test_size + val_size) != 1 or (train_size + test_size + val_size) > 1:
+        if (train_size + test_size + val_size) != 1:
             raise ValueError("train_size + test_size + val_size must equals 1")
 
         # Data Normalization
@@ -59,8 +58,8 @@ class TorchLoop:
         test_x = None
         test_y = None
 
-        data_x = data.loc[:, input_parameters]
-        data_y = data.loc[:, output_parameters]
+        data_x = eval("data.{}[:, input_parameters]".format('iloc' if type(input_parameters[0]) == int else 'loc'))
+        data_y = eval("data.{}[:, output_parameters]".format('iloc' if type(output_parameters[0]) == int else 'loc'))
 
         v_t_sum = (val_size + test_size)
 
@@ -170,10 +169,9 @@ class TorchLoop:
         else:
             return criterion(pi, mu, sigma, y), self.mse(y_pred, y), y_pred.cpu().numpy(), y.cpu().numpy(),
 
-    def fit_for_MDN(self, t_l, v_l, criterion: nn.Module = None, optim: str = 'Adam',
-                    xavier_init: bool = True, model: nn.Module = None, mixture: nn.Module = None,
-                    warmup_epoch: int = None,
-                    lr_milestones: list = None, gamma: float = 0.7, best_r2: float = 0.80, m_save_path: str = 'D:\\Resource\\MDN\\'):
+    def fit_for_MDN(self, t_l, v_l, criterion: nn.Module, optim, model: nn.Module, model_save_path: str,
+                    mixture: nn.Module, warmup_epoch: int = None, xavier_init: bool = True,
+                    lr_milestones: list = None, gamma: float = 0.7, best_r2: float = 0.80):
 
         # Xavier Init
         if xavier_init:
@@ -190,10 +188,7 @@ class TorchLoop:
         pdf = mixture
 
         # Optimizer
-        optimizer = eval("torch.optim.{}({}, lr={}, weight_decay={})".format(optim,
-                                                                             'split_weights(model)' if xavier_init else 'model.parameters()',
-                                                                             self.lr,
-                                                                             self.w_d if self.w_d is not None else None))
+        optimizer = optim
 
         # Schedular 1
         if warmup_epoch is not None:
@@ -223,7 +218,7 @@ class TorchLoop:
             val_r2_recorder = Recorder()
             mse_recorder = Recorder()
 
-            if e > warmup_epoch and lr_milestones is not None:
+            if warmup_epoch is not None and lr_milestones is not None and e > warmup_epoch:
                 lr_schedular.step()
 
             # lr_schedular.step()
@@ -232,7 +227,7 @@ class TorchLoop:
 
             with tqdm(t_l, unit='batch') as t_epoch:
                 for x, y in t_epoch:
-                    if e <= warmup_epoch:
+                    if warmup_epoch is not None and e <= warmup_epoch :
                         warmup.step()
                     t_epoch.set_description(f"Epoch {e + 1} Training")
 
@@ -252,8 +247,10 @@ class TorchLoop:
                     optimizer.step()
 
                     n_iter = (e - 1) * len(t_l) + i + 1
-                    visualize_lastlayer(self.writer, model, n_iter)
-                    visualize_train_loss(self.writer, loss.item(), n_iter)
+
+                    if self.writer is not None:
+                        visualize_lastlayer(self.writer, model, n_iter)
+                        visualize_train_loss(self.writer, loss.item(), n_iter)
 
                     t_epoch.set_postfix(loss="{:.4f}".format(train_loss.val),
                                         lr="{:.6f}".format(optimizer.state_dict()['param_groups'][0]['lr']),
@@ -290,18 +287,16 @@ class TorchLoop:
                 epoch_val_r2.append(val_r2_recorder.avg)
                 epoch_mse.append(mse_recorder.avg)
 
-                visualize_test_loss(self.writer, epoch_val_loss[-1], e)
+                if self.writer is not None:
+                    visualize_test_loss(self.writer, epoch_val_loss[-1], e)
 
-                if e >= warmup_epoch:
-                    if val_r2_recorder.avg > best_r2:
-                        torch.save(model.state_dict(), '{}model_best_mdn.pth'.format(m_save_path))
-                        best_r2 = val_r2_recorder.avg
-                        print("Save Best model: R2:{:.4f}, Loss Avg:{:.4f}".format(val_r2_recorder.avg, val_loss.avg))
 
-                    else:
-                        print(" ")
-                else:
-                    print(" ")
+                if val_r2_recorder.avg > best_r2:
+                    torch.save(model.state_dict(), '{}model_best_mdn.pth'.format(model_save_path))
+                    best_r2 = val_r2_recorder.avg
+                    print("Save Best model: R2:{:.4f}, Loss Avg:{:.4f}".format(val_r2_recorder.avg, val_loss.avg))
+
+
 
         return epoch_train_loss, epoch_val_loss, epoch_val_r2, epoch_train_r2, epoch_mse
 
