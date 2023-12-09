@@ -1,15 +1,22 @@
 from setuptools import setup
 
-with open('D:\\PythonProject\\TorchLoop\\requirements.txt') as f:
-    required = f.read().splitlines()
-
 setup(
-    name='zephram',
+    name='tortreinador',
     version='1.0',
     author='Xavier',
     author_email='zephramxu@gmail.com',
-    url='https://github.com/ArdenteX/zephram',
-    packages=['zephram'],
-    install_requires=required
+    url='https://github.com/ArdenteX/tortreinador',
+    packages=['tortreinador', 'tortreinador.models', 'tortreinador.utils'],
+    install_requires=[
+        'pandas>=1.4.2',
+        'seaborn>=0.11.2',
+        'matplotlib>=3.5.1',
+        'torch>=2.0.0',
+        'scikit-learn>=1.0.2',
+        'tqdm>=4.64.0',
+        'tensorboardx>=2.6',
+        'numpy>=1.21.5',
+        'setuptools>=61.2.0'
+    ]
 )
 

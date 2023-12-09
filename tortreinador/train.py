@@ -7,10 +7,10 @@ from torch.utils.data import TensorDataset, DataLoader
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import r2_score
 from tqdm import tqdm
-from zephram.Recorder import Recorder
-from zephram.WarmUpLR import WarmUpLR
+from tortreinador.utils.Recorder import Recorder
+from tortreinador.utils.WarmUpLR import WarmUpLR
 
-from zephram.View import init_weights, visualize_lastlayer, visualize_train_loss, visualize_test_loss
+from tortreinador.utils.View import init_weights, visualize_lastlayer, visualize_train_loss, visualize_test_loss, split_weights
 from tensorboardX import SummaryWriter
 
 
@@ -169,13 +169,13 @@ class TorchTrainer:
         else:
             return criterion(pi, mu, sigma, y), self.mse(y_pred, y), y_pred.cpu().numpy(), y.cpu().numpy(),
 
-    def fit_for_MDN(self, t_l, v_l, criterion: nn.Module, optim, model: nn.Module, model_save_path: str,
-                    mixture: nn.Module, warmup_epoch: int = None, xavier_init: bool = True,
-                    lr_milestones: list = None, gamma: float = 0.7, best_r2: float = 0.80):
+    # Xavier init
+    def xavier_init(self, net: nn.Module):
+        return split_weights(init_weights(net))
 
-        # Xavier Init
-        if xavier_init:
-            init_weights(model)
+    def fit_for_MDN(self, t_l, v_l, criterion: nn.Module, optim, model: nn.Module, model_save_path: str,
+                    mixture: nn.Module, warmup_epoch: int = None,
+                    lr_milestones: list = None, gamma: float = 0.7, best_r2: float = 0.80):
 
         model = nn.DataParallel(model)
 
@@ -292,7 +292,7 @@ class TorchTrainer:
 
 
                 if val_r2_recorder.avg > best_r2:
-                    torch.save(model.state_dict(), '{}model_best_mdn.pth'.format(model_save_path))
+                    torch.save(model.state_dict(), '{}best_model.pth'.format(model_save_path))
                     best_r2 = val_r2_recorder.avg
                     print("Save Best model: R2:{:.4f}, Loss Avg:{:.4f}".format(val_r2_recorder.avg, val_loss.avg))
 

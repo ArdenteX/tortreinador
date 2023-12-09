@@ -3,8 +3,8 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "zephram"
-version = "0.0.1"
+name = "tortreinador"
+version = "0.0.5"
 authors = [
   { name="Xavier", email="zephramxu@example.com" },
 ]
@@ -12,11 +12,23 @@ description = "A trainer based on Pytorch"
 readme = "README.md"
 requires-python = ">=3.7"
 classifiers = [
+    "Development Status :: 3 - Alpha",
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
+    "Environment :: GPU :: NVIDIA CUDA :: 11.2",
+]
+dependencies = [
+    "pandas>=1.3.5",
+    "seaborn>=0.11.2",
+    "matplotlib>=3.4.3",
+    "scikit-learn>=1.0.2",
+    "tqdm>=4.64.0",
+    "tensorboardx>=2.5.1",
+    "numpy>=1.21.5",
+    'ipython'
 ]
 
 [project.urls]
-Homepage = "https://github.com/ArdenteX/zephram"
-Issues = "https://github.com/ArdenteX/zephram/issues"
+Homepage = "https://github.com/ArdenteX/tortreinador"
+Issues = "https://github.com/ArdenteX/tortreinador/issues"
