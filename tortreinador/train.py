@@ -23,10 +23,9 @@ class TorchTrainer:
     """
 
     def __init__(self, batch_size: int = 512, is_gpu: bool = True,
-                 epoch: int = 150, weight_decay: float = None, log_dir: str = None):
+                 epoch: int = 150, log_dir: str = None):
         self.b_s = batch_size
         self.epoch = epoch
-        self.w_d = weight_decay
         self.device = torch.device('cuda' if is_gpu and torch.cuda.is_available() else 'cpu')
         self.writer = eval("{}".format(SummaryWriter(log_dir=log_dir) if log_dir is not None else log_dir))
         # MSE
@@ -167,7 +166,7 @@ class TorchTrainer:
             return criterion(pi, mu, sigma, y), y_pred.cpu().numpy(), y.cpu().numpy()
 
         else:
-            return criterion(pi, mu, sigma, y), self.mse(y_pred, y), y_pred.cpu().numpy(), y.cpu().numpy(),
+            return criterion(pi, mu, sigma, y), self.mse(y_pred, y), y_pred.cpu().numpy(), y.cpu().numpy()
 
     # Xavier init
     def xavier_init(self, net: nn.Module):
