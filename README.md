@@ -143,6 +143,12 @@ This package just support MDN for now, but the ```load_data``` is suitable for e
          + lr_milestones: Optional[list] = None ***Decrease learning rate according the input list and gamma, for example: lr_milestones=[10], gamma=0.7, then the learning rate will x0.7 at the 10 epoch***
          + gamma: float = 0.7
          + best_r2: float = 0.80
+       + Return:
+         + train loss: List
+         + validation loss: list
+         + validation R2: list
+         + train R2: list
+         + validation mse: list
 
 
 
