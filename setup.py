@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='tortreinador',
-    version='1.0',
+    version='0.0.6',
     author='Xavier',
     author_email='zephramxu@gmail.com',
     url='https://github.com/ArdenteX/tortreinador',
@@ -11,7 +11,6 @@ setup(
         'pandas>=1.4.2',
         'seaborn>=0.11.2',
         'matplotlib>=3.5.1',
-        'torch>=2.0.0',
         'scikit-learn>=1.0.2',
         'tqdm>=4.64.0',
         'tensorboardx>=2.6',
