@@ -1,4 +1,5 @@
 import torch
+from torch.distributions import Categorical, Normal
 
 
 def _check_is_tensor(x):
@@ -28,4 +29,22 @@ def r2_score(y_ture, y_pred):
     r2 = 1 - ss_res / ss_tot
 
     return torch.mean(r2)
+
+
+def mixture(pi, mu, sigma, sample_for='train'):
+    cat = Categorical(logits=pi)
+
+    select_idx = cat.sample()
+
+    # Advance Indexing
+    mu_selected = mu[torch.arange(mu.shape[0]), select_idx, :]
+    sigma_selected = sigma[torch.arange(sigma.shape[0]), select_idx, :]
+
+    pdf = Normal(loc=mu_selected, scale=sigma_selected)
+
+    if sample_for == 'train':
+        return pdf
+
+    else:
+        return pdf, select_idx, mu_selected, sigma_selected
 
