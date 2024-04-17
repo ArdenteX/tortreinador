@@ -19,14 +19,13 @@ class TorchTrainer:
 
     def __init__(self, batch_size: int = 512, is_gpu: bool = True,
                  epoch: int = 150, log_dir: str = None):
-        self.b_s = batch_size
         self.epoch = epoch
         self.device = torch.device('cuda' if is_gpu and torch.cuda.is_available() else 'cpu')
         self.writer = SummaryWriter(log_dir=log_dir) if log_dir is not None else log_dir
         # MSE
         self.mse = nn.MSELoss()
 
-        print("Batch size: {}, Epoch:{}, is GPU: {}".format(self.b_s, self.epoch, is_gpu))
+        print("Batch size: {}, Epoch:{}, is GPU: {}".format(self.epoch, is_gpu))
 
     def _calculate(self, model, pdf, x, y, criterion, loss_recorder, metric_recorder, t='train'):
         pi, mu, sigma = model(x)
@@ -85,6 +84,7 @@ class TorchTrainer:
             warmup = WarmUpLR(optimizer, len(t_l) * warmup_epoch)
 
         # Schedular 2
+        # todo: fix bug
         if lr_milestones is not None:
             lr_schedular = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=lr_milestones, gamma=gamma)
 

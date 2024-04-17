@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "tortreinador"
 version = "0.0.6"
 authors = [
-  { name="Xavier", email="zephramxu@example.com" },
+  { name="Xavier", email="zephramxu@gmail.com" },
 ]
 description = "A trainer based on Pytorch"
 readme = "README.md"
