@@ -1,12 +1,11 @@
 import torch
 import torch.nn as nn
 from torch.optim import Optimizer
-from utils.metrics import r2_score, mixture
+from tortreinador.utils.metrics import r2_score, mixture
 from tqdm import tqdm
-from utils.Recorder import Recorder
-from utils.WarmUpLR import WarmUpLR
-from utils.View import init_weights, visualize_lastlayer, visualize_train_loss, visualize_test_loss, \
-    split_weights
+from tortreinador.utils.Recorder import Recorder
+from tortreinador.utils.WarmUpLR import WarmUpLR
+from tortreinador.utils.View import visualize_lastlayer, visualize_train_loss, visualize_test_loss
 from tensorboardX import SummaryWriter
 
 
