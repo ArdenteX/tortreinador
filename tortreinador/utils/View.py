@@ -134,8 +134,7 @@ def visualize_learning_rate(writer, lr, epoch):
 
 
 # Xavier init
-def xavier_init(self, net: nn.Module):
-    return split_weights(init_weights(net))
+
 
 # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # net = eca_resnet50(num_classes=2)

@@ -15,12 +15,13 @@ from tortreinador.utils.plot import plot_line_2
 from tortreinador.utils.preprocessing import load_data
 from tortreinador.train import TorchTrainer
 from tortreinador.models.MDN import mdn, Mixture, NLLLoss
+from tortreinador.utils.tools import xavier_init
 from tortreinador.utils.View import init_weights, split_weights
 import torch
 import pandas as pd
 
-df_GG = pd.read_excel('D:\\Resource\\Gas_Giants_Core_Earth20W.xlsx')
-df_GG['M_total (M_E)'] = df_GG['Mcore (M_J/10^3)'] + df_GG['Menv (M_E)']
+data = pd.read_excel('D:\\Resource\\Gas_Giants_Core_Earth20W.xlsx')
+data['M_total (M_E)'] = data['Mcore (M_J/10^3)'] + data['Menv (M_E)']
 
 # Support index, e.g input_parameters = [0, 1, 2]
 input_parameters = [
@@ -36,31 +37,35 @@ output_parameters = [
     'T_CEB (K)'
 ]
 # Load Data
-t_loader, v_loader, t_x, t_y, m_x, m_y = load_data(df_GG, input_parameters, output_parameters, batch_size=256)
+t_loader, v_loader, t_x, t_y, m_x, m_y = load_data(data, input_parameters, output_parameters, batch_size=256)
 
-trainer = TorchTrainer(epoch=200)
-
-# Model & Xavier Init
 model = mdn(len(input_parameters), len(output_parameters), 20, 512)
-init_weights(model)
-
-# Loss
 criterion = NLLLoss()
+optim = torch.optim.Adam(xavier_init(model), lr=0.0001, weight_decay=0.001)
 
-# Mixture
-pdf = Mixture()
+trainer = TorchTrainer(is_gpu=True, epoch=50, optimizer=optim, model=model, criterion=criterion)
 
-# Optimizer
-optim = torch.optim.Adam(split_weights(model), lr=0.0005, weight_decay=0.001)
-
+'''
+        kwargs: model_save_path -> m_p, warmup_epoch(option) -> w_e, lr_milestones and gamma(option) -> l_m, best_metric(eg: r2) -> b_m
+'''
+config = {
+    'b_m': 0.8,
+    'm_p': 'D:\\Resource\\MDN\\PackageTest\\savedModel\\',
+    'w_e': 5,
+    'l_m': {
+        's_l': [20, 40],
+        'gamma': 0.7
+    }
+}
 # Training
-t_l, v_l, val_r2, train_r2, mse = trainer.fit_for_MDN(t_loader, v_loader, criterion, model=model, mixture=pdf, model_save_path='D:\\Resource\\MDN\\GrainExoModel\\', optim=optim, best_r2=0.8, lr_milestones=[15, 45, 60, 110, 130, 150], gamma=0.7)
+result = trainer.fit(t_loader, v_loader, **config)
+
 
 # Plot line chart
 result_pd = pd.DataFrame()
-result_pd['epoch'] = range(200)
-result_pd['train_r2_avg'] = train_r2
-result_pd['val_r2_avg'] = val_r2
+result_pd['epoch'] = len(result[0])
+result_pd['train_r2_avg'] = result[4]
+result_pd['val_r2_avg'] = result[3]
 
 plot_line_2(y_1='train_r2_avg', y_2='val_r2_avg', df=result_pd, fig_size=(10, 6), output_path=".\\imgs\\GasGiants_MDN20240116_TrainValR2_2.png", dpi=300)
 ```
@@ -119,37 +124,20 @@ This package just support MDN for now, but the ```load_data``` is suitable for e
          + criterion: Any,
          + t: str = 'train'
        ```python
-       # Make sure your return are including a dict and loss(train) or mse(validate)
-       def _calculate(self, model, pdf, x, y, criterion, loss_recorder, metric_recorder, t='train'):
-            pi, mu, sigma = model(x)
-            
-            mixture = pdf(pi, mu, sigma)
-            
-            y_pred = mixture.sample()
-            
-            loss = criterion(pi, mu, sigma, y)
-            
+       # Please call self._standard_return() at the end
+       def calculate(self, x, y, mode='t'):
+
+            pi, mu, sigma = self.model(x)
+
+            loss = self.criterion(pi, mu, sigma, y)
+
+            pdf = mixture(pi, mu, sigma)
+
+            y_pred = pdf.sample()
+
             metric_per = r2_score(y, y_pred)
             
-            loss_recorder.update(loss.item())
-            metric_recorder.update(metric_per.item())
-            
-            if t == 'train':
-                return {
-                           'loss': (loss_recorder.val, '.4f'),
-                           'loss_avg': (loss_recorder.avg, '.4f'),
-                           'r2': (metric_recorder.avg, '.4f'),
-                       }, loss
-            
-            
-            else:
-                mse = self.mse(y, y_pred).item()
-                return {
-                           'loss': (loss_recorder.val, '.4f'),
-                           'loss_avg': (loss_recorder.avg, '.4f'),
-                           'r2': (metric_recorder.avg, '.4f'),
-                           'mse': (mse, '.4f')
-                       }, mse
+            return self._standard_return(loss, metric_per, mode, y, y_pred)
          ```
      + fit_for_MDN()
        + Describe: ***Train loop for MDN(Mixture Density Network)*** 

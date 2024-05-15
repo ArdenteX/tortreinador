@@ -57,6 +57,10 @@ class TorchTrainer:
 
         metric_per = r2_score(y, y_pred)
 
+        return self._standard_return(loss, metric_per, mode, y, y_pred)
+
+    def _standard_return(self, loss, metric_per, mode, y, y_pred):
+
         if mode == 't':
             return [loss, metric_per, 't']
 
@@ -98,7 +102,7 @@ class TorchTrainer:
     '''
         Parameter Check
 
-        :param b_m: A param like R-Square, this param is used for judging the model can be save or not
+        :param b_m: A param like R-Square, this param is used to judging the model can be save or not
         :return: bool
     '''
 
@@ -120,7 +124,7 @@ class TorchTrainer:
         kwargs: model_save_path -> m_p, warmup_epoch(option) -> w_e, lr_milestones and gamma(option) -> l_m, best_metric(eg: r2) -> b_m
     '''
 
-    def fit_for_MDN(self, t_l, v_l, **kwargs):
+    def fit(self, t_l, v_l, **kwargs):
         if not self._check_param_exist(kwargs['b_m']):
             raise ValueError('Best metric does not exist')
 
