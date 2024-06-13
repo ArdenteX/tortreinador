@@ -14,7 +14,6 @@ class TorchTrainer:
         Implemented the train loop based on pytorch
 
         kwargs: is_gpu, epoch, model, optimizer, criterion, validation_metric(eg: validation MSE)
-
     """
 
     def __init__(self,
@@ -34,14 +33,23 @@ class TorchTrainer:
         self.device = torch.device('cuda' if is_gpu and torch.cuda.is_available() else 'cpu')
         self.writer = SummaryWriter(log_dir=log_dir) if log_dir is not None else log_dir
 
-        self.train_loss_recorder = Recorder()
-        self.val_loss_recorder = Recorder()
-        self.train_metric_recorder = Recorder()
-        self.val_metric_recorder = Recorder()
+        self.train_loss_recorder = Recorder(self.device.type)
+        self.val_loss_recorder = Recorder(self.device.type)
+        self.train_metric_recorder = Recorder(self.device.type)
+        self.val_metric_recorder = Recorder(self.device.type)
 
         if extra_metric is not None:
             self.extra_metric = extra_metric
-            self.extra_recorder = Recorder()
+            self.extra_recorder = Recorder(self.device.type)
+
+        self.epoch_train_loss = Recorder(self.device.type)
+        self.epoch_val_loss = Recorder(self.device.type)
+        self.epoch_train_metric = Recorder(self.device.type)
+        self.epoch_val_metric = Recorder(self.device.type)
+        self.epoch_extra_metric = None
+
+        if 'extra_metric' in self.__dict__:
+            self.epoch_extra_metric = torch.Tensor([]).to(self.device)
 
         print("Epoch:{}, is GPU: {}".format(epoch, is_gpu))
 
@@ -72,31 +80,31 @@ class TorchTrainer:
 
     def cal_result(self, *args):
         if args[-1] == 't':
-            self.train_loss_recorder.update(args[0].item())
-            self.train_metric_recorder.update(args[1].item())
+            self.train_loss_recorder.update(args[0])
+            self.train_metric_recorder.update(args[1])
             return {
-                'loss': (self.train_loss_recorder.val, '.4f'),
-                'loss_avg': (self.train_loss_recorder.avg, '.4f'),
-                'train_metric': (self.train_metric_recorder.avg, '.4f')
+                'loss': (self.train_loss_recorder.val[-1].item(), '.4f'),
+                'loss_avg': (self.train_loss_recorder.avg().item(), '.4f'),
+                'train_metric': (self.train_metric_recorder.avg().item(), '.4f')
             }, args[0]
 
         elif args[-1] == 'v':
-            self.val_loss_recorder.update(args[0].item())
-            self.val_metric_recorder.update(args[1].item())
+            self.val_loss_recorder.update(args[0])
+            self.val_metric_recorder.update(args[1])
             if len(args[:-1]) == 4:
-                self.extra_recorder.update(self.extra_metric(args[2], args[3]).item())
+                self.extra_recorder.update(self.extra_metric(args[2], args[3]))
                 return {
-                    'loss': (self.val_loss_recorder.val, '.4f'),
-                    'loss_avg': (self.val_loss_recorder.avg, '.4f'),
-                    'val_metric': (self.val_metric_recorder.avg, '.4f'),
-                    'extra_metric': (self.extra_recorder.avg, '.4f')
+                    'loss': (self.val_loss_recorder.val[-1].item(), '.4f'),
+                    'loss_avg': (self.val_loss_recorder.avg().item(), '.4f'),
+                    'val_metric': (self.val_metric_recorder.avg().item(), '.4f'),
+                    'extra_metric': (self.extra_recorder.avg().item(), '.4f')
                 }
 
             else:
                 return {
-                    'loss': (self.val_loss_recorder.val, '.4f'),
-                    'loss_avg': (self.val_loss_recorder.avg, '.4f'),
-                    'val_metric': (self.val_metric_recorder.avg, '.4f'),
+                    'loss': (self.val_loss_recorder.val[-1].item(), '.4f'),
+                    'loss_avg': (self.val_loss_recorder.avg().item(), '.4f'),
+                    'val_metric': (self.val_metric_recorder.avg().item(), '.4f'),
                 }
 
     '''
@@ -138,6 +146,7 @@ class TorchTrainer:
         self.model = nn.DataParallel(self.model)
 
         self.model.to(self.device)
+        self.criterion.to(self.device)
 
         # Schedular 1
         if 'w_e' in kwargs.keys():
@@ -153,15 +162,6 @@ class TorchTrainer:
 
         for name, parameters in self.model.named_parameters():
             print(name, ':', parameters.size())
-
-        epoch_train_loss = []
-        epoch_val_loss = []
-        epoch_train_metric = []
-        epoch_val_metric = []
-        epoch_extra_metric = None
-
-        if 'extra_metric' in self.__dict__:
-            epoch_extra_metric = []
 
         # Epoch
         for e in range(self.epoch):
@@ -203,8 +203,12 @@ class TorchTrainer:
 
                     t_epoch.set_postfix(**params)
 
-                epoch_train_metric.append(self.train_metric_recorder.avg)
-                epoch_train_loss.append(self.train_loss_recorder.avg)
+                # epoch_train_metric.append(self.train_metric_recorder.avg)
+                # epoch_train_loss.append(self.train_loss_recorder.avg)
+
+                self.epoch_train_metric.update(self.train_metric_recorder.avg())
+                self.epoch_train_loss.update(self.train_loss_recorder.avg())
+
 
             with torch.no_grad():
                 self.model.eval()
@@ -223,39 +227,40 @@ class TorchTrainer:
 
                         v_epoch.set_postfix(**params)
 
-                epoch_val_loss.append(self.val_loss_recorder.avg)
-                epoch_val_metric.append(self.val_metric_recorder.avg)
-                if epoch_extra_metric is not None:
-                    epoch_extra_metric.append(self.extra_recorder.avg)
+                self.epoch_val_loss.update(self.val_loss_recorder.avg())
+                self.epoch_val_metric.update(self.val_metric_recorder.avg())
+
+                if self.epoch_extra_metric is not None:
+                    self.epoch_extra_metric.update(self.extra_recorder.avg())
 
                 if self.writer is not None:
-                    visualize_test_loss(self.writer, epoch_val_loss[-1], e)
+                    visualize_test_loss(self.writer, self.epoch_val_loss.val[-1], e)
 
-                if self.val_metric_recorder.avg > kwargs['b_m']:
-                    kwargs['b_m'] = self.val_metric_recorder.avg
+                if self.val_metric_recorder.avg().item() > kwargs['b_m']:
+                    kwargs['b_m'] = self.val_metric_recorder.avg().item()
 
                     if 'm_p' in kwargs.keys():
                         torch.save(self.model.state_dict(), '{}best_model.pth'.format(kwargs['m_p']))
 
-                        print("Save Best model: R2:{:.4f}, Loss Avg:{:.4f}".format(self.val_metric_recorder.avg,
-                                                                                   self.val_loss_recorder.avg))
+                        print("Save Best model: Metric:{:.4f}, Loss Avg:{:.4f}".format(self.val_metric_recorder.avg().item(),
+                                                                                   self.val_loss_recorder.avg().item()))
 
                     else:
-                        print("Best model: R2:{:.4f}, Loss Avg:{:.4f}".format(self.val_metric_recorder.avg,
-                                                                              self.val_loss_recorder.avg))
+                        print("Best model: R2:{:.4f}, Loss Avg:{:.4f}".format(self.val_metric_recorder.avg().item(),
+                                                                              self.val_loss_recorder.avg().item()))
 
-            self.train_loss_recorder = Recorder()
-            self.val_loss_recorder = Recorder()
-            self.train_metric_recorder = Recorder()
-            self.val_metric_recorder = Recorder()
+            self.train_loss_recorder.reset()
+            self.val_loss_recorder.reset()
+            self.train_metric_recorder.reset()
+            self.val_metric_recorder.reset()
             if 'extra_metric' in self.__dict__:
-                self.extra_recorder = Recorder()
+                self.extra_recorder = self.extra_recorder.reset()
 
             if IS_WARMUP is False and IS_LR_MILESTONE is True:
                 lr_schedular.step()
 
         if 'extra_metric' in self.__dict__:
-            return epoch_train_loss, epoch_val_loss, epoch_val_metric, epoch_train_metric, epoch_extra_metric
+            return self.epoch_train_loss, self.epoch_val_loss, self.epoch_val_metric, self.epoch_train_metric, self.epoch_extra_metric
 
         else:
-            return epoch_train_loss, epoch_val_loss, epoch_val_metric, epoch_train_metric
+            return self.epoch_train_loss, self.epoch_val_loss, self.epoch_val_metric, self.epoch_train_metric

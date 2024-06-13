@@ -1,12 +1,18 @@
+import torch
+
+
 class Recorder:
-    def __init__(self):
-        self.val = 0
-        self.count = 0
-        self.avg = 0
-        self.sum = 0
+    def __init__(self, device):
+        super().__init__()
+        self.device = device
+        self.val = torch.Tensor([]).to(self.device)
 
     def update(self, val):
-        self.val = val
-        self.count += 1
-        self.sum += val * 1
-        self.avg = self.sum / self.count
+        val = val.unsqueeze(0)
+        self.val = torch.cat((self.val, val), 0)
+
+    def avg(self):
+        return torch.mean(self.val.mean(), dim=0).unsqueeze(0)
+
+    def reset(self):
+        self.val = torch.Tensor([]).to(self.device)
