@@ -11,9 +11,17 @@ from tensorboardX import SummaryWriter
 
 class TorchTrainer:
     """
-        Implemented the train loop based on pytorch
+        The train loop based on pytorch
 
-        kwargs: is_gpu, epoch, model, optimizer, criterion, validation_metric(eg: validation MSE)
+        Args:
+            - is_gpu (bool): whether to use GPU or not
+            - epoch (int): number of epochs to train for
+            - log_dir (str): directory
+            - model (torch.nn.Module):
+            - optimizer (torch.optim.Optimizer):
+            - extra_metric (torch.nn.Module):
+            - criterion (torch.nn.Module):
+
     """
 
     def __init__(self,
@@ -49,7 +57,7 @@ class TorchTrainer:
         self.epoch_extra_metric = None
 
         if 'extra_metric' in self.__dict__:
-            self.epoch_extra_metric = torch.Tensor([]).to(self.device)
+            self.epoch_extra_metric = Recorder(self.device.type)
 
         print("Epoch:{}, is GPU: {}".format(epoch, is_gpu))
 
@@ -107,14 +115,18 @@ class TorchTrainer:
                     'val_metric': (self.val_metric_recorder.avg().item(), '.4f'),
                 }
 
-    '''
-        Parameter Check
-
-        :param b_m: A param like R-Square, this param is used to judging the model can be save or not
-        :return: bool
-    '''
 
     def _check_best_metric_for_regression(self, b_m):
+
+        """
+                Parameter Check
+
+                Args:
+                    - param b_m: A param like R-Square, this param is used to judging the model can be save or not
+
+                    - return: bool: Whether the metric is best or not
+        """
+
         if b_m >= 1.0:
             return False
 
@@ -128,11 +140,22 @@ class TorchTrainer:
         else:
             return False
 
-    '''
-        kwargs: model_save_path -> m_p, warmup_epoch(option) -> w_e, lr_milestones and gamma(option) -> l_m, best_metric(eg: r2) -> b_m
-    '''
 
     def fit(self, t_l, v_l, **kwargs):
+        """
+            Args:
+                - param t_l: training data loader
+                - param v_l: validation data loader
+                - kwargs:
+                    - m_p (str): model save path
+                    - w_e (int): Epochs of warm up
+                    - l_m (dict): lr_milestones and gamma(option) e.g. 'l_m': {
+                                                                                's_l': [20, 40],
+                                                                                'gamma': 0.7
+                                                                            }
+                    - b_m (float): best metric(e.g. r2), this param is used to judging the model can be saved
+
+        """
         if not self._check_param_exist(kwargs['b_m']):
             raise ValueError('Best metric does not exist')
 

@@ -8,16 +8,33 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
               feature_range=None, train_size: float = 0.8, val_size: float = 0.1, test_size: float = 0.1,
               if_normal: bool = True, if_shuffle: bool = True, n_workers: int = 8, batch_size: int = 256):
     """
-    Load Data and Normalization
-    :return:
-        Train DataLoader, Validation DataLoader, Test X, Test Y, Scaler X, Scaler Y
+    Load Data and Normalization, this function is used to preprocess the regression task data
+        Args:
+            - data: Pandas Dataframe
+            - input_parameters: List of input's columns or index
+            - output_parameters: List of output's columns or index
+            - feature_range: Used to define the Arg of MinMaxScaler
+            - train_size: Percentage of training data
+            - val_size: Percentage of validation data
+            - test_size: Percentage of test data
+            - if_normal: Whether to data normalization
+            - if_shuffle: Whether to shuffle the data
+            - n_workers: Number of workers in Dataloader
+            - batch_size:
+
+        return:
+            - Train DataLoader, Validation DataLoader, Test X, Test Y, Scaler X, Scaler Y
     """
     if (train_size + test_size + val_size) != 1:
         raise ValueError("train_size + test_size + val_size must equals 1")
 
     # Data Normalization
     if feature_range is None:
-        feature_range = [0, 1]
+        try:
+            feature_range = [0, 1]
+        except:
+            feature_range = (0, 1)
+
     scaler_x = MinMaxScaler(feature_range=feature_range)
     scaler_y = MinMaxScaler(feature_range=feature_range)
 

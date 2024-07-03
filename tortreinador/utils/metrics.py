@@ -17,8 +17,10 @@ def _check_in_same_device(arg1, arg2):
 def r2_score(y_ture, y_pred):
     """
     r2 score function for the data in GPU
-    :params y_ture:
-    :params y_pred:
+
+        Args:
+            - y_ture: true
+            - y_pred: predicted
     """
     if _check_in_same_device(y_ture, y_pred) is not True:
         msg = 'Two arguments in different device'
