@@ -28,7 +28,8 @@ class TorchTrainer:
         self.optimizer = optimizer
         self.criterion = criterion
 
-        self.device = torch.device('cuda' if is_gpu and torch.cuda.is_available() else 'cpu')
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
         self.writer = SummaryWriter(log_dir=log_dir) if log_dir is not None else log_dir
 
         self.train_loss_recorder = Recorder(self.device.type)
@@ -49,7 +50,7 @@ class TorchTrainer:
         if 'extra_metric' in self.__dict__:
             self.epoch_extra_metric = torch.Tensor([]).to(self.device)
 
-        print("Epoch:{}, is GPU: {}".format(epoch, is_gpu))
+        print("Epoch:{}, Device: {}".format(epoch, self.device))
 
     def calculate(self, x, y, mode='t'):
 
@@ -81,7 +82,7 @@ class TorchTrainer:
             self.train_loss_recorder.update(args[0])
             self.train_metric_recorder.update(args[1])
             return {
-                'loss': (self.train_loss_recorder.val[-1].item(), '.4f'),
+                # 'loss': (self.train_loss_recorder.val[-1].item(), '.4f'),
                 'loss_avg': (self.train_loss_recorder.avg().item(), '.4f'),
                 'train_metric': (self.train_metric_recorder.avg().item(), '.4f')
             }, args[0]
@@ -92,7 +93,7 @@ class TorchTrainer:
             if len(args[:-1]) == 4:
                 self.extra_recorder.update(self.extra_metric(args[2], args[3]))
                 return {
-                    'loss': (self.val_loss_recorder.val[-1].item(), '.4f'),
+                    # 'loss': (self.val_loss_recorder.val[-1].item(), '.4f'),
                     'loss_avg': (self.val_loss_recorder.avg().item(), '.4f'),
                     'val_metric': (self.val_metric_recorder.avg().item(), '.4f'),
                     'extra_metric': (self.extra_recorder.avg().item(), '.4f')
@@ -100,7 +101,7 @@ class TorchTrainer:
 
             else:
                 return {
-                    'loss': (self.val_loss_recorder.val[-1].item(), '.4f'),
+                    # 'loss': (self.val_loss_recorder.val[-1].item(), '.4f'),
                     'loss_avg': (self.val_loss_recorder.avg().item(), '.4f'),
                     'val_metric': (self.val_metric_recorder.avg().item(), '.4f'),
                 }
@@ -237,8 +238,8 @@ class TorchTrainer:
                 # epoch_train_metric.append(self.train_metric_recorder.avg)
                 # epoch_train_loss.append(self.train_loss_recorder.avg)
 
-                self.epoch_train_metric.update(self.train_metric_recorder.avg())
-                self.epoch_train_loss.update(self.train_loss_recorder.avg())
+                self.epoch_train_metric.update(self.train_metric_recorder.avg().detach())
+                self.epoch_train_loss.update(self.train_loss_recorder.avg().detach())
 
             with torch.no_grad():
                 self.model.eval()
@@ -257,8 +258,8 @@ class TorchTrainer:
 
                         v_epoch.set_postfix(**params)
 
-                self.epoch_val_loss.update(self.val_loss_recorder.avg())
-                self.epoch_val_metric.update(self.val_metric_recorder.avg())
+                self.epoch_val_loss.update(self.val_loss_recorder.avg().detach())
+                self.epoch_val_metric.update(self.val_metric_recorder.avg().detach())
 
                 if self.epoch_extra_metric is not None:
                     self.epoch_extra_metric.update(self.extra_recorder.avg())
@@ -368,3 +369,4 @@ def config_generator(model_save_path: str, warmup_epochs: int = None, lr_milesto
         config['l_m'] = child_dict
 
     return config
+

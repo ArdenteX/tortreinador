@@ -3,43 +3,33 @@ import torch
 
 class Recorder:
     def __init__(self, device):
-        """
-        Metrics Recorde e.g. loss and accuracy
-
-            Args:
-                - device (string): Device used e.g. 'cpu' or 'cuda'
-
-            Variables:
-                - self.val: Pre-created empty tensor, used to concat the new tensor
-                - self.is_check: This is used to avoid the Runtime error like "expected scalar type double but found float"
-                    - 0: Waiting for check
-                    - 1: Dtype of input data is the same as 'self.val'
-        """
         super().__init__()
         self.device = device
-        self.input_dtype = None
-        self.val = torch.Tensor([]).to(self.device)
-        self.is_check = 0
+        self.val = torch.tensor(0.0).to(self.device)
+        self.count = 0
+        self.is_check = False
 
     def update(self, val):
-        if self.is_check == 0:
+        if not self.is_check:
             if not _check_type(self.val, val):
-                self.input_dtype = val.dtype
-                self.val = self.val.to(self.input_dtype)
-                self.is_check = 1
+                self.val = self.val.to(val.dtype)
+                self.is_check = True
 
             else:
-                self.is_check = 1
+                self.is_check = True
 
-        val = val.unsqueeze(0)
-        self.val = torch.cat((self.val, val), 0)
+        self.val += val
+        self.count += 1
 
     def avg(self):
-        return torch.mean(self.val.mean(), dim=0).unsqueeze(0)
+        if self.count == 0:
+            return torch.tensor(0.0).to(self.device)
+
+        return (self.val / self.count).to(self.device)
 
     def reset(self):
-        self.val = torch.Tensor([]).to(self.device)
-        self.val = self.val.to(self.input_dtype)
+        self.val = torch.tensor(0.0).to(self.device)
+        self.count = 0
 
 
 def _check_type(x, y):
@@ -47,5 +37,5 @@ def _check_type(x, y):
         return x.dtype == y.dtype
 
     else:
-        raise TypeError('Make sure the type of input is torch.Tensor')
+        return False
 
