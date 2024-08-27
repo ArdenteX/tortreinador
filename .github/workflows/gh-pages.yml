@@ -24,6 +24,9 @@ jobs:
         pip install furo
 #        pip install -r requirements.txt
 
+    - name: Clean before building
+      run: make clean
+
     - name: Build the documentation
       run: |
         cd docs
