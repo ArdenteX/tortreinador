@@ -24,14 +24,14 @@ jobs:
         pip install furo
 #        pip install -r requirements.txt
 
-    - name: Build the documentation
-      run: |
-        cd docs
-        make clean
-        make html
+#    - name: Build the documentation
+#      run: |
+#        cd docs
+#        make clean
+#        make html
 
     - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
+      uses: actions/deploy-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./docs/build/html
