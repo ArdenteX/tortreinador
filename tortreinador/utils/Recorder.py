@@ -1,6 +1,14 @@
 import torch
 
 
+def _check_type(x, y):
+    if isinstance(x, torch.Tensor) and isinstance(y, torch.Tensor):
+        return x.dtype == y.dtype
+
+    else:
+        return False
+
+
 class Recorder:
     def __init__(self, device):
         super().__init__()
@@ -32,10 +40,31 @@ class Recorder:
         self.count = 0
 
 
-def _check_type(x, y):
-    if isinstance(x, torch.Tensor) and isinstance(y, torch.Tensor):
-        return x.dtype == y.dtype
+class RecorderForEpoch:
+    def __init__(self, device):
+        super().__init__()
+        self.device = device
+        self.val = torch.Tensor([]).to(self.device)
+        self.is_check = False
 
-    else:
-        return False
+    def update(self, val):
+        if not self.is_check:
+            if not _check_type(self.val, val):
+                self.val = self.val.to(val.dtype)
+                self.is_check = True
+
+            else:
+                self.is_check = True
+
+        val = val.unsqueeze(0)
+        self.val = torch.cat((self.val, val), 0)
+
+    def avg(self):
+        return torch.mean(self.val.mean(), dim=0).unsqueeze(0)
+
+    def reset(self):
+        self.val = torch.Tensor([]).to(self.device)
+
+
+
 
