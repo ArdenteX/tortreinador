@@ -6,7 +6,7 @@ import math
 from sklearn.preprocessing import MinMaxScaler
 
 
-def plot_line_2(y_1: str, y_2: str, df: pd.DataFrame, output_path: str, fig_size: tuple = (10, 6),
+def plot_line_2(y_1: str, y_2: str, df: pd.DataFrame, output_path: str = None, fig_size: tuple = (10, 6),
                 dpi: int = 300):
     """
     Plot Merge Line (2 Lines) using Seaborn
@@ -26,7 +26,8 @@ def plot_line_2(y_1: str, y_2: str, df: pd.DataFrame, output_path: str, fig_size
     sns.lineplot(x='epoch', y=y_1, data=df)
     sns.lineplot(x='epoch', y=y_2, data=df)
     plt.show()
-    fig.savefig(output_path, dpi=dpi)
+    if output_path is not None:
+        fig.savefig(output_path, dpi=dpi)
 
 
 def calculate_GMM(p, m, s, y_label):

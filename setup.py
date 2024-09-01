@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='tortreinador',
-    version='0.0.15',
+    version='0.0.17',
     author='Xavier',
     author_email='zephramxu@gmail.com',
     url='https://github.com/ArdenteX/tortreinador',

@@ -10,6 +10,7 @@ from tensorboardX import SummaryWriter
 from datetime import datetime
 import csv
 import os
+import platform
 
 
 class TorchTrainer:
@@ -74,6 +75,8 @@ class TorchTrainer:
         self.optimizer = optimizer
         self.criterion = criterion
         self.data_save_mode = data_save_mode
+        self.system = platform.system()
+        self.file_time = datetime.now().strftime('%Y-%m-%d %H:%M').replace(":", "").replace("-", '').replace(" ", '')
 
         self.device = torch.device("cuda" if torch.cuda.is_available() and is_gpu else "cpu")
 
@@ -100,10 +103,9 @@ class TorchTrainer:
 
         elif self.data_save_mode == 'csv':
             current_path = os.getcwd()
-            filepath = current_path + "\\train_log"
-            file_time = datetime.now().strftime('%Y-%m-%d %H:%M').replace(":", "").replace("-", '').replace(" ", '')
+            filepath = current_path + "\\train_log" if self.system == 'Windows' else current_path + "/train_log"
 
-            self.csv_filename = filepath + '\\log_{}.csv'.format(file_time)
+            self.csv_filename = filepath + '\\log_{}.csv'.format(self.file_time) if self.system == 'Windows' else filepath + '/log_{}.csv'.format(self.file_time)
 
             if not os.path.exists(filepath):
                 os.mkdir(filepath)
@@ -398,7 +400,7 @@ class TorchTrainer:
                         IF_SAVE = True
 
                 if 'm_p' in kwargs.keys() and IF_SAVE is True:
-                    torch.save(self.model.state_dict(), '{}best_model.pth'.format(kwargs['m_p']))
+                    torch.save(self.model.state_dict(), '{}best_model_{}.pth'.format(kwargs['m_p'], self.file_time))
 
                     print(
                         "Save Best model: Metric:{:.4f}, Loss Avg:{:.4f}".format(self.val_metric_recorder.avg().item(),
