@@ -284,6 +284,10 @@ class TorchTrainer:
 
         IF_SAVE = False
         CONDITION = kwargs['condition']
+        START_EPOCH = kwargs['start_epoch']
+        AUTO_SAVE = 10
+        AUTO_COUNT = 1
+        CHECK_POINT_PATH = '{}check_point_{}.pth'.format(kwargs['m_p'], self.file_time)
 
         self.model = nn.DataParallel(self.model)
 
@@ -305,8 +309,14 @@ class TorchTrainer:
         for name, parameters in self.model.named_parameters():
             print(name, ':', parameters.size())
 
+        # Initial PTH file
+        torch.save({
+            'total_epoch': self.epoch,
+            'config': kwargs
+        }, CHECK_POINT_PATH)
+
         # Epoch
-        for e in range(self.epoch):
+        for e in range(START_EPOCH, self.epoch):
 
             self.model.train()
 
@@ -399,8 +409,22 @@ class TorchTrainer:
                         kwargs['b_l'] = self.val_loss_recorder.avg().item()
                         IF_SAVE = True
 
+                if AUTO_COUNT % AUTO_SAVE == 0:
+                    checkpoint = torch.load(CHECK_POINT_PATH)
+                    checkpoint['current_epoch'] = e
+                    checkpoint['optimizer'] = self.optimizer.state_dict()
+                    torch.save(checkpoint, CHECK_POINT_PATH)
+                    AUTO_COUNT = 1
+                else:
+                    AUTO_COUNT += 1
+
                 if 'm_p' in kwargs.keys() and IF_SAVE is True:
-                    torch.save(self.model.state_dict(), '{}best_model_{}.pth'.format(kwargs['m_p'], self.file_time))
+                    checkpoint = torch.load(CHECK_POINT_PATH)
+                    checkpoint['model'] = self.model.state_dict()
+                    checkpoint['current_epoch'] = e + 1
+                    checkpoint['optimizer'] = self.optimizer.state_dict()
+                    torch.save(checkpoint, CHECK_POINT_PATH)
+                    AUTO_COUNT = 1
 
                     print(
                         "Save Best model: Metric:{:.4f}, Loss Avg:{:.4f}".format(self.val_metric_recorder.avg().item(),
@@ -429,6 +453,12 @@ class TorchTrainer:
 
         elif self.data_save_mode == 'csv':
             return 'OK'
+
+    def continue_fit(self, t_l, v_l, checkpoint: dict):
+        checkpoint['config']['start_epoch'] = checkpoint['current_epoch']
+        self.optimizer.load_state_dict(checkpoint['optimizer'])
+        self.model.load_state_dict(checkpoint['model'])
+        return self.fit(t_l, v_l, **checkpoint['config'])
 
 
 def config_generator(model_save_path: str, warmup_epochs: int = None, lr_milestones: list = None,
@@ -468,6 +498,7 @@ def config_generator(model_save_path: str, warmup_epochs: int = None, lr_milesto
     # config['validation_rate'] = validation_rate
 
     config['m_p'] = model_save_path
+    config['start_epoch'] = 0
 
     if best_metric is not None and best_loss is not None:
         config['b_m'] = best_metric
