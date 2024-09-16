@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch.optim import Optimizer
 from tortreinador.utils.metrics import r2_score, mixture
 from tqdm import tqdm
-from tortreinador.utils.Recorder import Recorder, RecorderForEpoch
+from tortreinador.utils.Recorder import Recorder, RecorderForEpoch, CheckpointRecorder
 from tortreinador.utils.WarmUpLR import WarmUpLR
 from tortreinador.utils.View import visualize_lastlayer, visualize_train_loss, visualize_test_loss
 from tensorboardX import SummaryWriter
@@ -40,7 +40,8 @@ class TorchTrainer:
     def __init__(self,
                  is_gpu: bool = True,
                  epoch: int = 150, log_dir: str = None, model: nn.Module = None,
-                 optimizer: Optimizer = None, extra_metric: nn.Module = None, criterion: nn.Module = None, data_save_mode: str = 'recorder'):
+                 optimizer: Optimizer = None, extra_metric: nn.Module = None, criterion: nn.Module = None,
+                 data_save_mode: str = 'recorder'):
         """
         Initializes the TorchTrainer with model, optimizer, criterion, and other training settings.
 
@@ -76,7 +77,6 @@ class TorchTrainer:
         self.criterion = criterion
         self.data_save_mode = data_save_mode
         self.system = platform.system()
-        self.file_time = datetime.now().strftime('%Y-%m-%d %H:%M').replace(":", "").replace("-", '').replace(" ", '')
 
         self.device = torch.device("cuda" if torch.cuda.is_available() and is_gpu else "cpu")
 
@@ -100,26 +100,6 @@ class TorchTrainer:
 
             if 'extra_metric' in self.__dict__:
                 self.epoch_extra_metric = RecorderForEpoch(self.device.type)
-
-        elif self.data_save_mode == 'csv':
-            current_path = os.getcwd()
-            filepath = current_path + "\\train_log" if self.system == 'Windows' else current_path + "/train_log"
-
-            self.csv_filename = filepath + '\\log_{}.csv'.format(self.file_time) if self.system == 'Windows' else filepath + '/log_{}.csv'.format(self.file_time)
-
-            if not os.path.exists(filepath):
-                os.mkdir(filepath)
-
-            if not os.path.isfile(self.csv_filename):
-                if 'extra_metric' not in self.__dict__:
-                    with open(self.csv_filename, 'w') as file:
-                        writer = csv.writer(file)
-                        writer.writerow(['epoch', 'train_loss', 'train_metrics', 'val_loss', 'val_metrics'])
-
-                elif 'extra_metric' in self.__dict__:
-                    with open(self.csv_filename, 'w') as file:
-                        writer = csv.writer(file)
-                        writer.writerow(['epoch', 'train_loss', 'train_metrics', 'val_loss', 'val_metrics', 'val_extra_metrics'])
 
         print("Epoch:{}, Device: {}".format(epoch, self.device))
 
@@ -235,7 +215,32 @@ class TorchTrainer:
         else:
             return False
 
-    def fit(self, t_l, v_l, **kwargs):
+    def _initial_csv_mode(self):
+        file_time = datetime.now().strftime('%Y-%m-%d %H:%M').replace(":", "").replace("-", '').replace(
+            " ", '')
+        current_path = os.getcwd()
+        filepath = current_path + "\\train_log" if self.system == 'Windows' else current_path + "/train_log"
+
+        csv_filename = filepath + '\\log_{}.csv'.format(
+            file_time) if self.system == 'Windows' else filepath + '/log_{}.csv'.format(file_time)
+
+        if not os.path.exists(filepath):
+            os.mkdir(filepath)
+
+        if not os.path.isfile(csv_filename):
+            if 'extra_metric' not in self.__dict__:
+                with open(csv_filename, 'w') as file:
+                    writer = csv.writer(file)
+                    writer.writerow(['epoch', 'train_loss', 'train_metrics', 'val_loss', 'val_metrics'])
+
+            elif 'extra_metric' in self.__dict__:
+                with open(csv_filename, 'w') as file:
+                    writer = csv.writer(file)
+                    writer.writerow(
+                        ['epoch', 'train_loss', 'train_metrics', 'val_loss', 'val_metrics', 'val_extra_metrics'])
+        return csv_filename, file_time
+
+    def fit(self, t_l, v_l, checkpoint_=None, **kwargs):
         """
         Trains and validates a machine learning model using the provided training and validation data loaders,
         applying specific learning rate schedules and warm-up periods. The function also handles the saving of the model
@@ -244,6 +249,7 @@ class TorchTrainer:
         Args:
             t_l (DataLoader): DataLoader containing the training data.
             v_l (DataLoader): DataLoader containing the validation data.
+            checkpoint_:
             **kwargs: A dictionary of additional keyword arguments:
                 m_p (str): Path where the model should be saved.
                 w_e (int, optional): Number of initial epochs during which the learning rate is increased linearly.
@@ -272,6 +278,9 @@ class TorchTrainer:
             ValueError: If required parameters in `kwargs` like `b_m` are missing or if validation metrics exceed expected boundaries.
 
         """
+        if checkpoint_ is not None:
+            kwargs = checkpoint_['config']
+
         if not self._check_param_exist(kwargs['b_m']):
             raise ValueError('Best metric does not exist')
 
@@ -279,17 +288,32 @@ class TorchTrainer:
             if not self._check_best_metric_for_regression(kwargs['b_m']):
                 raise ValueError("Best metric can't higher than 1.0")
 
+        checkpoint_recorder = None
+        csv_filename = None
+        file_time = None
+        if self.data_save_mode == 'csv' and kwargs['train_mode'] == 'new':
+            csv_filename, file_time = self._initial_csv_mode()
+
+        if kwargs['train_mode'] == 'new':
+            CHECK_POINT_PATH = '{}check_point_{}.pth'.format(kwargs['m_p'], file_time)
+            checkpoint_recorder = CheckpointRecorder(CHECK_POINT_PATH, self.epoch, kwargs, csv_filename, mode='new',
+                                                     system=self.system)
+
+        elif kwargs['train_mode'] == 'reload':
+            checkpoint_recorder = CheckpointRecorder(checkpoint_, mode='reload')
+            csv_filename = kwargs['log_dir']
+            checkpoint_recorder.reload(self.model, self.optimizer)
+
         IS_WARMUP = False
         IS_LR_MILESTONE = False
 
         IF_SAVE = False
         CONDITION = kwargs['condition']
         START_EPOCH = kwargs['start_epoch']
-        AUTO_SAVE = 10
+        AUTO_SAVE = kwargs['auto_save']
         AUTO_COUNT = 1
-        CHECK_POINT_PATH = '{}check_point_{}.pth'.format(kwargs['m_p'], self.file_time)
 
-        self.model = nn.DataParallel(self.model)
+        # self.model = nn.DataParallel(self.model)
 
         self.model.to(self.device)
         self.criterion.to(self.device)
@@ -308,12 +332,6 @@ class TorchTrainer:
 
         for name, parameters in self.model.named_parameters():
             print(name, ':', parameters.size())
-
-        # Initial PTH file
-        torch.save({
-            'total_epoch': self.epoch,
-            'config': kwargs
-        }, CHECK_POINT_PATH)
 
         # Epoch
         for e in range(START_EPOCH, self.epoch):
@@ -385,7 +403,7 @@ class TorchTrainer:
                         self.epoch_extra_metric.update(self.extra_recorder.avg().detach())
 
                 elif self.data_save_mode == 'csv':
-                    with open(self.csv_filename, 'a', newline='') as file:
+                    with open(csv_filename, 'a', newline='') as file:
                         writer = csv.writer(file)
                         writer.writerow([e + 1, self.train_loss_recorder.avg().detach().item(), self.train_metric_recorder.avg().detach().item(), self.val_loss_recorder.avg().detach().item(), self.val_metric_recorder.avg().detach().item()])
 
@@ -409,27 +427,22 @@ class TorchTrainer:
                         kwargs['b_l'] = self.val_loss_recorder.avg().item()
                         IF_SAVE = True
 
-                if AUTO_COUNT % AUTO_SAVE == 0:
-                    checkpoint = torch.load(CHECK_POINT_PATH)
-                    checkpoint['current_epoch'] = e
-                    checkpoint['optimizer'] = self.optimizer.state_dict()
-                    torch.save(checkpoint, CHECK_POINT_PATH)
-                    AUTO_COUNT = 1
-                else:
-                    AUTO_COUNT += 1
-
                 if 'm_p' in kwargs.keys() and IF_SAVE is True:
-                    checkpoint = torch.load(CHECK_POINT_PATH)
-                    checkpoint['model'] = self.model.state_dict()
-                    checkpoint['current_epoch'] = e + 1
-                    checkpoint['optimizer'] = self.optimizer.state_dict()
-                    torch.save(checkpoint, CHECK_POINT_PATH)
+                    checkpoint_recorder.update_by_condition(CONDITION, b_m=kwargs['b_m'] if 'b_m' in kwargs.keys() else None, b_l=kwargs['b_l'] if 'b_l' in kwargs.keys() else None)
+                    checkpoint_recorder.update(e, model=self.model.state_dict(), current_optimizer_sd=self.optimizer.state_dict(), mode='best')
                     AUTO_COUNT = 1
 
                     print(
                         "Save Best model: Metric:{:.4f}, Loss Avg:{:.4f}".format(self.val_metric_recorder.avg().item(),
                                                                                  self.val_loss_recorder.avg().item()))
                     IF_SAVE = False
+
+                if AUTO_COUNT % AUTO_SAVE == 0:
+                    checkpoint_recorder.update(e, model=self.model.state_dict(),
+                                               current_optimizer_sd=self.optimizer.state_dict())
+                    AUTO_COUNT = 1
+                else:
+                    AUTO_COUNT += 1
 
                 # else:
                 #     print("Best model: R2:{:.4f}, Loss Avg:{:.4f}".format(self.val_metric_recorder.avg().item(),
@@ -454,16 +467,14 @@ class TorchTrainer:
         elif self.data_save_mode == 'csv':
             return 'OK'
 
-    def continue_fit(self, t_l, v_l, checkpoint: dict):
-        checkpoint['config']['start_epoch'] = checkpoint['current_epoch']
-        self.optimizer.load_state_dict(checkpoint['optimizer'])
-        self.model.load_state_dict(checkpoint['model'])
-        return self.fit(t_l, v_l, **checkpoint['config'])
+    def continue_fit(self, t_l, v_l, checkpoint_path):
+        checkpoint_ = torch.load(checkpoint_path)
+        self.fit(t_l, v_l, checkpoint_)
 
 
 def config_generator(model_save_path: str, warmup_epochs: int = None, lr_milestones: list = None,
                      lr_decay_rate: float = None, best_metric: float = None, best_loss: float = None, validation_rate: float = 0.2,
-                     ):
+                     auto_save: int = 10):
     """
     Generates a configuration dictionary for model training based on specified parameters.
 
@@ -475,6 +486,7 @@ def config_generator(model_save_path: str, warmup_epochs: int = None, lr_milesto
         best_metric (float, optional): Threshold for a performance metric (e.g., accuracy) to determine the best model.
         best_loss (float, optional): Threshold for the loss value to determine the best model.
         validation_rate(float): Fraction of the validation set which split by training data(developing)
+        auto_save(int):
 
     Raises:
         ValueError: If `model_save_path` is None or if `lr_milestones` is set but `lr_decay_rate` is not provided.
@@ -499,6 +511,8 @@ def config_generator(model_save_path: str, warmup_epochs: int = None, lr_milesto
 
     config['m_p'] = model_save_path
     config['start_epoch'] = 0
+    config['train_mode'] = 'new'
+    config['auto_save'] = auto_save
 
     if best_metric is not None and best_loss is not None:
         config['b_m'] = best_metric
