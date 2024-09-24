@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import math
-from sklearn.preprocessing import MinMaxScaler
 
 
 def plot_line_2(y_1: str, y_2: str, df: pd.DataFrame, output_path: str = None, fig_size: tuple = (10, 6),

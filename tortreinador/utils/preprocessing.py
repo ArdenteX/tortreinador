@@ -2,6 +2,7 @@ from sklearn.preprocessing import MinMaxScaler
 import pandas as pd
 import torch
 from torch.utils.data import TensorDataset, DataLoader
+import numpy as np
 
 
 class _FunctionController:
@@ -156,5 +157,29 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
     return train_loader, validation_loader, test_x, test_y, scaler_x, scaler_y
 
 
+def noise_generator(error_rate, input_features, data):
+    columns_mean = data[input_features].mean()
+    variance = (columns_mean * error_rate) ** 2
+    corr = data[input_features].corr()
+
+    cov = []
+    for i in range(len(variance)):
+        var = variance.iloc[i]
+        col = input_features[i]
+        tmp = []
+        for j in range(len(corr)):
+            current_col = input_features[j]
+            if j == i:
+                tmp.append(var)
+
+            else:
+                p = corr.loc[col, current_col]
+                current_var = variance[current_col]
+                tmp.append(p * (var * current_var))
+
+        cov.append(tmp)
+
+    np_cov = np.array(cov)
+    return np_cov
 
 

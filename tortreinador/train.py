@@ -82,6 +82,10 @@ class TorchTrainer:
 
         self.writer = SummaryWriter(log_dir=log_dir) if log_dir is not None else log_dir
 
+        self.checkpoint_recorder = None
+        self.current_error_rate = None
+        self.cov = None
+
         self.train_loss_recorder = Recorder(self.device.type)
         self.val_loss_recorder = Recorder(self.device.type)
         self.train_metric_recorder = Recorder(self.device.type)
@@ -288,7 +292,6 @@ class TorchTrainer:
             if not self._check_best_metric_for_regression(kwargs['b_m']):
                 raise ValueError("Best metric can't higher than 1.0")
 
-        checkpoint_recorder = None
         csv_filename = None
         file_time = None
         if self.data_save_mode == 'csv' and kwargs['train_mode'] == 'new':
@@ -296,13 +299,20 @@ class TorchTrainer:
 
         if kwargs['train_mode'] == 'new':
             CHECK_POINT_PATH = '{}check_point_{}.pth'.format(kwargs['m_p'], file_time)
-            checkpoint_recorder = CheckpointRecorder(CHECK_POINT_PATH, self.epoch, kwargs, csv_filename, mode='new',
+            self.checkpoint_recorder = CheckpointRecorder(CHECK_POINT_PATH, self.epoch, kwargs, csv_filename, mode='new',
                                                      system=self.system)
 
         elif kwargs['train_mode'] == 'reload':
-            checkpoint_recorder = CheckpointRecorder(checkpoint_, mode='reload')
+            self.checkpoint_recorder = CheckpointRecorder(checkpoint_, mode='reload')
             csv_filename = kwargs['log_dir']
-            checkpoint_recorder.reload(self.model, self.optimizer)
+            self.checkpoint_recorder.reload(self.model, self.optimizer)
+
+        INIT_RATE = None
+        FINAL_RATE = None
+        if 'mix' in kwargs.keys():
+            INIT_RATE = kwargs['mix']['initial_rate']
+            FINAL_RATE = kwargs['mix']['final_rate']
+            self.cov = kwargs['mix']['cov']
 
         IS_WARMUP = False
         IS_LR_MILESTONE = False
@@ -344,6 +354,8 @@ class TorchTrainer:
             # lr_schedular.step()
 
             i = 0
+            if 'mix' in kwargs.keys():
+                self.current_error_rate = (FINAL_RATE - INIT_RATE) * (e / (self.epoch-1)) + INIT_RATE
 
             with tqdm(t_l, unit='batch') as t_epoch:
                 for x, y in t_epoch:
@@ -428,8 +440,8 @@ class TorchTrainer:
                         IF_SAVE = True
 
                 if 'm_p' in kwargs.keys() and IF_SAVE is True:
-                    checkpoint_recorder.update_by_condition(CONDITION, b_m=kwargs['b_m'] if 'b_m' in kwargs.keys() else None, b_l=kwargs['b_l'] if 'b_l' in kwargs.keys() else None)
-                    checkpoint_recorder.update(e, model=self.model.state_dict(), current_optimizer_sd=self.optimizer.state_dict(), mode='best')
+                    self.checkpoint_recorder.update_by_condition(CONDITION, b_m=kwargs['b_m'] if 'b_m' in kwargs.keys() else None, b_l=kwargs['b_l'] if 'b_l' in kwargs.keys() else None)
+                    self.checkpoint_recorder.update(e, model=self.model.state_dict(), current_optimizer_sd=self.optimizer.state_dict(), mode='best')
                     AUTO_COUNT = 1
 
                     print(
@@ -438,7 +450,7 @@ class TorchTrainer:
                     IF_SAVE = False
 
                 if AUTO_COUNT % AUTO_SAVE == 0:
-                    checkpoint_recorder.update(e, model=self.model.state_dict(),
+                    self.checkpoint_recorder.update(e, model=self.model.state_dict(),
                                                current_optimizer_sd=self.optimizer.state_dict())
                     AUTO_COUNT = 1
                 else:
@@ -474,7 +486,7 @@ class TorchTrainer:
 
 def config_generator(model_save_path: str, warmup_epochs: int = None, lr_milestones: list = None,
                      lr_decay_rate: float = None, best_metric: float = None, best_loss: float = None, validation_rate: float = 0.2,
-                     auto_save: int = 10):
+                     auto_save: int = 10, if_mix: bool = False, initial_rate: float = 0.1, final_rate: float = 1, cov: object = None):
     """
     Generates a configuration dictionary for model training based on specified parameters.
 
@@ -487,6 +499,10 @@ def config_generator(model_save_path: str, warmup_epochs: int = None, lr_milesto
         best_loss (float, optional): Threshold for the loss value to determine the best model.
         validation_rate(float): Fraction of the validation set which split by training data(developing)
         auto_save(int):
+        if_mix(bool):
+        initial_rate(float):
+        final_rate(float):
+        cov(object):
 
     Raises:
         ValueError: If `model_save_path` is None or if `lr_milestones` is set but `lr_decay_rate` is not provided.
@@ -513,6 +529,16 @@ def config_generator(model_save_path: str, warmup_epochs: int = None, lr_milesto
     config['start_epoch'] = 0
     config['train_mode'] = 'new'
     config['auto_save'] = auto_save
+    config['if_mix'] = if_mix
+    if if_mix and cov is not None:
+        config['mix'] = {
+            'initial_rate': initial_rate,
+            'final_rate': final_rate,
+            'cov': cov
+        }
+
+    else:
+        raise KeyError("Got empty covariance matrix")
 
     if best_metric is not None and best_loss is not None:
         config['b_m'] = best_metric
