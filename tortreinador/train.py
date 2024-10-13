@@ -11,6 +11,7 @@ from datetime import datetime
 import csv
 import os
 import platform
+import numpy as np
 
 
 class TorchTrainer:
@@ -37,6 +38,7 @@ class TorchTrainer:
         csv_filename (str, optional): The filename for saving data in CSV format (only if `data_save_mode` is 'csv').
 
     """
+
     def __init__(self,
                  is_gpu: bool = True,
                  epoch: int = 150, log_dir: str = None, model: nn.Module = None,
@@ -83,8 +85,13 @@ class TorchTrainer:
         self.writer = SummaryWriter(log_dir=log_dir) if log_dir is not None else log_dir
 
         self.checkpoint_recorder = None
+
+        # mix strategy 1
         self.current_error_rate = None
-        self.cov = None
+
+        # mix strategy 2
+        self.event_occurs = False
+        self.lambda_factor = None
 
         self.train_loss_recorder = Recorder(self.device.type)
         self.val_loss_recorder = Recorder(self.device.type)
@@ -132,7 +139,7 @@ class TorchTrainer:
 
         return self._standard_return(loss, metric_per, mode, y, y_pred)
 
-    def _standard_return(self, loss, metric_per, mode, y, y_pred):
+    def _standard_return(self, loss, metric_per, mode, y, y_pred=None):
         """
         Formats the return values based on the operation mode.
 
@@ -156,7 +163,10 @@ class TorchTrainer:
         elif mode == 'v':
             return [loss, metric_per, 'v']
 
-    def cal_result(self, *args):
+    def _dict_return(self, return_dict):
+        return return_dict
+
+    def cal_result(self, *args, **kwargs):
         """
         Updates the loss and metric recorders based on the results from the current epoch.
 
@@ -167,13 +177,31 @@ class TorchTrainer:
             dict: A dictionary containing the updated loss and metrics.
 
         """
+        # if not args:
+        #     if kwargs['mode'] == 't':
+        #         self.train_loss_recorder.update(kwargs['loss'])
+        #         if 'R-Square' in kwargs.keys() or 'Accuracy' in kwargs.keys():
+        #             try:
+        #                 self.train_metric_recorder.update(kwargs['R-Square'])
+        #
+        #             except Exception:
+        #                 self.train_metric_recorder.update(kwargs['Accuracy'])
+        #
+        #         tmp = {}
+        #         for k, v in kwargs.items():
+        #             tmp[k] = (v.item(), '.4f')
+        #
+        #         return
+
         if args[-1] == 't':
             self.train_loss_recorder.update(args[0])
-            self.train_metric_recorder.update(args[1])
+            if args[1] is not None:
+                self.train_metric_recorder.update(args[1])
+
             return {
                 # 'loss': (self.train_loss_recorder.val[-1].item(), '.4f'),
                 'loss_avg': (self.train_loss_recorder.avg().item(), '.4f'),
-                'train_metric': (self.train_metric_recorder.avg().item(), '.4f')
+                'train_metric': (self.train_metric_recorder.avg().item(), '.4f') if args[1] is not None else (0.0, '.4f'),
             }, args[0]
 
         elif args[-1] == 'v':
@@ -218,6 +246,15 @@ class TorchTrainer:
 
         else:
             return False
+
+    def _random_event(self, event_rate):
+        event_ = np.random.rand()
+
+        if event_ <= event_rate:
+            self.event_occurs = True
+
+        else:
+            self.event_occurs = False
 
     def _initial_csv_mode(self):
         file_time = datetime.now().strftime('%Y-%m-%d %H:%M').replace(":", "").replace("-", '').replace(
@@ -299,8 +336,9 @@ class TorchTrainer:
 
         if kwargs['train_mode'] == 'new':
             CHECK_POINT_PATH = '{}check_point_{}.pth'.format(kwargs['m_p'], file_time)
-            self.checkpoint_recorder = CheckpointRecorder(CHECK_POINT_PATH, self.epoch, kwargs, csv_filename, mode='new',
-                                                     system=self.system)
+            self.checkpoint_recorder = CheckpointRecorder(CHECK_POINT_PATH, self.epoch, kwargs, csv_filename,
+                                                          mode='new',
+                                                          system=self.system)
 
         elif kwargs['train_mode'] == 'reload':
             self.checkpoint_recorder = CheckpointRecorder(checkpoint_, mode='reload')
@@ -309,19 +347,30 @@ class TorchTrainer:
 
         INIT_RATE = None
         FINAL_RATE = None
+
+        EVENT_RATE = None
         if 'mix' in kwargs.keys():
-            INIT_RATE = kwargs['mix']['initial_rate']
-            FINAL_RATE = kwargs['mix']['final_rate']
-            self.cov = kwargs['mix']['cov']
+            if kwargs['mix']['condition'] == 1:
+                INIT_RATE = kwargs['mix']['initial_rate']
+                FINAL_RATE = kwargs['mix']['final_rate']
+
+            elif kwargs['mix']['condition'] == 2:
+                EVENT_RATE = kwargs['mix']['event_rate']
+                self.current_error_rate = kwargs['mix']['final_rate']
+                self.lambda_factor = kwargs['mix']['lambda_factor']
 
         IS_WARMUP = False
         IS_LR_MILESTONE = False
+        IS_LR_RESTART = False
 
         IF_SAVE = False
         CONDITION = kwargs['condition']
         START_EPOCH = kwargs['start_epoch']
         AUTO_SAVE = kwargs['auto_save']
         AUTO_COUNT = 1
+
+        VAL_COUNT = 1
+        VAL_CYCLE = kwargs['val_cycle']
 
         # self.model = nn.DataParallel(self.model)
 
@@ -340,43 +389,78 @@ class TorchTrainer:
                                                                 milestones=kwargs['l_m']['s_l'],
                                                                 gamma=kwargs['l_m']['gamma'])
 
-        for name, parameters in self.model.named_parameters():
-            print(name, ':', parameters.size())
+        if 'lr_restart' in kwargs.keys():
+            IS_LR_RESTART = True
+            restart_schedular = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(self.optimizer,
+                                                                                     T_0=kwargs['lr_restart']['t_0'],
+                                                                                     T_mult=kwargs['lr_restart'][
+                                                                                         't_mult'],
+                                                                                     eta_min=kwargs['lr_restart'][
+                                                                                         'eta_min'])
+
+        # for name, parameters in self.model.named_parameters():
+        #     print(name, ':', parameters.size())
 
         # Epoch
         for e in range(START_EPOCH, self.epoch):
 
             self.model.train()
 
-            if IS_WARMUP is True and IS_LR_MILESTONE is True and e >= kwargs['w_e']:
+            if IS_WARMUP and IS_LR_MILESTONE is True and e >= kwargs['w_e']:
                 lr_schedular.step()
+
+            if IS_WARMUP and IS_LR_RESTART is True and e >= kwargs['w_e'] and kwargs['lr_restart']['mode'] == 'epoch':
+                restart_schedular.step()
 
             # lr_schedular.step()
 
             i = 0
             if 'mix' in kwargs.keys():
-                self.current_error_rate = (FINAL_RATE - INIT_RATE) * (e / (self.epoch-1)) + INIT_RATE
+                if kwargs['mix']['condition'] == 1 and e <= kwargs['mix']['warmup_error']:
+                    self.current_error_rate = (FINAL_RATE - INIT_RATE) * (
+                                e / (kwargs['mix']['warmup_error'] - 1)) + INIT_RATE
+
+                elif kwargs['mix']['condition'] == 2 and e >= kwargs['mix']['warmup_error']:
+
+                    self._random_event(EVENT_RATE)
 
             with tqdm(t_l, unit='batch') as t_epoch:
-                for x, y in t_epoch:
-                    if IS_WARMUP is True and e < kwargs['w_e']:
-                        warmup.step()
+                for batch_idx, (x, y) in enumerate(t_epoch):
+
                     t_epoch.set_description(f"Epoch {e + 1} Training")
 
                     mini_batch_x = x.to(self.device)
                     mini_batch_y = y.to(self.device)
                     self.optimizer.zero_grad()
 
-                    param_options, loss = self.cal_result(*self.calculate(mini_batch_x, mini_batch_y, mode='t'))
+                    cal = self.calculate(mini_batch_x, mini_batch_y, mode='t')
+                    if isinstance(cal, list):
+                        param_options, loss = self.cal_result(*cal)
+
+                    elif isinstance(cal, dict):
+                        param_options, loss = self.cal_result(**cal)
 
                     param_options['lr'] = (self.optimizer.state_dict()['param_groups'][0]['lr'], '.6f')
 
                     params = {key: "{value:{format}}".format(value=value, format=f)
                               for key, (value, f) in param_options.items()}
 
+                    if 'mix' in kwargs.keys() and kwargs['mix']['condition'] == 2:
+                        params['event'] = ("Occurs" if self.event_occurs else "Not Occurs")
+
                     loss.backward()
 
                     self.optimizer.step()
+
+                    if IS_WARMUP is True and e < kwargs['w_e']:
+                        warmup.step()
+
+                    if not IS_WARMUP and IS_LR_RESTART and kwargs['lr_restart']['mode'] == 'batch':
+                        restart_schedular.step(e + batch_idx / len(t_l))
+
+                    if IS_WARMUP and IS_LR_RESTART is True and e >= kwargs['w_e'] and kwargs['lr_restart'][
+                        'mode'] == 'batch':
+                        restart_schedular.step(e - kwargs['w_e'] + 1 + batch_idx / len(t_l))
 
                     if self.writer is not None:
                         n_iter = (e - 1) * len(t_l) + i + 1
@@ -388,73 +472,84 @@ class TorchTrainer:
                 # epoch_train_metric.append(self.train_metric_recorder.avg)
                 # epoch_train_loss.append(self.train_loss_recorder.avg)
 
-            with torch.no_grad():
-                self.model.eval()
+            if VAL_COUNT % VAL_CYCLE == 0:
+                VAL_COUNT = 1
 
-                with tqdm(v_l, unit='batch') as v_epoch:
-                    v_epoch.set_description(f"Epoch {e + 1} Validating")
+                with torch.no_grad():
+                    self.model.eval()
 
-                    for v_x, v_y in v_epoch:
-                        val_batch_x = v_x.to(self.device)
-                        val_batch_y = v_y.to(self.device)
+                    with tqdm(v_l, unit='batch') as v_epoch:
+                        v_epoch.set_description(f"Epoch {e + 1} Validating")
 
-                        param_options = self.cal_result(*self.calculate(val_batch_x, val_batch_y, mode='v'))
+                        for v_x, v_y in v_epoch:
+                            val_batch_x = v_x.to(self.device)
+                            val_batch_y = v_y.to(self.device)
 
-                        params = {key: "{value:{format}}".format(value=value, format=f)
-                                  for key, (value, f) in param_options.items()}
+                            param_options = self.cal_result(*self.calculate(val_batch_x, val_batch_y, mode='v'))
 
-                        v_epoch.set_postfix(**params)
+                            params = {key: "{value:{format}}".format(value=value, format=f)
+                                      for key, (value, f) in param_options.items()}
 
-                if self.data_save_mode == 'recorder':
-                    self.epoch_train_metric.update(self.train_metric_recorder.avg().detach())
-                    self.epoch_train_loss.update(self.train_loss_recorder.avg().detach())
-                    self.epoch_val_loss.update(self.val_loss_recorder.avg().detach())
-                    self.epoch_val_metric.update(self.val_metric_recorder.avg().detach())
+                            v_epoch.set_postfix(**params)
 
-                    if self.epoch_extra_metric is not None:
-                        self.epoch_extra_metric.update(self.extra_recorder.avg().detach())
+                    if self.data_save_mode == 'recorder':
+                        self.epoch_train_metric.update(self.train_metric_recorder.avg().detach())
+                        self.epoch_train_loss.update(self.train_loss_recorder.avg().detach())
+                        self.epoch_val_loss.update(self.val_loss_recorder.avg().detach())
+                        self.epoch_val_metric.update(self.val_metric_recorder.avg().detach())
 
-                elif self.data_save_mode == 'csv':
-                    with open(csv_filename, 'a', newline='') as file:
-                        writer = csv.writer(file)
-                        writer.writerow([e + 1, self.train_loss_recorder.avg().detach().item(), self.train_metric_recorder.avg().detach().item(), self.val_loss_recorder.avg().detach().item(), self.val_metric_recorder.avg().detach().item()])
+                        if self.epoch_extra_metric is not None:
+                            self.epoch_extra_metric.update(self.extra_recorder.avg().detach())
 
-                if self.writer is not None:
-                    visualize_test_loss(self.writer, self.epoch_val_loss.val[-1], e)
+                    elif self.data_save_mode == 'csv':
+                        with open(csv_filename, 'a', newline='') as file:
+                            writer = csv.writer(file)
+                            writer.writerow([e + 1, self.train_loss_recorder.avg().detach().item(),
+                                             self.train_metric_recorder.avg().detach().item(),
+                                             self.val_loss_recorder.avg().detach().item(),
+                                             self.val_metric_recorder.avg().detach().item()])
 
-                if CONDITION == 0:
-                    if self.val_metric_recorder.avg().item() >= kwargs['b_m']:
-                        kwargs['b_m'] = self.val_metric_recorder.avg().item()
-                        IF_SAVE = True
+                    if self.writer is not None:
+                        visualize_test_loss(self.writer, self.epoch_val_loss.val[-1], e)
 
-                elif CONDITION == 1:
-                    if self.val_loss_recorder.avg().item() <= kwargs['b_l']:
-                        kwargs['b_l'] = self.val_loss_recorder.avg().item()
-                        IF_SAVE = True
+                    if CONDITION == 0:
+                        if self.val_metric_recorder.avg().item() >= kwargs['b_m']:
+                            kwargs['b_m'] = self.val_metric_recorder.avg().item()
+                            IF_SAVE = True
 
-                elif CONDITION == 2:
-                    if self.val_loss_recorder.avg().item() <= kwargs['b_l'] and self.val_metric_recorder.avg().item() >= \
-                            kwargs['b_m']:
-                        kwargs['b_m'] = self.val_metric_recorder.avg().item()
-                        kwargs['b_l'] = self.val_loss_recorder.avg().item()
-                        IF_SAVE = True
+                    elif CONDITION == 1:
+                        if self.val_loss_recorder.avg().item() <= kwargs['b_l']:
+                            kwargs['b_l'] = self.val_loss_recorder.avg().item()
+                            IF_SAVE = True
 
-                if 'm_p' in kwargs.keys() and IF_SAVE is True:
-                    self.checkpoint_recorder.update_by_condition(CONDITION, b_m=kwargs['b_m'] if 'b_m' in kwargs.keys() else None, b_l=kwargs['b_l'] if 'b_l' in kwargs.keys() else None)
-                    self.checkpoint_recorder.update(e, model=self.model.state_dict(), current_optimizer_sd=self.optimizer.state_dict(), mode='best')
-                    AUTO_COUNT = 1
+                    elif CONDITION == 2:
+                        if self.val_loss_recorder.avg().item() <= kwargs['b_l'] and self.val_metric_recorder.avg().item() >= \
+                                kwargs['b_m']:
+                            kwargs['b_m'] = self.val_metric_recorder.avg().item()
+                            kwargs['b_l'] = self.val_loss_recorder.avg().item()
+                            IF_SAVE = True
 
-                    print(
-                        "Save Best model: Metric:{:.4f}, Loss Avg:{:.4f}".format(self.val_metric_recorder.avg().item(),
-                                                                                 self.val_loss_recorder.avg().item()))
-                    IF_SAVE = False
+                    if 'm_p' in kwargs.keys() and IF_SAVE is True:
+                        self.checkpoint_recorder.update_by_condition(CONDITION,
+                                                                     b_m=kwargs['b_m'] if 'b_m' in kwargs.keys() else None,
+                                                                     b_l=kwargs['b_l'] if 'b_l' in kwargs.keys() else None)
+                        self.checkpoint_recorder.update(e, model=self.model.state_dict(),
+                                                        current_optimizer_sd=self.optimizer.state_dict(), mode='best')
+                        AUTO_COUNT = 1
 
-                if AUTO_COUNT % AUTO_SAVE == 0:
-                    self.checkpoint_recorder.update(e, model=self.model.state_dict(),
-                                               current_optimizer_sd=self.optimizer.state_dict())
-                    AUTO_COUNT = 1
-                else:
-                    AUTO_COUNT += 1
+                        print(
+                            "Save Best model: Metric:{:.4f}, Loss Avg:{:.4f}".format(self.val_metric_recorder.avg().item(),
+                                                                                     self.val_loss_recorder.avg().item()))
+                        IF_SAVE = False
+            else:
+                VAL_COUNT += 1
+
+            if AUTO_COUNT % AUTO_SAVE == 0:
+                self.checkpoint_recorder.update(e, model=self.model.state_dict(),
+                                                current_optimizer_sd=self.optimizer.state_dict())
+                AUTO_COUNT = 1
+            else:
+                AUTO_COUNT += 1
 
                 # else:
                 #     print("Best model: R2:{:.4f}, Loss Avg:{:.4f}".format(self.val_metric_recorder.avg().item(),
@@ -469,6 +564,9 @@ class TorchTrainer:
 
             if IS_WARMUP is False and IS_LR_MILESTONE is True:
                 lr_schedular.step()
+
+            if IS_WARMUP is False and IS_LR_RESTART and kwargs['lr_restart']['mode'] == 'epoch':
+                restart_schedular.step()
 
         if 'extra_metric' in self.__dict__ and self.data_save_mode == 'recorder':
             return self.epoch_train_loss, self.epoch_val_loss, self.epoch_val_metric, self.epoch_train_metric, self.epoch_extra_metric
@@ -485,8 +583,13 @@ class TorchTrainer:
 
 
 def config_generator(model_save_path: str, warmup_epochs: int = None, lr_milestones: list = None,
-                     lr_decay_rate: float = None, best_metric: float = None, best_loss: float = None, validation_rate: float = 0.2,
-                     auto_save: int = 10, if_mix: bool = False, initial_rate: float = 0.1, final_rate: float = 1, cov: object = None):
+                     lr_decay_rate: float = None, best_metric: float = None, best_loss: float = None,
+                     validation_cycle: int = 1,
+                     auto_save: int = 10, if_mix: bool = False, initial_rate: float = None, final_rate: float = None,
+                     warmup_error: int = None, event_rate: float = None,
+                     lambda_factor: float = 0.7,
+                     lr_restart: bool = False, T_0: int = 10, t_mult: float = 1, eta_min: float = 0.00001,
+                     restart_mode='batch'):
     """
     Generates a configuration dictionary for model training based on specified parameters.
 
@@ -497,12 +600,19 @@ def config_generator(model_save_path: str, warmup_epochs: int = None, lr_milesto
         lr_decay_rate (float, optional): Multiplicative factor by which the learning rate is decayed at each milestone.
         best_metric (float, optional): Threshold for a performance metric (e.g., accuracy) to determine the best model.
         best_loss (float, optional): Threshold for the loss value to determine the best model.
-        validation_rate(float): Fraction of the validation set which split by training data(developing)
+        validation_cycle(int): Number of epoch for validation phase.
         auto_save(int):
         if_mix(bool):
         initial_rate(float):
         final_rate(float):
-        cov(object):
+        warmup_error(int):
+        event_rate(float):
+        lambda_factor(float):
+        lr_restart(bool):
+        T_0(int):
+        t_mult(float):
+        eta_min(float):
+        restart_mode(str):
 
     Raises:
         ValueError: If `model_save_path` is None or if `lr_milestones` is set but `lr_decay_rate` is not provided.
@@ -520,8 +630,8 @@ def config_generator(model_save_path: str, warmup_epochs: int = None, lr_milesto
     if model_save_path is None:
         raise ValueError("Please specify the path to save the model, this is used to save the best performance model")
 
-    if validation_rate >= 0.5:
-        raise Warning("The validation rate usually is less than 0.5.")
+    if restart_mode not in ['batch', 'epoch']:
+        raise ValueError("Restart mode must be either 'batch' or 'epoch'.")
 
     # config['validation_rate'] = validation_rate
 
@@ -530,15 +640,39 @@ def config_generator(model_save_path: str, warmup_epochs: int = None, lr_milesto
     config['train_mode'] = 'new'
     config['auto_save'] = auto_save
     config['if_mix'] = if_mix
-    if if_mix and cov is not None:
-        config['mix'] = {
-            'initial_rate': initial_rate,
-            'final_rate': final_rate,
-            'cov': cov
-        }
+    config['val_cycle'] = validation_cycle
 
-    else:
-        raise KeyError("Got empty covariance matrix")
+    if if_mix:
+        config['mix'] = {}
+
+        if initial_rate is None and final_rate is None and event_rate is None:
+            raise ValueError(
+                'Please specify initial_rate, final_rate and warmup_error as mix strategy 1 or specify event_rate as mix strategy 2')
+
+        if initial_rate is not None and final_rate is not None and event_rate is not None:
+            raise ValueError("Can't specify both (initial_rate and final_rate) and event_rate at the same time")
+
+        if initial_rate is not None and final_rate is not None and event_rate is None:
+            config['mix']['initial_rate'] = initial_rate
+            config['mix']['final_rate'] = final_rate
+            config['mix']['warmup_error'] = 10 if warmup_error is None else warmup_error
+            # config['mix']['error'] = error
+            config['mix']['condition'] = 1
+
+        elif initial_rate is None and event_rate is not None:
+            config['mix']['event_rate'] = event_rate
+            config['mix']['condition'] = 2
+            config['mix']['warmup_error'] = 5 if warmup_error is None else warmup_error
+            # config['mix']['error'] = error
+            config['mix']['lambda_factor'] = lambda_factor
+            if final_rate is None:
+                config['mix']['final_rate'] = 0.8
+                print(
+                    "Warning: The mix data training strategy 2 is turn on, however the final rate is unspecified, set it as 0.8")
+
+            else:
+                config['mix']['final_rate'] = final_rate
+
 
     if best_metric is not None and best_loss is not None:
         config['b_m'] = best_metric
@@ -566,5 +700,17 @@ def config_generator(model_save_path: str, warmup_epochs: int = None, lr_milesto
         }
         config['l_m'] = child_dict
 
+    if lr_restart:
+        child_dict = {
+            't_0': T_0,
+            't_mult': t_mult,
+            'eta_min': eta_min,
+            'mode': restart_mode
+        }
+        config['lr_restart'] = child_dict
+
     return config
+
+
+
 

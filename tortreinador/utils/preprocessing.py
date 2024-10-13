@@ -13,6 +13,7 @@ class _FunctionController:
             - requirement_dict (list): Combination of requirement, [[_normal, _shuffle], [_normal, _not_shuffle], [_not_normal, _shuffle], [_not_normal, _not_shuffle]]
 
     """
+
     def __init__(self, requirement_list: list, train_size, val_size, random_state, x, y, scaler_x, scaler_y):
         self.r_d = requirement_list
         self.t_size = train_size
@@ -73,7 +74,8 @@ class _FunctionController:
 
 def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: list,
               feature_range=None, train_size: float = 0.8, val_size: float = 0.1, if_normal: bool = True,
-              if_shuffle: bool = True, n_workers: int = 8, batch_size: int = 256, random_state=42, if_double: bool = False):
+              if_shuffle: bool = True, n_workers: int = 8, batch_size: int = 256, random_state=42,
+              if_double: bool = False, add_noise: bool = False, error_rate: list = None, only_noise=True):
     """
     Load Data and Normalize for Regression Tasks: This function preprocesses data specifically for regression tasks by handling data splitting, optional shuffling, normalization, and DataLoader creation.
 
@@ -90,6 +92,9 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
         batch_size (int): Number of samples per batch to load.
         random_state (int, optional): A seed used by the random number generator for reproducibility. Defaults to None.
         if_double (bool): Flag to determine whether to convert data to double precision (float64) format.
+        add_noise(bool): Flag to determine whether to add noise to origin dataset.
+        error_rate(list): List of error rates to calculate for covariance reflection. Defaults to None.
+        only_noise(bool): Flag to determine whether to add noise to dataset or add noised data to dataset.
 
     Returns:
         tuple: Contains Train DataLoader, Validation DataLoader, Test X, Test Y, Scaler for X, and Scaler for Y.
@@ -101,8 +106,12 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
         - Scaler Y (sklearn.preprocessing.MinMaxScaler): Scaler object used for the output targets.
     """
     if val_size >= 0.5:
-        raise Warning("The percentage of validation data too high will let the training data not enough to train the powerful model. "
-                      "Usually set the percentage of validation dataset at 0.1-0.3")
+        print(
+            "Warning: The percentage of validation data too high will let the training data not enough to train the powerful model. "
+            "Usually set the percentage of validation dataset at 0.1-0.3")
+
+    if add_noise and error_rate is None:
+        raise ValueError("Please specify the error rate list (e.g. [0.01, 0.01, 0.01]) when using the add_noise flag")
 
     scaler_x = None
     scaler_y = None
@@ -135,18 +144,48 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
     data_x = eval("data.{}[:, input_parameters]".format('iloc' if type(input_parameters[0]) == int else 'loc'))
     data_y = eval("data.{}[:, output_parameters]".format('iloc' if type(output_parameters[0]) == int else 'loc'))
 
-    requirement_list = ['_normal' if if_normal is True else '_not_normal', '_shuffle' if if_shuffle is True else '_not_shuffle']
+    requirement_list = ['_normal' if if_normal is True else '_not_normal',
+                        '_shuffle' if if_shuffle is True else '_not_shuffle']
 
-    controller = _FunctionController(requirement_list, train_size, val_size, random_state, data_x, data_y, scaler_x, scaler_y)
+    controller = _FunctionController(requirement_list, train_size, val_size, random_state, data_x, data_y, scaler_x,
+                                     scaler_y)
 
     train_x, train_y, val_x, val_y, test_x, test_y = controller.exec()
 
-    train_x = eval('torch.from_numpy(train_x.to_numpy()){}'.format('.double()' if if_double is True else ''))
-    train_y = eval('torch.from_numpy(train_y.to_numpy()){}'.format('.double()' if if_double is True else ''))
-    val_x = eval('torch.from_numpy(val_x.to_numpy()){}'.format('.double()' if if_double is True else ''))
-    val_y = eval('torch.from_numpy(val_y.to_numpy()){}'.format('.double()' if if_double is True else ''))
-    test_x = eval('torch.from_numpy(test_x.to_numpy()){}'.format('.double()' if if_double is True else ''))
-    test_y = eval('torch.from_numpy(test_y.to_numpy()){}'.format('.double()' if if_double is True else ''))
+    if add_noise:
+        adjusted_cov_train_x = noise_generator(error_rate, train_x)
+
+        adjusted_cov_val_x = noise_generator(error_rate, val_x)
+        adjusted_cov_test_x = noise_generator(error_rate, test_x)
+
+        noise_train_x = np.random.multivariate_normal(mean=[0, 0, 0, 0], cov=adjusted_cov_train_x,
+                                                      size=train_x.shape[0])
+        noise_val_x = np.random.multivariate_normal(mean=[0, 0, 0, 0], cov=adjusted_cov_val_x, size=val_x.shape[0])
+        noise_test_x = np.random.multivariate_normal(mean=[0, 0, 0, 0], cov=adjusted_cov_test_x, size=test_x.shape[0])
+
+        if not only_noise:
+            train_x_noise = train_x + noise_train_x
+            val_x_noise = val_x + noise_val_x
+            test_x_noise = test_x + noise_test_x
+
+        else:
+            train_x_noise = noise_train_x
+            val_x_noise = noise_val_x
+            test_x_noise = noise_test_x
+
+        for i in range(len(input_parameters)):
+            train_x[i + len(input_parameters) + 1] = train_x_noise.loc[:, i] if not only_noise else train_x_noise[:, i]
+            val_x[i + len(input_parameters) + 1] = val_x_noise.loc[:, i] if not only_noise else val_x_noise[:, i]
+            test_x[i + len(input_parameters) + 1] = test_x_noise.loc[:, i] if not only_noise else test_x_noise[:, i]
+
+        # print(train_x.head())
+
+    train_x = eval('torch.from_numpy(train_x.to_numpy()){}'.format('.double()' if if_double is True else '.float()'))
+    train_y = eval('torch.from_numpy(train_y.to_numpy()){}'.format('.double()' if if_double is True else '.float()'))
+    val_x = eval('torch.from_numpy(val_x.to_numpy()){}'.format('.double()' if if_double is True else '.float()'))
+    val_y = eval('torch.from_numpy(val_y.to_numpy()){}'.format('.double()' if if_double is True else '.float()'))
+    test_x = eval('torch.from_numpy(test_x.to_numpy()){}'.format('.double()' if if_double is True else '.float()'))
+    test_y = eval('torch.from_numpy(test_y.to_numpy()){}'.format('.double()' if if_double is True else '.float()'))
 
     t_set = TensorDataset(train_x, train_y)
     train_loader = DataLoader(t_set, batch_size=batch_size, shuffle=False, num_workers=n_workers)
@@ -157,29 +196,7 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
     return train_loader, validation_loader, test_x, test_y, scaler_x, scaler_y
 
 
-def noise_generator(error_rate, input_features, data):
-    columns_mean = data[input_features].mean()
-    variance = (columns_mean * error_rate) ** 2
-    corr = data[input_features].corr()
-
-    cov = []
-    for i in range(len(variance)):
-        var = variance.iloc[i]
-        col = input_features[i]
-        tmp = []
-        for j in range(len(corr)):
-            current_col = input_features[j]
-            if j == i:
-                tmp.append(var)
-
-            else:
-                p = corr.loc[col, current_col]
-                current_var = variance[current_col]
-                tmp.append(p * (var * current_var))
-
-        cov.append(tmp)
-
-    np_cov = np.array(cov)
-    return np_cov
-
-
+def noise_generator(error_rate, data):
+    cov = np.cov(data.to_numpy().T)
+    adjusted_cov_matrix = np.diag(error_rate) @ cov
+    return adjusted_cov_matrix
