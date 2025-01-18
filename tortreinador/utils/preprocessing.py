@@ -153,15 +153,16 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
     train_x, train_y, val_x, val_y, test_x, test_y = controller.exec()
 
     if add_noise:
+        error_rate = np.array(error_rate)
         adjusted_cov_train_x = noise_generator(error_rate, train_x)
 
         adjusted_cov_val_x = noise_generator(error_rate, val_x)
         adjusted_cov_test_x = noise_generator(error_rate, test_x)
 
-        noise_train_x = np.random.multivariate_normal(mean=[0, 0, 0, 0], cov=adjusted_cov_train_x,
+        noise_train_x = np.random.multivariate_normal(mean=[0] * adjusted_cov_train_x.shape[-1], cov=adjusted_cov_train_x,
                                                       size=train_x.shape[0])
-        noise_val_x = np.random.multivariate_normal(mean=[0, 0, 0, 0], cov=adjusted_cov_val_x, size=val_x.shape[0])
-        noise_test_x = np.random.multivariate_normal(mean=[0, 0, 0, 0], cov=adjusted_cov_test_x, size=test_x.shape[0])
+        noise_val_x = np.random.multivariate_normal(mean=[0] * adjusted_cov_val_x.shape[-1], cov=adjusted_cov_val_x, size=val_x.shape[0])
+        noise_test_x = np.random.multivariate_normal(mean=[0] * adjusted_cov_test_x.shape[-1], cov=adjusted_cov_test_x, size=test_x.shape[0])
 
         if not only_noise:
             train_x_noise = train_x + noise_train_x
@@ -196,7 +197,70 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
     return train_loader, validation_loader, test_x, test_y, scaler_x, scaler_y
 
 
-def noise_generator(error_rate, data):
-    cov = np.cov(data.to_numpy().T)
-    adjusted_cov_matrix = np.diag(error_rate) @ cov
-    return adjusted_cov_matrix
+def cov_decompose(cov):
+    S = [cov[i, i] for i in range(len(cov))]
+    U = [[cov[i, j] for j in range(i + 1, len(cov))] for i in range(int(len(cov) - 1))]
+    return S, U
+
+
+def p_calculation(s, u):
+    P_ij = []
+    for i in range(len(u)):
+        tmp_u = u[i]
+        tmp_s = s[i]
+        tmp_pij = []
+        for j in range(len(tmp_u)):
+            tmp_s_next = s[i + j + 1]
+            s_s_next_sqrt = np.sqrt(tmp_s * tmp_s_next)
+            p_ij = tmp_u[j] / s_s_next_sqrt
+            tmp_pij.append(p_ij)
+
+        P_ij.append(tmp_pij)
+
+    return P_ij
+
+
+def cov_adj_compose(pij, sadj):
+    cov_adj = np.zeros((4, 4))
+    for i in range(len(pij)):
+        tmp_pij = pij[i]
+        tmp_s = sadj[i]
+        for j in range(len(tmp_pij)):
+            tmp_s_next = sadj[i + j + 1]
+            s_s_next_sqrt = np.sqrt(tmp_s * tmp_s_next)
+            covij = tmp_pij[j] * s_s_next_sqrt
+            cov_adj[i, i + j + 1] = covij
+            cov_adj[i + j + 1, i] = covij
+
+    cov_adj = cov_adj + np.diag(sadj)
+    return cov_adj
+
+
+def noise_generator(n_r, df):
+    cov = np.cov(df.to_numpy().T)
+
+    try:
+        m = df.to_numpy().mean(axis=0) * n_r
+
+    except AttributeError:
+        m = df.mean(axis=0) * n_r
+
+    S, U = cov_decompose(cov)
+
+    P_ij = p_calculation(S, U)
+    S_adj = m ** 2
+    cov_adj = cov_adj_compose(P_ij, S_adj)
+    return cov_adj
+
+
+# def error_ratio_calculation(gen_noise, curr_df):
+#     return np.std(gen_noise) / curr_df.mean()
+#
+#
+# def e_r_evaluation(gen_noises, dfs):
+#     error_ratios = []
+#     for i in range(dfs.shape[-1]):
+#         tmp = error_ratio_calculation(gen_noises[:, i], dfs.to_numpy()[:, i])
+#         error_ratios.append(tmp)
+#
+#     print(error_ratios)

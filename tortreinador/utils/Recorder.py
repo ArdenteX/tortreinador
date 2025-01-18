@@ -112,10 +112,14 @@ class CheckpointRecorder:
 
     def update(self, current_epoch, model, current_optimizer_sd, mode: str = 'current'):
         self.checkpoint['current_epoch'] = current_epoch
-        self.checkpoint['optimizer'] = current_optimizer_sd
         model_save_path = self.checkpoint['config']['m_p'] + '{}_{}_model.pth'.format(self.file_time, mode)
+        optimizer_save_path = self.checkpoint['config']['m_p'] + '{}_{}_optimizer.pth'.format(self.file_time, mode)
         torch.save(model, model_save_path)
+        torch.save(current_optimizer_sd, optimizer_save_path)
+
         self.checkpoint['{}_model'.format(mode)] = model_save_path
+        self.checkpoint['{}_optimizer'.format(mode)] = optimizer_save_path
+
         self._save_pth()
 
     def update_by_condition(self, condition, b_m, b_l):
