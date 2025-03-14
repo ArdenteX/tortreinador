@@ -1,6 +1,5 @@
 from sklearn.preprocessing import MinMaxScaler
 import pandas as pd
-import torch
 from torch.utils.data import TensorDataset, DataLoader
 import numpy as np
 
@@ -144,6 +143,19 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
     data_x = eval("data.{}[:, input_parameters]".format('iloc' if type(input_parameters[0]) == int else 'loc'))
     data_y = eval("data.{}[:, output_parameters]".format('iloc' if type(output_parameters[0]) == int else 'loc'))
 
+    if add_noise:
+        error_rate = np.array(error_rate)
+        adj_cov_x = noise_generator(error_rate, data_x)
+        obs_error = np.random.multivariate_normal(mean=[0] * adj_cov_x.shape[-1], cov=adj_cov_x, size=data_x.shape[0])
+        data_x_noise = data_x + obs_error
+
+        if only_noise:
+            data_x = data_x_noise
+
+        else:
+            for i in input_parameters:
+                data_x[i + "_noise"] = data_x_noise.loc[:, i]
+
     requirement_list = ['_normal' if if_normal is True else '_not_normal',
                         '_shuffle' if if_shuffle is True else '_not_shuffle']
 
@@ -152,32 +164,32 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
 
     train_x, train_y, val_x, val_y, test_x, test_y = controller.exec()
 
-    if add_noise:
-        error_rate = np.array(error_rate)
-        adjusted_cov_train_x = noise_generator(error_rate, train_x)
-
-        adjusted_cov_val_x = noise_generator(error_rate, val_x)
-        adjusted_cov_test_x = noise_generator(error_rate, test_x)
-
-        noise_train_x = np.random.multivariate_normal(mean=[0] * adjusted_cov_train_x.shape[-1], cov=adjusted_cov_train_x,
-                                                      size=train_x.shape[0])
-        noise_val_x = np.random.multivariate_normal(mean=[0] * adjusted_cov_val_x.shape[-1], cov=adjusted_cov_val_x, size=val_x.shape[0])
-        noise_test_x = np.random.multivariate_normal(mean=[0] * adjusted_cov_test_x.shape[-1], cov=adjusted_cov_test_x, size=test_x.shape[0])
-
-        if not only_noise:
-            train_x_noise = train_x + noise_train_x
-            val_x_noise = val_x + noise_val_x
-            test_x_noise = test_x + noise_test_x
-
-        else:
-            train_x_noise = noise_train_x
-            val_x_noise = noise_val_x
-            test_x_noise = noise_test_x
-
-        for i in range(len(input_parameters)):
-            train_x[i + len(input_parameters) + 1] = train_x_noise.loc[:, i] if not only_noise else train_x_noise[:, i]
-            val_x[i + len(input_parameters) + 1] = val_x_noise.loc[:, i] if not only_noise else val_x_noise[:, i]
-            test_x[i + len(input_parameters) + 1] = test_x_noise.loc[:, i] if not only_noise else test_x_noise[:, i]
+    # if add_noise:
+    #     error_rate = np.array(error_rate)
+    #     adjusted_cov_train_x = noise_generator(error_rate, train_x)
+    #
+    #     adjusted_cov_val_x = noise_generator(error_rate, val_x)
+    #     adjusted_cov_test_x = noise_generator(error_rate, test_x)
+    #
+    #     noise_train_x = np.random.multivariate_normal(mean=[0] * adjusted_cov_train_x.shape[-1], cov=adjusted_cov_train_x,
+    #                                                   size=train_x.shape[0])
+    #     noise_val_x = np.random.multivariate_normal(mean=[0] * adjusted_cov_val_x.shape[-1], cov=adjusted_cov_val_x, size=val_x.shape[0])
+    #     noise_test_x = np.random.multivariate_normal(mean=[0] * adjusted_cov_test_x.shape[-1], cov=adjusted_cov_test_x, size=test_x.shape[0])
+    #
+    #     if not only_noise:
+    #         train_x_noise = train_x + noise_train_x
+    #         val_x_noise = val_x + noise_val_x
+    #         test_x_noise = test_x + noise_test_x
+    #
+    #     else:
+    #         train_x_noise = noise_train_x
+    #         val_x_noise = noise_val_x
+    #         test_x_noise = noise_test_x
+    #
+    #     for i in range(len(input_parameters)):
+    #         train_x[i + len(input_parameters) + 1] = train_x_noise.loc[:, i] if not only_noise else train_x_noise[:, i]
+    #         val_x[i + len(input_parameters) + 1] = val_x_noise.loc[:, i] if not only_noise else val_x_noise[:, i]
+    #         test_x[i + len(input_parameters) + 1] = test_x_noise.loc[:, i] if not only_noise else test_x_noise[:, i]
 
         # print(train_x.head())
 
@@ -251,16 +263,3 @@ def noise_generator(n_r, df):
     S_adj = m ** 2
     cov_adj = cov_adj_compose(P_ij, S_adj)
     return cov_adj
-
-
-# def error_ratio_calculation(gen_noise, curr_df):
-#     return np.std(gen_noise) / curr_df.mean()
-#
-#
-# def e_r_evaluation(gen_noises, dfs):
-#     error_ratios = []
-#     for i in range(dfs.shape[-1]):
-#         tmp = error_ratio_calculation(gen_noises[:, i], dfs.to_numpy()[:, i])
-#         error_ratios.append(tmp)
-#
-#     print(error_ratios)
