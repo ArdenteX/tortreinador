@@ -2,6 +2,7 @@ from sklearn.preprocessing import MinMaxScaler
 import pandas as pd
 from torch.utils.data import TensorDataset, DataLoader
 import numpy as np
+import torch
 
 
 class _FunctionController:

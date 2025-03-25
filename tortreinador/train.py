@@ -513,21 +513,31 @@ class TorchTrainer:
                         visualize_test_loss(self.writer, self.epoch_val_loss.val[-1], e)
 
                     if CONDITION == 0:
-                        if self.val_metric_recorder.avg().item() >= kwargs['b_m']:
+                        if self.val_metric_recorder.avg().item() > kwargs['b_m']:
                             kwargs['b_m'] = self.val_metric_recorder.avg().item()
                             IF_SAVE = True
 
                     elif CONDITION == 1:
-                        if self.val_loss_recorder.avg().item() <= kwargs['b_l']:
+                        if self.val_loss_recorder.avg().item() < kwargs['b_l']:
                             kwargs['b_l'] = self.val_loss_recorder.avg().item()
                             IF_SAVE = True
 
                     elif CONDITION == 2:
-                        if self.val_loss_recorder.avg().item() <= kwargs['b_l'] and self.val_metric_recorder.avg().item() >= \
+                        if self.val_loss_recorder.avg().item() < kwargs[
+                            'b_l'] and self.val_metric_recorder.avg().item() > \
                                 kwargs['b_m']:
                             kwargs['b_m'] = self.val_metric_recorder.avg().item()
                             kwargs['b_l'] = self.val_loss_recorder.avg().item()
                             IF_SAVE = True
+
+                        elif self.val_loss_recorder.avg().item() < kwargs[
+                            'b_l'] and self.val_metric_recorder.avg().item() < \
+                                kwargs['b_m']:
+                            abs_dis = np.abs((kwargs['b_m'] - self.val_metric_recorder.avg().item()) / kwargs['b_m'])
+                            if 0.001 < abs_dis < 0.003:
+                                kwargs['b_m'] = self.val_metric_recorder.avg().item()
+                                kwargs['b_l'] = self.val_loss_recorder.avg().item()
+                                IF_SAVE = True
 
                     if 'm_p' in kwargs.keys() and IF_SAVE is True:
                         self.checkpoint_recorder.update_by_condition(CONDITION,
