@@ -1,8 +1,9 @@
+from mpl_toolkits.mplot3d.proj3d import transform
 from sklearn.preprocessing import MinMaxScaler
 import pandas as pd
+import torch
 from torch.utils.data import TensorDataset, DataLoader
 import numpy as np
-import torch
 
 
 class _FunctionController:
@@ -25,24 +26,36 @@ class _FunctionController:
         self.s_x = scaler_x
         self.s_y = scaler_y
 
-    def _normal(self):
-        x_normal = pd.DataFrame(self.s_x.fit_transform(self.x))
-        y_normal = pd.DataFrame(self.s_y.fit_transform(self.y))
+    def _normal(self, x_, y_, first=False):
+
+        if first:
+            x_normal = pd.DataFrame(self.s_x.fit_transform(x_))
+            y_normal = pd.DataFrame(self.s_y.fit_transform(y_))
+
+        else:
+            x_normal = pd.DataFrame(self.s_x.transform(x_))
+            y_normal = pd.DataFrame(self.s_y.transform(y_))
 
         return [x_normal, y_normal]
 
     def _not_normal(self):
         return [self.x, self.y]
 
-    def _shuffle(self, *args):
-        train_x = args[0].sample(frac=self.t_size, random_state=self.random_state)
-        train_y = args[1].loc[train_x.index]
+    def _shuffle(self, args):
 
-        test_x = args[0].drop(train_x.index)
-        test_y = args[1].loc[test_x.index]
+        train_x = self.x.sample(frac=self.t_size, random_state=self.random_state)
+        train_y = self.y.loc[train_x.index]
+
+        test_x = self.x.drop(train_x.index)
+        test_y = self.y.loc[test_x.index]
 
         val_x = train_x.sample(frac=self.v_size, random_state=self.random_state)
         val_y = train_y.loc[val_x.index]
+
+        if args == '_normal':
+            train_x, train_y = self._normal(train_x, train_y, first=True)
+            test_x, test_y = self._normal(test_x, test_y, first=False)
+            val_x, val_y = self._normal(val_x, val_y, first=False)
 
         train_x = train_x.drop(val_x.index)
         train_y = train_y.drop(val_y.index)
@@ -56,20 +69,25 @@ class _FunctionController:
 
         return train_x, train_y, val_x, val_y, test_x, test_y
 
-    def _not_shuffle(self, *args):
-        train_x = args[0].iloc[:int(len(args[0]) * self.t_size), :]
-        train_y = args[1].iloc[:int(len(args[1]) * self.t_size), :]
+    def _not_shuffle(self, args):
+        train_x = self.x.iloc[:int(len(self.x) * self.t_size), :]
+        train_y = self.y.iloc[:int(len(self.y) * self.t_size), :]
 
-        val_x = args[0].iloc[int(len(args[0]) * self.t_size):int(len(args[0]) * (self.t_size + self.v_size)), :]
-        val_y = args[1].iloc[int(len(args[1]) * self.t_size):int(len(args[1]) * (self.t_size + self.v_size)), :]
+        val_x = self.x.iloc[int(len(self.x) * self.t_size):int(len(self.x) * (self.t_size + self.v_size)), :]
+        val_y = self.y.iloc[int(len(self.y) * self.t_size):int(len(self.y) * (self.t_size + self.v_size)), :]
 
-        test_x = args[0].iloc[int(len(args[0]) * (self.t_size + self.v_size)):, :]
-        test_y = args[1].iloc[int(len(args[1]) * (self.t_size + self.v_size)):, :]
+        test_x = self.x.iloc[int(len(self.x) * (self.t_size + self.v_size)):, :]
+        test_y = self.y.iloc[int(len(self.y) * (self.t_size + self.v_size)):, :]
+
+        if args == '_normal':
+            train_x, train_y = self._normal(train_x, train_y, first=True)
+            test_x, test_y = self._normal(test_x, test_y, first=False)
+            val_x, val_y = self._normal(val_x, val_y, first=False)
 
         return train_x, train_y, val_x, val_y, test_x, test_y
 
     def exec(self):
-        return getattr(self, self.r_d[1])(*getattr(self, self.r_d[0])())
+        return getattr(self, self.r_d[1])(self.r_d[0])
 
 
 def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: list,
@@ -264,3 +282,16 @@ def noise_generator(n_r, df):
     S_adj = m ** 2
     cov_adj = cov_adj_compose(P_ij, S_adj)
     return cov_adj
+
+
+# def error_ratio_calculation(gen_noise, curr_df):
+#     return np.std(gen_noise) / curr_df.mean()
+#
+#
+# def e_r_evaluation(gen_noises, dfs):
+#     error_ratios = []
+#     for i in range(dfs.shape[-1]):
+#         tmp = error_ratio_calculation(gen_noises[:, i], dfs.to_numpy()[:, i])
+#         error_ratios.append(tmp)
+#
+#     print(error_ratios)
