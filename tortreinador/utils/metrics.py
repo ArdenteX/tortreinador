@@ -1,5 +1,8 @@
 import torch
+from sklearn.metrics import mean_squared_error, mean_absolute_error, median_absolute_error, explained_variance_score
+from sklearn.metrics import r2_score as r2_
 from torch.distributions import Categorical, Normal
+import numpy as np
 
 
 def _check_is_tensor(x):
@@ -50,3 +53,28 @@ def mixture(pi, mu, sigma, sample_for='train'):
     else:
         return pdf, select_idx, mu_selected, sigma_selected
 
+def evaluation(y_true, y_pred):
+    r2 = r2_(y_true, y_pred)
+
+    mse = mean_squared_error(y_true, y_pred)
+    mae = mean_absolute_error(y_true, y_pred)
+
+    rmse = mean_squared_error(y_true, y_pred, squared=False)
+
+    medae = median_absolute_error(y_true, y_pred)
+
+    mape = np.mean(np.abs((y_true - y_pred) / y_true)) * 100
+
+    explained_variance = explained_variance_score(y_true, y_pred)
+
+    print(f"R-Square: {r2}")
+    print(f"MSE: {mse}")
+    print(f"MAE: {mae}")
+    print(f"RMSE: {rmse}")
+    print(f"MedAE: {medae}")
+    # print(f"Max Error: {max_err}")
+    print(f"MAPE: {mape}")
+    print(f"Explained Variance: {explained_variance}")
+    # print(f"MSLE: {msle}")
+
+    return r2, mse, mae, rmse, medae, mape, explained_variance

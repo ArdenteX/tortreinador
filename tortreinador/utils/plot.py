@@ -34,9 +34,9 @@ def calculate_GMM(p, m, s, y_label):
     Calculate the probability density function of the Gaussian Mixture Model
 
         Args:
-            - param p: pi
-            - param m: mean
-            - param s: standard deviation
+            - param p: pi (batch size, 10)
+            - param m: mean (batch size, 10 , 8)
+            - param s: standard deviation (batch size, 10 , 8)
             - param y_label: e.g. np.arange(0, 1, 0.001)
 
     """

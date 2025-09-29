@@ -1,4 +1,6 @@
-from mpl_toolkits.mplot3d.proj3d import transform
+import os
+import joblib
+# from mpl_toolkits.mplot3d.proj3d import transform
 from sklearn.preprocessing import MinMaxScaler
 import pandas as pd
 import torch
@@ -15,7 +17,7 @@ class _FunctionController:
 
     """
 
-    def __init__(self, requirement_list: list, train_size, val_size, random_state, x, y, scaler_x, scaler_y):
+    def __init__(self, requirement_list: dict, train_size, val_size, random_state, x, y, scaler_x, scaler_y):
         self.r_d = requirement_list
         self.t_size = train_size
         self.v_size = val_size
@@ -26,17 +28,19 @@ class _FunctionController:
         self.s_x = scaler_x
         self.s_y = scaler_y
 
-    def _normal(self, x_, y_, first=False):
+    def _normal(self, x_, y_, first=False, normal_y=True):
 
         if first:
-            x_normal = pd.DataFrame(self.s_x.fit_transform(x_))
-            y_normal = pd.DataFrame(self.s_y.fit_transform(y_))
+            x_ = pd.DataFrame(self.s_x.fit_transform(x_))
+            if normal_y:
+                y_ = pd.DataFrame(self.s_y.fit_transform(y_))
 
         else:
-            x_normal = pd.DataFrame(self.s_x.transform(x_))
-            y_normal = pd.DataFrame(self.s_y.transform(y_))
+            x_ = pd.DataFrame(self.s_x.transform(x_))
+            if normal_y:
+                y_ = pd.DataFrame(self.s_y.transform(y_))
 
-        return [x_normal, y_normal]
+        return [x_, y_]
 
     def _not_normal(self):
         return [self.x, self.y]
@@ -53,9 +57,9 @@ class _FunctionController:
         val_y = train_y.loc[val_x.index]
 
         if args == '_normal':
-            train_x, train_y = self._normal(train_x, train_y, first=True)
-            test_x, test_y = self._normal(test_x, test_y, first=False)
-            val_x, val_y = self._normal(val_x, val_y, first=False)
+            train_x, train_y = self._normal(train_x, train_y, first=True, normal_y=self.r_d['normal_y'])
+            test_x, test_y = self._normal(test_x, test_y, first=False, normal_y=self.r_d['normal_y'])
+            val_x, val_y = self._normal(val_x, val_y, first=False, normal_y=self.r_d['normal_y'])
 
         train_x = train_x.drop(val_x.index)
         train_y = train_y.drop(val_y.index)
@@ -87,13 +91,13 @@ class _FunctionController:
         return train_x, train_y, val_x, val_y, test_x, test_y
 
     def exec(self):
-        return getattr(self, self.r_d[1])(self.r_d[0])
+        return getattr(self, self.r_d['shuffle_function'])(self.r_d['normal_function'])
 
 
 def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: list,
               feature_range=None, train_size: float = 0.8, val_size: float = 0.1, if_normal: bool = True,
               if_shuffle: bool = True, n_workers: int = 8, batch_size: int = 256, random_state=42,
-              if_double: bool = False, add_noise: bool = False, error_rate: list = None, only_noise=True):
+              if_double: bool = False, add_noise: bool = False, error_rate: list = None, only_noise=True, save_path: str = None, normal_y: bool = True):
     """
     Load Data and Normalize for Regression Tasks: This function preprocesses data specifically for regression tasks by handling data splitting, optional shuffling, normalization, and DataLoader creation.
 
@@ -113,6 +117,8 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
         add_noise(bool): Flag to determine whether to add noise to origin dataset.
         error_rate(list): List of error rates to calculate for covariance reflection. Defaults to None.
         only_noise(bool): Flag to determine whether to add noise to dataset or add noised data to dataset.
+        save_path(str): Path to save .npy file
+        normal_y(bool): Flag to determine whether to normalize the y using MinMaxScaler.
 
     Returns:
         tuple: Contains Train DataLoader, Validation DataLoader, Test X, Test Y, Scaler for X, and Scaler for Y.
@@ -175,8 +181,14 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
             for i in input_parameters:
                 data_x[i + "_noise"] = data_x_noise.loc[:, i]
 
-    requirement_list = ['_normal' if if_normal is True else '_not_normal',
-                        '_shuffle' if if_shuffle is True else '_not_shuffle']
+    # requirement_list = ['_normal' if if_normal is True else '_not_normal',
+    #                     '_shuffle' if if_shuffle is True else '_not_shuffle']
+
+    requirement_list = {
+        'normal_function': '_normal' if if_normal is True else '_not_normal',
+        'shuffle_function': '_shuffle' if if_shuffle is True else '_not_shuffle',
+        'normal_y': normal_y
+    }
 
     controller = _FunctionController(requirement_list, train_size, val_size, random_state, data_x, data_y, scaler_x,
                                      scaler_y)
@@ -211,6 +223,16 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
     #         test_x[i + len(input_parameters) + 1] = test_x_noise.loc[:, i] if not only_noise else test_x_noise[:, i]
 
         # print(train_x.head())
+    if save_path is not None:
+        save_npy(path=save_path, df=train_x, name='train_x')
+        save_npy(path=save_path, df=train_y, name='train_y')
+        save_npy(path=save_path, df=val_x, name='val_x')
+        save_npy(path=save_path, df=val_y, name='val_y')
+        save_npy(path=save_path, df=test_x, name='test_x')
+        save_npy(path=save_path, df=test_y, name='test_y')
+
+        save_scaler(scaler_x, path=save_path, name='scaler_x')
+        save_scaler(scaler_y, path=save_path, name='scaler_y')
 
     train_x = eval('torch.from_numpy(train_x.to_numpy()){}'.format('.double()' if if_double is True else '.float()'))
     train_y = eval('torch.from_numpy(train_y.to_numpy()){}'.format('.double()' if if_double is True else '.float()'))
@@ -219,14 +241,36 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
     test_x = eval('torch.from_numpy(test_x.to_numpy()){}'.format('.double()' if if_double is True else '.float()'))
     test_y = eval('torch.from_numpy(test_y.to_numpy()){}'.format('.double()' if if_double is True else '.float()'))
 
-    t_set = TensorDataset(train_x, train_y)
-    train_loader = DataLoader(t_set, batch_size=batch_size, shuffle=False, num_workers=n_workers)
+    # t_set = TensorDataset(train_x, train_y)
+    # train_loader = DataLoader(t_set, batch_size=batch_size, shuffle=False, num_workers=n_workers)
+    train_loader = get_dataloader(x=train_x, y=train_y, batch_size=batch_size, shuffle=False, num_workers=n_workers)
 
-    v_set = TensorDataset(val_x, val_y)
-    validation_loader = DataLoader(v_set, batch_size=batch_size, shuffle=False, num_workers=n_workers)
+    # v_set = TensorDataset(val_x, val_y)
+    # validation_loader = DataLoader(v_set, batch_size=batch_size, shuffle=False, num_workers=n_workers)
+    validation_loader = get_dataloader(val_x, val_y, batch_size=batch_size, shuffle=False, num_workers=n_workers)
 
     return train_loader, validation_loader, test_x, test_y, scaler_x, scaler_y
 
+
+def save_npy(df, path, name):
+    if os.path.exists(path):
+        df_to_np = df.to_numpy()
+        np.save(os.path.join(path, name + ".npy"), df_to_np)
+
+    else:
+        raise FileNotFoundError()
+
+def save_scaler(scaler, path, name):
+    if os.path.exists(path):
+        joblib.dump(scaler, os.path.join(path, name + ".save"))
+
+    else:
+        raise FileNotFoundError()
+
+def get_dataloader(x, y, batch_size, shuffle, num_workers):
+    tensor_dataset = TensorDataset(x, y)
+    data_loader = DataLoader(tensor_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_workers)
+    return data_loader
 
 def cov_decompose(cov):
     S = [cov[i, i] for i in range(len(cov))]
@@ -282,16 +326,3 @@ def noise_generator(n_r, df):
     S_adj = m ** 2
     cov_adj = cov_adj_compose(P_ij, S_adj)
     return cov_adj
-
-
-# def error_ratio_calculation(gen_noise, curr_df):
-#     return np.std(gen_noise) / curr_df.mean()
-#
-#
-# def e_r_evaluation(gen_noises, dfs):
-#     error_ratios = []
-#     for i in range(dfs.shape[-1]):
-#         tmp = error_ratio_calculation(gen_noises[:, i], dfs.to_numpy()[:, i])
-#         error_ratios.append(tmp)
-#
-#     print(error_ratios)

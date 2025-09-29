@@ -3,7 +3,7 @@
 A PyTorch-based trainer. The highlight of this tool is the separation of the loop module and the computation module within the training module, allowing for a customizable computation process. Users can rewrite the ```calculate``` function according to their specific needs (see example). Additionally, this tool supports features such as checkpoint training, data preprocessing, loss function visualization, and a series of overfitting prevention mechanisms (e.g., cosine annealing and warmup). It also enables evaluation metrics to be stored in memory or saved as CSV files.
 
 ## Installation
-This package needs Python>=3.7 and the version of Pytorch used in development is 1.13.1 and cuda11.2, considering the different version of cuda, the package will
+This package needs Python>=3.7 and the version of Pytorch used in development is 2.5.1 and cuda12.4, considering the different version of cuda, the package will
 not install Pytorch automatically. You should check your cuda's version, install the suitable [pytorch](https://pytorch.org/get-started/previous-versions/) first. Then, run the command below:
 ```
 pip install tortreinador 
