@@ -22,28 +22,28 @@ class mdn(nn.Module):
             # nn.Dropout(),
             nn.Linear(self.n_h, self.n_h),
             nn.SiLU()
-        ).double()
+        )
 
         self.pi = nn.Sequential(
             nn.Linear(self.n_h, self.n_h),
             nn.SiLU(),
             nn.Linear(self.n_h, self.n_g)
-        ).double()
+        )
 
         self.mu = nn.Sequential(
             nn.Linear(self.n_h, self.n_h),
             nn.SiLU(),
             nn.Linear(self.n_h, self.o_s * self.n_g)
-        ).double()
+        )
 
         self.sigma = nn.Sequential(
             nn.Linear(self.n_h, self.n_h),
             nn.ELU(),
             nn.Linear(self.n_h, self.o_s * self.n_g)
-        ).double()
+        )
 
     def forward(self, x, eps=1e-6):
-        parameters = self.root_layer(x).double()
+        parameters = self.root_layer(x)
 
         pi = torch.log_softmax(self.pi(parameters), dim=-1)
 

@@ -1,11 +1,63 @@
 import os
 import joblib
-# from mpl_toolkits.mplot3d.proj3d import transform
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
 import pandas as pd
-import torch
 from torch.utils.data import TensorDataset, DataLoader
 import numpy as np
+from dataclasses import dataclass, field
+from typing import Union, Tuple, List
+import torch
+
+
+@dataclass
+class ScalerConfig:
+    """
+    Configuration for feature/target normalization.
+
+    Attributes:
+        on (bool): Whether to enable normalization.
+        method (str): Either 'MinMaxScaler'/'minmax' or 'StandardScaler'/'standard'.
+        normal_y (bool): Whether to normalize target columns in addition to features.
+        feature_range (tuple): Range used by MinMaxScaler.
+    """
+    on: bool = True
+    method: str = 'MinMaxScaler'
+    normal_y: bool = False
+    feature_range: Union[Tuple, List, None] = (0, 1)
+
+    def validate(self):
+        """Validate scaler configuration before use."""
+        if self.on is True and self.method not in ['MinMaxScaler', 'StandardScaler', 'minmax', 'standard']:
+            raise ValueError(
+                "Currently only 'MinMaxScaler' and 'StandardScaler' are supported for normalization methods ('minmax' and 'standard' are allowed).")
+
+    def select_scaler(self):
+        """
+        Instantiate sklearn scaler objects for X and Y.
+
+        Returns:
+            tuple: A pair of scalers (scaler_x, scaler_y) matching the requested method.
+        """
+        if self.feature_range is None:
+            self.feature_range = (0, 1)
+
+        scaler_x = None
+        scaler_y = None
+
+        success = False
+        while success is False:
+            try:
+                scaler_x = MinMaxScaler(feature_range=self.feature_range) if self.method in ['MinMaxScaler',
+                                                                                                 'minmax'] else StandardScaler()
+                scaler_y = MinMaxScaler(feature_range=self.feature_range) if self.method in ['MinMaxScaler',
+                                                                                                 'minmax'] else StandardScaler()
+                success = True
+
+            except:
+                self.feature_range = tuple(self.feature_range)
+
+        return scaler_x, scaler_y
 
 
 class _FunctionController:
@@ -18,6 +70,17 @@ class _FunctionController:
     """
 
     def __init__(self, requirement_list: dict, train_size, val_size, random_state, x, y, scaler_x, scaler_y):
+        """
+        Args:
+            requirement_list (dict): Functions to call for normalization and shuffling.
+            train_size (float): Fraction used for training split.
+            val_size (float): Fraction of training split reserved for validation.
+            random_state (int): Seed for deterministic sampling.
+            x (pd.DataFrame): Feature dataframe.
+            y (pd.DataFrame): Target dataframe.
+            scaler_x: Scaler used for features.
+            scaler_y: Scaler used for targets.
+        """
         self.r_d = requirement_list
         self.t_size = train_size
         self.v_size = val_size
@@ -29,6 +92,15 @@ class _FunctionController:
         self.s_y = scaler_y
 
     def _normal(self, x_, y_, first=False, normal_y=True):
+        """
+        Normalize features (and optionally targets) using pre-selected scalers.
+
+        Args:
+            x_ (pd.DataFrame): Feature slice.
+            y_ (pd.DataFrame): Target slice.
+            first (bool): If True, fit scalers; otherwise transform only.
+            normal_y (bool): Whether to normalize targets.
+        """
 
         if first:
             x_ = pd.DataFrame(self.s_x.fit_transform(x_))
@@ -43,9 +115,16 @@ class _FunctionController:
         return [x_, y_]
 
     def _not_normal(self):
+        """Return raw feature/target data without normalization."""
         return [self.x, self.y]
 
     def _shuffle(self, args):
+        """
+        Shuffle dataset rows and split into train/val/test with optional normalization.
+
+        Args:
+            args (str): Either '_normal' or '_not_normal' indicating normalization path.
+        """
 
         train_x = self.x.sample(frac=self.t_size, random_state=self.random_state)
         train_y = self.y.loc[train_x.index]
@@ -74,6 +153,12 @@ class _FunctionController:
         return train_x, train_y, val_x, val_y, test_x, test_y
 
     def _not_shuffle(self, args):
+        """
+        Deterministically split dataset without shuffling, preserving original order.
+
+        Args:
+            args (str): Either '_normal' or '_not_normal' indicating normalization path.
+        """
         train_x = self.x.iloc[:int(len(self.x) * self.t_size), :]
         train_y = self.y.iloc[:int(len(self.y) * self.t_size), :]
 
@@ -91,13 +176,14 @@ class _FunctionController:
         return train_x, train_y, val_x, val_y, test_x, test_y
 
     def exec(self):
+        """Dispatch to shuffle/not-shuffle and normalize/not-normalize implementations."""
         return getattr(self, self.r_d['shuffle_function'])(self.r_d['normal_function'])
 
 
 def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: list,
-              feature_range=None, train_size: float = 0.8, val_size: float = 0.1, if_normal: bool = True,
+              train_size: float = 0.8, val_size: float = 0.1, normal: ScalerConfig = None,
               if_shuffle: bool = True, n_workers: int = 8, batch_size: int = 256, random_state=42,
-              if_double: bool = False, add_noise: bool = False, error_rate: list = None, only_noise=True, save_path: str = None, normal_y: bool = True):
+              if_double: bool = False, add_noise: bool = False, error_rate: list = None, only_noise=True, save_path: str = None):
     """
     Load Data and Normalize for Regression Tasks: This function preprocesses data specifically for regression tasks by handling data splitting, optional shuffling, normalization, and DataLoader creation.
 
@@ -105,10 +191,10 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
         data (pd.DataFrame): The complete dataset in a Pandas DataFrame.
         input_parameters (list of str or int): Column names or indices representing the input features.
         output_parameters (list of str or int): Column names or indices representing the target variables.
-        feature_range (tuple of (float, float), optional): The range (min, max) used by the MinMaxScaler for scaling data. Defaults to (0, 1).
+
         train_size (float): The proportion of the dataset to include in the train split (0 to 1).
         val_size (float): The proportion of the training data to use as validation data (0 to 1).
-        if_normal (bool): Flag to determine whether to normalize the data using MinMaxScaler.
+
         if_shuffle (bool): Flag to determine whether to shuffle the data before splitting into training, validation, and test sets.
         n_workers (int): The number of subprocesses to use for data loading. More workers can increase the loading speed but consume more CPU cores.
         batch_size (int): Number of samples per batch to load.
@@ -118,7 +204,12 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
         error_rate(list): List of error rates to calculate for covariance reflection. Defaults to None.
         only_noise(bool): Flag to determine whether to add noise to dataset or add noised data to dataset.
         save_path(str): Path to save .npy file
-        normal_y(bool): Flag to determine whether to normalize the y using MinMaxScaler.
+
+        normal(ScalerConfig, optional): Normalization method to use. Defaults to MinMaxScaler()
+            - on (bool): Flag to determine whether to normalize the data using MinMaxScaler.
+            - method (str): MinMaxScaler or StandardScaler
+            - feature_range (tuple of (float, float), optional): The range (min, max) used by the MinMaxScaler for scaling data. Defaults to (0, 1).
+            - normal_y(bool): Flag to determine whether to normalize the y using MinMaxScaler.
 
     Returns:
         tuple: Contains Train DataLoader, Validation DataLoader, Test X, Test Y, Scaler for X, and Scaler for Y.
@@ -137,26 +228,15 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
     if add_noise and error_rate is None:
         raise ValueError("Please specify the error rate list (e.g. [0.01, 0.01, 0.01]) when using the add_noise flag")
 
-    scaler_x = None
-    scaler_y = None
+    if normal is None:
+        normal = ScalerConfig(on=False)
 
-    # Data Normalization
-    if feature_range is None:
-        feature_range = [0, 1]
+    if normal.on:
+        normal.validate()
+        scaler_x, scaler_y = normal.select_scaler()
 
-    # 8/12 Fixed
-    success = False
-    while success is False:
-        try:
-            scaler_x = MinMaxScaler(feature_range=feature_range)
-            scaler_y = MinMaxScaler(feature_range=feature_range)
-            success = True
-
-        except:
-            feature_range = tuple(feature_range)
-
-    if 'scaler_x' not in locals() or 'scaler_y' not in locals():
-        raise ValueError("Can not define scaler_x or scaler_y, please check the input feature range.")
+        if 'scaler_x' not in locals() or 'scaler_y' not in locals():
+            raise ValueError("Can not define scaler_x or scaler_y, please check the input feature range.")
 
     train_x = None
     train_y = None
@@ -185,9 +265,9 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
     #                     '_shuffle' if if_shuffle is True else '_not_shuffle']
 
     requirement_list = {
-        'normal_function': '_normal' if if_normal is True else '_not_normal',
+        'normal_function': '_normal' if normal.on is True else '_not_normal',
         'shuffle_function': '_shuffle' if if_shuffle is True else '_not_shuffle',
-        'normal_y': normal_y
+        'normal_y': normal.normal_y
     }
 
     controller = _FunctionController(requirement_list, train_size, val_size, random_state, data_x, data_y, scaler_x,
@@ -253,6 +333,12 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
 
 
 def save_npy(df, path, name):
+    """
+    Save a dataframe as a NumPy binary file.
+
+    Raises:
+        FileNotFoundError: When the destination directory does not exist.
+    """
     if os.path.exists(path):
         df_to_np = df.to_numpy()
         np.save(os.path.join(path, name + ".npy"), df_to_np)
@@ -261,6 +347,12 @@ def save_npy(df, path, name):
         raise FileNotFoundError()
 
 def save_scaler(scaler, path, name):
+    """
+    Persist a fitted scaler with joblib.
+
+    Raises:
+        FileNotFoundError: When the destination directory does not exist.
+    """
     if os.path.exists(path):
         joblib.dump(scaler, os.path.join(path, name + ".save"))
 
@@ -268,17 +360,20 @@ def save_scaler(scaler, path, name):
         raise FileNotFoundError()
 
 def get_dataloader(x, y, batch_size, shuffle, num_workers):
+    """Wrap tensors into a DataLoader with consistent arguments used across the package."""
     tensor_dataset = TensorDataset(x, y)
     data_loader = DataLoader(tensor_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_workers)
     return data_loader
 
 def cov_decompose(cov):
+    """Extract diagonal variances and upper-triangular covariances from a covariance matrix."""
     S = [cov[i, i] for i in range(len(cov))]
     U = [[cov[i, j] for j in range(i + 1, len(cov))] for i in range(int(len(cov) - 1))]
     return S, U
 
 
 def p_calculation(s, u):
+    """Convert covariance components into correlation-like coefficients used for noise synthesis."""
     P_ij = []
     for i in range(len(u)):
         tmp_u = u[i]
@@ -296,6 +391,7 @@ def p_calculation(s, u):
 
 
 def cov_adj_compose(pij, sadj):
+    """Recompose an adjusted covariance matrix from correlation coefficients and adjusted variances."""
     cov_adj = np.zeros((4, 4))
     for i in range(len(pij)):
         tmp_pij = pij[i]
@@ -312,6 +408,16 @@ def cov_adj_compose(pij, sadj):
 
 
 def noise_generator(n_r, df):
+    """
+    Generate an adjusted covariance matrix to synthesize noise scaled by provided error rates.
+
+    Args:
+        n_r (np.ndarray): Error rate multipliers per feature.
+        df (pd.DataFrame): Data used to compute the base covariance.
+
+    Returns:
+        np.ndarray: Adjusted covariance matrix.
+    """
     cov = np.cov(df.to_numpy().T)
 
     try:
