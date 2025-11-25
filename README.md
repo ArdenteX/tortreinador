@@ -1,5 +1,3 @@
-from openpyxl.styles.builtins import output
-
 # Torch Treinador
 
 **Torch Treinador** is a flexible and highly customizable training framework designed for PyTorch. It aims to eliminate the repetitive boilerplate code associated with training loops while giving developers complete control over the computation logic.
