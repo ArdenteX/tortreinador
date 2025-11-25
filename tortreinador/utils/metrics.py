@@ -17,7 +17,7 @@ def _check_in_same_device(arg1, arg2):
     return arg1.device == arg2.device
 
 
-def r2_score(y_ture, y_pred):
+def r2_score(y_true, y_pred):
     """
     r2 score function for the data in GPU
 
@@ -25,12 +25,12 @@ def r2_score(y_ture, y_pred):
             - y_ture: true
             - y_pred: predicted
     """
-    if _check_in_same_device(y_ture, y_pred) is not True:
+    if _check_in_same_device(y_true, y_pred) is not True:
         msg = 'Two arguments in different device'
         raise RuntimeError(msg)
 
-    ss_tot = torch.sum(((y_ture - torch.mean(y_ture, dim=0)) ** 2), dim=0, dtype=torch.float64)
-    ss_res = torch.sum(((y_ture - y_pred) ** 2), dim=0, dtype=torch.float64)
+    ss_tot = torch.sum(((y_true - torch.mean(y_true, dim=0)) ** 2), dim=0, dtype=torch.float64)
+    ss_res = torch.sum(((y_true - y_pred) ** 2), dim=0, dtype=torch.float64)
     r2 = 1 - ss_res / ss_tot
 
     return torch.mean(r2)

@@ -182,8 +182,8 @@ class _FunctionController:
 
 def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: list,
               train_size: float = 0.8, val_size: float = 0.1, normal: ScalerConfig = None,
-              if_shuffle: bool = True, n_workers: int = 8, batch_size: int = 256, random_state=42,
-              if_double: bool = False, add_noise: bool = False, error_rate: list = None, only_noise=True, save_path: str = None):
+              if_shuffle: bool = True, num_workers: int = 8, batch_size: int = 256, random_state=42,
+              if_double: bool = False, add_noise: bool = False, error_rate: list = None, only_noise=True, save_path: str = None, grid_search: bool = False):
     """
     Load Data and Normalize for Regression Tasks: This function preprocesses data specifically for regression tasks by handling data splitting, optional shuffling, normalization, and DataLoader creation.
 
@@ -196,7 +196,7 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
         val_size (float): The proportion of the training data to use as validation data (0 to 1).
 
         if_shuffle (bool): Flag to determine whether to shuffle the data before splitting into training, validation, and test sets.
-        n_workers (int): The number of subprocesses to use for data loading. More workers can increase the loading speed but consume more CPU cores.
+        num_workers (int): The number of subprocesses to use for data loading. More workers can increase the loading speed but consume more CPU cores.
         batch_size (int): Number of samples per batch to load.
         random_state (int, optional): A seed used by the random number generator for reproducibility. Defaults to None.
         if_double (bool): Flag to determine whether to convert data to double precision (float64) format.
@@ -204,6 +204,7 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
         error_rate(list): List of error rates to calculate for covariance reflection. Defaults to None.
         only_noise(bool): Flag to determine whether to add noise to dataset or add noised data to dataset.
         save_path(str): Path to save .npy file
+        grid_search(bool): Only return the train loader and validation loader if using Grid Search function, defaults to False.
 
         normal(ScalerConfig, optional): Normalization method to use. Defaults to MinMaxScaler()
             - on (bool): Flag to determine whether to normalize the data using MinMaxScaler.
@@ -323,13 +324,17 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
 
     # t_set = TensorDataset(train_x, train_y)
     # train_loader = DataLoader(t_set, batch_size=batch_size, shuffle=False, num_workers=n_workers)
-    train_loader = get_dataloader(x=train_x, y=train_y, batch_size=batch_size, shuffle=False, num_workers=n_workers)
+    train_loader = get_dataloader(x=train_x, y=train_y, batch_size=batch_size, shuffle=False, num_workers=num_workers)
 
     # v_set = TensorDataset(val_x, val_y)
     # validation_loader = DataLoader(v_set, batch_size=batch_size, shuffle=False, num_workers=n_workers)
-    validation_loader = get_dataloader(val_x, val_y, batch_size=batch_size, shuffle=False, num_workers=n_workers)
+    validation_loader = get_dataloader(val_x, val_y, batch_size=batch_size, shuffle=False, num_workers=num_workers)
 
-    return train_loader, validation_loader, test_x, test_y, scaler_x, scaler_y
+    if grid_search:
+        return train_loader, validation_loader
+
+    else:
+        return train_loader, validation_loader, test_x, test_y, scaler_x, scaler_y
 
 
 def save_npy(df, path, name):
@@ -359,7 +364,7 @@ def save_scaler(scaler, path, name):
     else:
         raise FileNotFoundError()
 
-def get_dataloader(x, y, batch_size, shuffle, num_workers):
+def get_dataloader(x, y, batch_size, shuffle, num_workers=8):
     """Wrap tensors into a DataLoader with consistent arguments used across the package."""
     tensor_dataset = TensorDataset(x, y)
     data_loader = DataLoader(tensor_dataset, batch_size=batch_size, shuffle=shuffle, num_workers=num_workers)

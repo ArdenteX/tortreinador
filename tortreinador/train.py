@@ -31,7 +31,7 @@ class TorchTrainer:
     def __init__(self,
                  is_gpu: bool = True,
                  epoch: int = 150, log_dir: str = None, model: nn.Module = None,
-                 optimizer: Optimizer = None, metric_manger: MetricManager = None, criterion: nn.Module = None,
+                 optimizer: Optimizer = None, metric_manager: MetricManager = None, criterion: nn.Module = None,
                  data_save_mode: str = 'recorder'):
         """
         Build a trainer with the core components required for the optimization loop.
@@ -42,7 +42,7 @@ class TorchTrainer:
             log_dir: Destination directory for TensorBoard summaries. When ``None`` logging is disabled.
             model: PyTorch module to train.
             optimizer: Optimizer configured for ``model``.
-            metric_manger: MetricManager describing which metrics should be tracked. A default manager
+            metric_manager: MetricManager describing which metrics should be tracked. A default manager
                 that only tracks loss is created when ``None`` is supplied.
             criterion: Callable loss object that matches the model outputs.
             data_save_mode: Selects how epoch statistics are persisted. ``'recorder'`` keeps the data in
@@ -89,20 +89,20 @@ class TorchTrainer:
         # self.train_metric_recorder = Recorder(self.device.type)
         # self.val_metric_recorder = Recorder(self.device.type)
 
-        if metric_manger is not None:
-            self.metric_manger = metric_manger
+        if metric_manager is not None:
+            self.metric_manager = metric_manager
 
         else:
-            self.metric_manger = MetricManager([MetricDefine('loss', torch.tensor(0.0), 0)])
+            self.metric_manager = MetricManager([MetricDefine('loss', torch.tensor(0.0), 0)])
 
         self.recorders = [
-            Recorder(self.device.type) for i in range(len(metric_manger.metric_list))
+            Recorder(self.device.type) for i in range(len(self.metric_manager.metric_list))
         ]
         self.recorders = np.array(self.recorders)
 
         if self.data_save_mode == 'recorder':
             self.recorder_for_epoch = [
-            RecorderForEpoch(self.device.type) for i in range(len(metric_manger.metric_list))
+            RecorderForEpoch(self.device.type) for i in range(len(self.metric_manager.metric_list))
         ]
             self.recorder_for_epoch = np.array(self.recorder_for_epoch)
 
@@ -154,7 +154,7 @@ class TorchTrainer:
         if not isinstance(mode, int):
             raise ValueError("Unexpected type for mode: {}, please input correct type (int).".format(type(mode)))
 
-        self.metric_manger.update(update_values, mode=mode)
+        self.metric_manager.update(update_values, mode=mode)
         return mode
 
     def _dict_return(self, return_dict):
@@ -182,8 +182,8 @@ class TorchTrainer:
             as the optimization target.
         """
 
-        current_mode_idx = self.metric_manger.get_metrics_by_mode(mode, idx=True)
-        current_mode_metrics = self.metric_manger.get_metrics_by_mode(mode)
+        current_mode_idx = self.metric_manager.get_metrics_by_mode(mode, idx=True)
+        current_mode_metrics = self.metric_manager.get_metrics_by_mode(mode)
 
         # print(current_mode_idx)
 
@@ -191,8 +191,8 @@ class TorchTrainer:
             self.recorders[c_i].update(c_m.metric_value)
 
         return {
-            '{}'.format(k): (v.avg().item(), '.4f') for k, v in zip(self.metric_manger.metric_names[current_mode_idx], self.recorders[current_mode_idx])
-        }, self.metric_manger.metric_list[self.metric_manger.criterion_idx].metric_value
+            '{}'.format(k): (v.avg().item(), '.4f') for k, v in zip(self.metric_manager.metric_names[current_mode_idx], self.recorders[current_mode_idx])
+        }, self.metric_manager.metric_list[self.metric_manager.criterion_idx].metric_value
 
     def _check_best_metric_for_regression(self, b_m):
         """
@@ -255,10 +255,11 @@ class TorchTrainer:
         file_time = datetime.now().strftime('%Y-%m-%d %H:%M').replace(":", "").replace("-", '').replace(
             " ", '')
         current_path = os.getcwd()
-        filepath = current_path + "\\train_log" if self.system == 'Windows' else current_path + "/train_log"
 
-        csv_filename = filepath + '\\log_{}.csv'.format(
-            file_time) if self.system == 'Windows' else filepath + '/log_{}.csv'.format(file_time)
+        filepath = os.path.join(current_path, 'train_log')
+
+        csv_filename = os.path.join(filepath, 'log_{}.csv'.format(
+            file_time))
 
         if not os.path.exists(filepath):
             os.mkdir(filepath)
@@ -304,6 +305,8 @@ class TorchTrainer:
             list[RecorderForEpoch] | str: Recorder list with epoch level summaries when ``data_save_mode``
             is ``'recorder'``. When ``'csv'`` mode is used the literal string ``'OK'`` indicates success.
         """
+
+        # TRAIN_INIT
         if checkpoint_ is not None:
             kwargs = checkpoint_['config']
 
@@ -386,9 +389,9 @@ class TorchTrainer:
         # for name, parameters in self.model.named_parameters():
         #     print(name, ':', parameters.size())
 
-        # Epoch
-        for e in range(START_EPOCH, self.epoch):
 
+        for e in range(START_EPOCH, self.epoch):
+            # TRAIN_EPOCH_START
             self.model.train()
 
             if IS_WARMUP and IS_LR_MILESTONE is True and e >= kwargs['w_e']:
@@ -411,6 +414,7 @@ class TorchTrainer:
 
             with tqdm(t_l, unit='batch') as t_epoch:
                 for batch_idx, (x, y) in enumerate(t_epoch):
+                    # TRAIN_BATCH_START
 
                     t_epoch.set_description(f"Epoch {e + 1} Training")
 
@@ -419,13 +423,15 @@ class TorchTrainer:
                     self.optimizer.zero_grad()
 
                     cal = self.calculate(mini_batch_x, mini_batch_y, mode=1)
+                    # TRAIN_BATCH_CALCULATION_END
+
                     param_options, loss = self.cal_result(mode=cal)
 
                     param_options['lr'] = (self.optimizer.state_dict()['param_groups'][0]['lr'], '.6f')
 
                     params = {key: "{value:{format}}".format(value=value, format=f)
                               for key, (value, f) in param_options.items()}
-
+                    # TRAIN_BATCH_METRIC_COLLECTION_COMPLETE
                     if 'mix' in kwargs.keys() and kwargs['mix']['condition'] == 2:
                         params['event'] = ("Occurs" if self.event_occurs else "Not Occurs")
 
@@ -433,6 +439,7 @@ class TorchTrainer:
 
                     self.optimizer.step()
 
+                    # TRAIN_BATCH_END
                     if IS_WARMUP is True and e < kwargs['w_e']:
                         warmup.step()
 
@@ -452,14 +459,16 @@ class TorchTrainer:
 
                 # epoch_train_metric.append(self.train_metric_recorder.avg)
                 # epoch_train_loss.append(self.train_loss_recorder.avg)
-
+            # TRAIN_EPOCH_END
             if VAL_COUNT % VAL_CYCLE == 0:
+
                 VAL_COUNT = 1
 
                 with torch.no_grad():
                     self.model.eval()
-
+                    # VALIDATION_START
                     with tqdm(v_l, unit='batch') as v_epoch:
+                        # VALIDATION_BATCH_START
                         v_epoch.set_description(f"Epoch {e + 1} Validating")
 
                         for v_x, v_y in v_epoch:
@@ -471,8 +480,12 @@ class TorchTrainer:
                             params = {key: "{value:{format}}".format(value=value, format=f)
                                       for key, (value, f) in param_options.items()}
 
+                            # VALIDATION_BATCH_METRIC_COLLECTION_COMPLETE
                             v_epoch.set_postfix(**params)
 
+                            # VALIDATION_BATCH_END
+
+                    # VALIDATION_END
                     if self.data_save_mode == 'recorder':
 
                         for i in range(len(self.recorder_for_epoch)):
@@ -488,8 +501,8 @@ class TorchTrainer:
 
                             writer.writerow([e + 1] + [r.avg().detach().item() for r in self.recorders])
 
-                    val_loss_recorder = self.recorders[self.metric_manger.criterion_idx]
-                    val_baseline_metric = self.recorders[self.metric_manger.baseline_metric_idx]
+                    val_loss_recorder = self.recorders[self.metric_manager.criterion_idx]
+                    val_baseline_metric = self.recorders[self.metric_manager.baseline_metric_idx]
 
                     val_loss = val_loss_recorder.avg().item()
                     val_metric = val_baseline_metric.avg().item()
@@ -567,6 +580,7 @@ class TorchTrainer:
             if IS_WARMUP is False and IS_LR_RESTART and kwargs['lr_restart']['mode'] == 'epoch':
                 restart_schedular.step()
 
+        # TRAIN_COMPLETE
         if self.data_save_mode == 'recorder':
             return self.recorder_for_epoch
 

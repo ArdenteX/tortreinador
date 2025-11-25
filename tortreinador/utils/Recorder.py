@@ -170,7 +170,7 @@ class MetricDefine:
     Attributes
         metric_name: Name of the metric, default as 'Unknown Metric'
         metric_value: Value of the metric
-        metric_mod:
+        metric_mode:
             - 0: Display this metric in All the stage (Training and Validation)
             - 1: Display this metric in Training
             - 2: Display this metric in Validation
