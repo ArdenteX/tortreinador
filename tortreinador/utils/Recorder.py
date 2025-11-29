@@ -1,3 +1,5 @@
+import os.path
+
 import torch
 from dataclasses import dataclass, field
 from typing import Union, List, Tuple, Dict, Literal
@@ -136,8 +138,12 @@ class CheckpointRecorder:
     def update(self, current_epoch, model, current_optimizer_sd, mode: str = 'current'):
         """Persist current model/optimizer states and training progress to disk."""
         self.checkpoint['current_epoch'] = current_epoch
-        model_save_path = self.checkpoint['config']['m_p'] + '{}_{}_model.pth'.format(self.file_time, mode)
-        optimizer_save_path = self.checkpoint['config']['m_p'] + '{}_{}_optimizer.pth'.format(self.file_time, mode)
+        # model_save_path = self.checkpoint['config']['m_p'] + '{}_{}_model.pth'.format(self.file_time, mode)
+        # optimizer_save_path = self.checkpoint['config']['m_p'] + '{}_{}_optimizer.pth'.format(self.file_time, mode)
+
+        model_save_path = os.path.join( self.checkpoint['config']['m_p'], '{}_{}_model.pth'.format(self.file_time, mode))
+        optimizer_save_path = os.path.join( self.checkpoint['config']['m_p'], '{}_{}_optimizer.pth'.format(self.file_time, mode))
+
         torch.save(model, model_save_path)
         torch.save(current_optimizer_sd, optimizer_save_path)
 

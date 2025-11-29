@@ -2,11 +2,11 @@ from setuptools import setup
 
 setup(
     name='tortreinador',
-    version='0.2.3',
+    version='0.2.4',
     author='Xavier',
     author_email='zephramxu@gmail.com',
     url='https://github.com/ArdenteX/tortreinador',
-    packages=['tortreinador', 'tortreinador.models', 'tortreinador.utils'],
+    packages=['tortreinador', 'tortreinador.models', 'tortreinador.utils', 'tortreinador.Events'],
     install_requires=[
         'pandas>=1.4.2',
         'seaborn>=0.11.2',
