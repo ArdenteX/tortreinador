@@ -19,22 +19,24 @@ class AutoSave(Event):
                 trainer.checkpoint_recorder.update(trainer.current_epoch, model=trainer.model.state_dict(),
                                                 current_optimizer_sd=trainer.optimizer.state_dict(), mode='best')
                 self.AUTO_COUNT = 1
-                print(
-                    "Save Best model: Metric:{:.4f}, Loss Avg:{:.4f}".format(
-                        kwargs['val_metric'],
-                        kwargs['val_loss']))
+                trainer.trigger(event_type=EventType.INFO, **{'msg': "Save Best model: Metric:{:.4f}, Loss Avg:{:.4f}".format(
+                    kwargs['val_metric'],
+                    kwargs['val_loss']),
+                'prefix': 'BMD'})
 
             else:
-                print(
-                    "Best model Detected: Metric:{:.4f}, Loss Avg:{:.4f}".format(
-                        kwargs['val_metric'],
-                        kwargs['val_loss']))
+
+                trainer.trigger(event_type=EventType.INFO, **{'msg': "Best model Detected: Metric:{:.4f}, Loss Avg:{:.4f}".format(
+                kwargs['val_metric'],
+                kwargs['val_loss']), 'prefix': 'BMD'})
 
         elif event_type == EventType.TRAIN_EPOCH_END:
             if self.MODEL_SAVE_PATH is not None:
                 if self.AUTO_COUNT % self.AUTO_SAVE_EPOCH == 0:
                     trainer.checkpoint_recorder.update(trainer.current_epoch, model=trainer.model.state_dict(),
                                                     current_optimizer_sd=trainer.optimizer.state_dict())
+                    trainer.trigger(event_type=EventType.INFO,
+                                    **{'msg': 'Auto save model and optimizer', 'prefix': 'Auto Save'})
                     self.AUTO_COUNT = 1
                 else:
                     self.AUTO_COUNT += 1

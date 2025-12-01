@@ -12,12 +12,12 @@ from tortreinador.utils.metrics import r2_score
 from test_dir.cVAEPaperspace import cVAE, CombineLoss
 
 
-sig = inspect.signature(cVAE.__init__)
-sig_2 = inspect.signature(Task.__init__)
-sig_3 = inspect.signature(TaskManager.__init__)
-print(sig)
-print(sig_2)
-print(sig_3)
+# sig = inspect.signature(cVAE.__init__)
+# sig_2 = inspect.signature(Task.__init__)
+# sig_3 = inspect.signature(TaskManager.__init__)
+# print(sig)
+# print(sig_2)
+# print(sig_3)
 
 df_chunk_0 = pd.read_parquet("D:\\Resource\\rockyExoplanetV3\\data_chunk_0.parquet")
 df_chunk_1 = pd.read_parquet("D:\\Resource\\rockyExoplanetV3\\data_chunk_1.parquet")
@@ -44,7 +44,7 @@ model_hps = {
     'c_dim': 4,
     'z_dim': IntParam(32, 64),
     'o_dim': 8,
-    'num_hidden': IntParam(512, 2048),
+    'num_hidden': IntParam(256, 1024),
     'mode': 'condition'
 }
 optim_hps = {
@@ -73,8 +73,10 @@ trainer_configs = {
     'warmup_epochs': 5,
     'best_metric': 0.8,
     'auto_save': 2,
-    'validation_cycle': 10
+    'validation_cycle': 10,
+    'logger_on': True
 }
+
 class Trainer(TorchTrainer):
 
     def calculate(self, x, y, mode=1):
@@ -92,8 +94,8 @@ class Trainer(TorchTrainer):
         return self._standard_return(mode=mode, update_values=update_values)
 
 tasks = [Task(model_class=cVAE, model_hps=model_hps, criterion=CombineLoss, optimizer_class=torch.optim.Adam,
-              optimizer_hps=optim_hps, dataset=df_all, dataset_hps=dataset_hps, task_name='grid_search test', trainer=Trainer, trainer_hps=trainer_hps, train_configs=trainer_configs, search_times=2)]
+              optimizer_hps=optim_hps, dataset=df_all, dataset_hps=dataset_hps, task_name='hpo test', trainer=Trainer, trainer_hps=trainer_hps, train_configs=trainer_configs, search_times=2)]
 
 tasks_manager = TaskManager(tasks)
-tasks_manager.search()
+tasks_manager.search(target_param_key='R2')
 tasks_manager.check_all_hps(tasks_manager.tasks[0])

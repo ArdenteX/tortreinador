@@ -222,13 +222,14 @@ class MetricManager:
         if self.criterion_idx is None:
             raise ValueError('It seems that none of the registered metrics used as criterion, it will cause the training to fail')
 
-    def get_metrics_by_mode(self, mode: int = 0, idx: bool = False):
+    def get_metrics_by_mode(self, mode: int = 0, idx: bool = False, both: bool = False):
         """
         Retrieve metrics filtered by their mode.
 
         Args:
             mode (int): 0 for both train/val, 1 for train-only, 2 for val-only.
             idx (bool): Return indices instead of MetricDefine objects when True.
+            both (bool): Return both metric instant and idx
         """
         metrics_by_mode = []
         metrics_idx = []
@@ -241,7 +242,10 @@ class MetricManager:
                 if idx:
                     metrics_idx.append(m_idx)
                 # yield m_idx
-        if idx:
+        if both:
+            return metrics_by_mode, metrics_idx
+
+        elif idx:
             return metrics_idx
 
         else:
@@ -272,9 +276,16 @@ class MetricManager:
         elif idx:
             return idx_by_name
 
-    def update(self, update_pair: List[torch.Tensor] = None, mode: int = None):
+    def update(self, update_pair: Union[List[torch.Tensor], Dict[str, torch.Tensor]] = None, mode: int = None):
         """Update all metrics belonging to a particular phase with fresh values."""
         current_metrics = self.get_metrics_by_mode(mode)
-        for n_v, update_v in zip(current_metrics, update_pair):
-            n_v.update(update_v)
+
+        if isinstance(update_pair, list):
+            for n_v, update_v in zip(current_metrics, update_pair):
+                n_v.update(update_v)
+
+        elif isinstance(update_pair, dict):
+            for k in update_pair.keys():
+                self.get_metrics_by_name(k).update(update_pair[k])
+
 

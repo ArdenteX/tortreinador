@@ -1,3 +1,4 @@
+import logging
 import warnings
 import torch
 import torch.nn as nn
@@ -90,16 +91,24 @@ class TorchTrainer:
         else:
             self.metric_manager = MetricManager([MetricDefine('loss', torch.tensor(0.0), 0)])
 
-        self.recorders = [
-            Recorder(self.device.type) for i in range(len(self.metric_manager.metric_list))
-        ]
-        self.recorders = np.array(self.recorders)
+        # self.recorders = [
+        #     Recorder(self.device.type) for i in range(len(self.metric_manager.metric_list))
+        # ]
+
+        self.recorders = {}
+        for metric in self.metric_manager.metric_names.tolist():
+            self.recorders[metric] = Recorder(self.device.type)
+
+        # self.recorders = np.array(self.recorders)
 
         if self.data_save_mode == 'recorder':
-            self.recorder_for_epoch = [
-            RecorderForEpoch(self.device.type) for i in range(len(self.metric_manager.metric_list))
-        ]
-            self.recorder_for_epoch = np.array(self.recorder_for_epoch)
+        #     self.recorder_for_epoch = [
+        #     RecorderForEpoch(self.device.type) for i in range(len(self.metric_manager.metric_list))
+        # ]
+            self.recorder_for_epoch = {}
+            for metric in self.metric_manager.metric_names.tolist():
+                self.recorder_for_epoch[metric] = RecorderForEpoch(self.device.type)
+            # self.recorder_for_epoch = np.array(self.recorder_for_epoch)
 
         self.event_manager = EventManager()
         self.subscribe(event_type=EventType.TRAIN_INIT, event=ConfigRegisterEvent())
@@ -108,6 +117,10 @@ class TorchTrainer:
 
     def subscribe(self, event_type: Union[EventType, List[EventType]], event):
         self.event_manager.subscribe(event_type, event)
+
+    def trigger(self, event_type: EventType, **kwargs):
+        for event in self.event_manager.listener[event_type]:
+            event.on_fire(event_type, trainer=self, **kwargs)
 
     def calculate(self, x, y, mode=1):
         """
@@ -183,10 +196,10 @@ class TorchTrainer:
         # print(current_mode_idx)
 
         for c_i, c_m in zip(current_mode_idx, current_mode_metrics):
-            self.recorders[c_i].update(c_m.metric_value)
+            self.recorders[self.metric_manager.metric_names[c_i]].update(c_m.metric_value)
 
         return {
-            '{}'.format(k): (v.avg().item(), '.4f') for k, v in zip(self.metric_manager.metric_names[current_mode_idx], self.recorders[current_mode_idx])
+            '{}'.format(k): (v.avg().item(), '.4f') for k, v in zip(self.metric_manager.metric_names[current_mode_idx], [self.recorders[self.metric_manager.metric_names[c_idx]] for c_idx in current_mode_idx])
         }, self.metric_manager.metric_list[self.metric_manager.criterion_idx].metric_value
 
     def _check_best_metric_for_regression(self, b_m):
@@ -436,8 +449,8 @@ class TorchTrainer:
                             v_epoch.set_postfix(**params)
 
                             # VALIDATION_BATCH_END
-                    val_loss_recorder = self.recorders[self.metric_manager.criterion_idx]
-                    val_baseline_metric = self.recorders[self.metric_manager.baseline_metric_idx]
+                    val_loss_recorder = self.recorders[self.metric_manager.metric_names[self.metric_manager.criterion_idx]]
+                    val_baseline_metric = self.recorders[self.metric_manager.metric_names[self.metric_manager.baseline_metric_idx]]
 
                     val_loss = val_loss_recorder.avg().item()
                     val_metric = val_baseline_metric.avg().item()
@@ -447,14 +460,14 @@ class TorchTrainer:
 
                     if self.data_save_mode == 'recorder':
 
-                        for i in range(len(self.recorder_for_epoch)):
-                            self.recorder_for_epoch[i].update(self.recorders[i].avg().detach())
+                        for k in self.recorder_for_epoch.keys():
+                            self.recorder_for_epoch[k].update(self.recorders[k].avg().detach())
 
                     elif self.data_save_mode == 'csv':
                         with open(csv_filename, 'a', newline='') as file:
                             writer = csv.writer(file)
 
-                            writer.writerow([e + 1] + [r.avg().detach().item() for r in self.recorders])
+                            writer.writerow([e + 1] + [r.avg().detach().item() for r in self.recorders.values()])
 
                     if self.writer is not None:
                         visualize_test_loss(self.writer, val_loss_recorder.val[-1], e)
@@ -465,7 +478,7 @@ class TorchTrainer:
             # TRAIN_EPOCH_END
             self.event_manager.trigger(EventType.TRAIN_EPOCH_END, trainer=self)
 
-            for recorder in self.recorders:
+            for recorder in self.recorders.values():
                 recorder.reset()
 
         # TRAIN_COMPLETE
@@ -498,7 +511,8 @@ def config_generator(model_save_path: str=None, warmup_epochs: int = None, lr_mi
                      warmup_error: int = None, event_rate: float = None,
                      lambda_factor: float = 0.7,
                      lr_restart: bool = False, T_0: int = 10, t_mult: float = 1, eta_min: float = 0.00001,
-                     restart_mode='batch'):
+                     restart_mode='batch', logger_on: bool = False, logger: logging.Logger = None, logger_level: int = None,
+                     logger_file_max_bytes: int = 10 * 1024 * 1024, logger_file_backup_count: int = 5, logger_dir: str = None):
     """
     Build a ``fit`` configuration dictionary using explicit keyword arguments.
 
@@ -522,6 +536,12 @@ def config_generator(model_save_path: str=None, warmup_epochs: int = None, lr_mi
         t_mult: Multiplicative increase applied to ``T_0`` for every restart.
         eta_min: Minimum learning rate for cosine restart schedules.
         restart_mode: ``'batch'`` or ``'epoch'``; determines when the restart scheduler steps.
+        logger_on:
+        logger:
+        logger_level:
+        logger_file_max_bytes:
+        logger_file_backup_count:
+        logger_dir:
 
     Returns:
         dict: Fully-populated configuration dictionary ready to be passed to :meth:`TorchTrainer.fit`.
@@ -624,6 +644,15 @@ def config_generator(model_save_path: str=None, warmup_epochs: int = None, lr_mi
             'eta_min': eta_min,
             'mode': restart_mode
         }
+    }
+
+    config['logger'] = {
+        'on': logger_on,
+        'logger': logger,
+        'level': logger_level,
+        'logger_dir': logger_dir,
+        'logger_file_max_bytes': logger_file_max_bytes,
+        'logger_file_backup_count': logger_file_backup_count
     }
 
     return config
