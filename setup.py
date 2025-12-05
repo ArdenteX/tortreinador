@@ -6,7 +6,7 @@ setup(
     author='Xavier',
     author_email='zephramxu@gmail.com',
     url='https://github.com/ArdenteX/tortreinador',
-    packages=['tortreinador', 'tortreinador.models', 'tortreinador.utils', 'tortreinador.Events'],
+    packages=['tortreinador', 'tortreinador.models', 'tortreinador.utils', 'tortreinador.Events', 'tortreinador.ParamOptimization'],
     install_requires=[
         'pandas>=1.4.2',
         'seaborn>=0.11.2',
