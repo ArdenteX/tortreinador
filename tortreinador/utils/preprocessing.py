@@ -222,6 +222,15 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
         - Scaler X (sklearn.preprocessing.MinMaxScaler): Scaler object used for the input features.
         - Scaler Y (sklearn.preprocessing.MinMaxScaler): Scaler object used for the output targets.
     """
+    train_x = None
+    train_y = None
+    val_x = None
+    val_y = None
+    test_x = None
+    test_y = None
+    scaler_x = None
+    scaler_y = None
+
     if val_size >= 0.5:
         print(
             "Warning: The percentage of validation data too high will let the training data not enough to train the powerful model. "
@@ -240,21 +249,15 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
         if 'scaler_x' not in locals() or 'scaler_y' not in locals():
             raise ValueError("Can not define scaler_x or scaler_y, please check the input feature range.")
 
-    train_x = None
-    train_y = None
-    val_x = None
-    val_y = None
-    test_x = None
-    test_y = None
-
     data_x = eval("data.{}[:, input_parameters]".format('iloc' if type(input_parameters[0]) == int else 'loc'))
     data_y = eval("data.{}[:, output_parameters]".format('iloc' if type(output_parameters[0]) == int else 'loc'))
 
     if add_noise:
-        error_rate = np.array(error_rate)
-        adj_cov_x = noise_generator(error_rate, data_x)
-        obs_error = np.random.multivariate_normal(mean=[0] * adj_cov_x.shape[-1], cov=adj_cov_x, size=data_x.shape[0])
-        data_x_noise = data_x + obs_error
+        data_x_noise = noise_injection(error_rate, data_x)
+        # error_rate = np.array(error_rate)
+        # adj_cov_x = noise_generator(error_rate, data_x)
+        # obs_error = np.random.multivariate_normal(mean=[0] * adj_cov_x.shape[-1], cov=adj_cov_x, size=data_x.shape[0])
+        # data_x_noise = data_x + obs_error
 
         if only_noise:
             data_x = data_x_noise
@@ -455,3 +458,10 @@ def noise_generator(n_r, df):
     S_adj = m ** 2
     cov_adj = cov_adj_compose(P_ij, S_adj)
     return cov_adj
+
+def noise_injection(error_rate, data_x):
+    error_rate = np.array(error_rate)
+    adj_cov_x = noise_generator(error_rate, data_x)
+    obs_error = np.random.multivariate_normal(mean=[0] * adj_cov_x.shape[-1], cov=adj_cov_x, size=data_x.shape[0])
+    return data_x + obs_error
+
