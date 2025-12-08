@@ -190,13 +190,16 @@ class TorchTrainer:
             as the optimization target.
         """
 
-        current_mode_idx = self.metric_manager.get_metrics_by_mode(mode, idx=True)
-        current_mode_metrics = self.metric_manager.get_metrics_by_mode(mode)
+        # current_mode_idx = self.metric_manager.get_metrics_by_mode(mode, idx=True)
+        # current_mode_metrics = self.metric_manager.get_metrics_by_mode(mode)
+
+        current_mode_metrics, current_mode_idx = self.metric_manager.get_metrics_by_mode(mode, both=True)
 
         # print(current_mode_idx)
 
         for c_i, c_m in zip(current_mode_idx, current_mode_metrics):
-            self.recorders[self.metric_manager.metric_names[c_i]].update(c_m.metric_value)
+            current_value = c_m.metric_value if c_i != self.metric_manager.criterion_idx else c_m.metric_value.detach()
+            self.recorders[self.metric_manager.metric_names[c_i]].update(current_value)
 
         return {
             '{}'.format(k): (v.avg().item(), '.4f') for k, v in zip(self.metric_manager.metric_names[current_mode_idx], [self.recorders[self.metric_manager.metric_names[c_idx]] for c_idx in current_mode_idx])
@@ -389,16 +392,21 @@ class TorchTrainer:
                     # TRAIN_BATCH_START
 
                     t_epoch.set_description(f"Epoch {e + 1} Training")
+                    try:
+                        mini_batch_x = x.to(self.device)
+                        mini_batch_y = y.to(self.device)
 
-                    mini_batch_x = x.to(self.device)
-                    mini_batch_y = y.to(self.device)
+                    except AttributeError:
+                        mini_batch_x = x
+                        mini_batch_y = y
+                        # self.trigger(event_type=EventType.INFO,
+                        #                 **{'msg': "Seems that there was something wrong when transferring the x or y to CUDA, the device of x and y, which will convert to the calculate() is CPU", 'prefix': 'Trainer'})
                     self.optimizer.zero_grad()
 
                     cal = self.calculate(mini_batch_x, mini_batch_y, mode=1)
 
                     param_options, loss = self.cal_result(mode=cal)
                     # TRAIN_BATCH_CALCULATION_END
-
 
                     param_options['lr'] = (self.optimizer.state_dict()['param_groups'][0]['lr'], '.6f')
 
@@ -437,8 +445,14 @@ class TorchTrainer:
                         v_epoch.set_description(f"Epoch {e + 1} Validating")
 
                         for v_x, v_y in v_epoch:
-                            val_batch_x = v_x.to(self.device)
-                            val_batch_y = v_y.to(self.device)
+                            try:
+                                val_batch_x = v_x.to(self.device)
+                                val_batch_y = v_y.to(self.device)
+
+                            except AttributeError:
+                                val_batch_x = x
+                                val_batch_y = y
+
 
                             param_options, _ = self.cal_result(self.calculate(val_batch_x, val_batch_y, mode=2))
 

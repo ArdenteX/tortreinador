@@ -8,6 +8,7 @@ import numpy as np
 from dataclasses import dataclass, field
 from typing import Union, Tuple, List
 import torch
+from typing import Union, List, Dict, Tuple
 
 
 @dataclass
@@ -182,7 +183,7 @@ class _FunctionController:
 
 def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: list,
               train_size: float = 0.8, val_size: float = 0.1, normal: ScalerConfig = None,
-              if_shuffle: bool = True, num_workers: int = 8, batch_size: int = 256, random_state=42,
+              if_shuffle: bool = True, num_workers: Union[List, Dict[str, int], Tuple, int] = (0, 0), batch_size: int = 256, random_state=42,
               if_double: bool = False, add_noise: bool = False, error_rate: list = None, only_noise=True, save_path: str = None, grid_search: bool = False):
     """
     Load Data and Normalize for Regression Tasks: This function preprocesses data specifically for regression tasks by handling data splitting, optional shuffling, normalization, and DataLoader creation.
@@ -324,11 +325,28 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
 
     # t_set = TensorDataset(train_x, train_y)
     # train_loader = DataLoader(t_set, batch_size=batch_size, shuffle=False, num_workers=n_workers)
-    train_loader = get_dataloader(x=train_x, y=train_y, batch_size=batch_size, shuffle=False, num_workers=num_workers)
+    if isinstance(num_workers, list) or isinstance(num_workers, tuple):
+        train_loader = get_dataloader(x=train_x, y=train_y, batch_size=batch_size, shuffle=False, num_workers=num_workers[0])
 
-    # v_set = TensorDataset(val_x, val_y)
-    # validation_loader = DataLoader(v_set, batch_size=batch_size, shuffle=False, num_workers=n_workers)
-    validation_loader = get_dataloader(val_x, val_y, batch_size=batch_size, shuffle=False, num_workers=num_workers)
+        # v_set = TensorDataset(val_x, val_y)
+        # validation_loader = DataLoader(v_set, batch_size=batch_size, shuffle=False, num_workers=n_workers)
+        validation_loader = get_dataloader(val_x, val_y, batch_size=batch_size, shuffle=False, num_workers=num_workers[1])
+
+    if isinstance(num_workers, int):
+        train_loader = get_dataloader(x=train_x, y=train_y, batch_size=batch_size, shuffle=False,
+                                      num_workers=num_workers)
+
+        # v_set = TensorDataset(val_x, val_y)
+        # validation_loader = DataLoader(v_set, batch_size=batch_size, shuffle=False, num_workers=n_workers)
+        validation_loader = get_dataloader(val_x, val_y, batch_size=batch_size, shuffle=False, num_workers=num_workers)
+
+    if isinstance(num_workers, dict):
+        train_loader = get_dataloader(x=train_x, y=train_y, batch_size=batch_size, shuffle=False,
+                                      num_workers=num_workers['train_num_workers'])
+
+        # v_set = TensorDataset(val_x, val_y)
+        # validation_loader = DataLoader(v_set, batch_size=batch_size, shuffle=False, num_workers=n_workers)
+        validation_loader = get_dataloader(val_x, val_y, batch_size=batch_size, shuffle=False, num_workers=num_workers['val_num_workers'])
 
     if grid_search:
         return train_loader, validation_loader

@@ -222,6 +222,9 @@ class MetricManager:
         if self.criterion_idx is None:
             raise ValueError('It seems that none of the registered metrics used as criterion, it will cause the training to fail')
 
+    def _detach(self, value):
+        return value.detach()
+
     def get_metrics_by_mode(self, mode: int = 0, idx: bool = False, both: bool = False):
         """
         Retrieve metrics filtered by their mode.
@@ -239,7 +242,7 @@ class MetricManager:
                 if not idx:
                     metrics_by_mode.append(current_metric)
 
-                if idx:
+                if idx or both:
                     metrics_idx.append(m_idx)
                 # yield m_idx
         if both:
@@ -257,13 +260,20 @@ class MetricManager:
             if name.lower() in n.metric_name.lower():
                 return True
 
-    def get_metrics_by_name(self, name, idx: bool = False):
+    def get_metrics_by_name(self, name, idx: bool = False, strict=False) -> List[MetricDefine]:
         """Fetch metrics whose names contain the provided substring."""
         metrics_by_name = []
         idx_by_name = []
         for m_idx in range(len(self.metric_list)):
             current_metric = self.metric_list[m_idx]
-            if name.lower() in current_metric.metric_name.lower():
+            if name.lower() in current_metric.metric_name.lower() and strict == False:
+                if not idx:
+                    metrics_by_name.append(current_metric)
+
+                if idx:
+                    idx_by_name.append(m_idx)
+
+            elif strict and name.lower() == current_metric.metric_name.lower():
                 if not idx:
                     metrics_by_name.append(current_metric)
 
@@ -282,10 +292,21 @@ class MetricManager:
 
         if isinstance(update_pair, list):
             for n_v, update_v in zip(current_metrics, update_pair):
-                n_v.update(update_v)
+                if not n_v.use_as_criterion:
+                    n_v.update(self._detach(update_v))
+
+                elif n_v.use_as_criterion:
+                    n_v.update(update_v)
 
         elif isinstance(update_pair, dict):
             for k in update_pair.keys():
-                self.get_metrics_by_name(k).update(update_pair[k])
+                current_metric = self.get_metrics_by_name(k, strict=True)[0]
+
+                if not current_metric.use_as_criterion:
+                    current_metric.update(self._detach(update_pair[k]))
+
+                elif current_metric.use_as_criterion:
+                    current_metric.update(update_pair[k])
+
 
 
