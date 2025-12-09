@@ -1,5 +1,4 @@
 from typing import Union
-
 from tortreinador.Events.event_system import Event, EventType
 
 class AutoSave(Event):

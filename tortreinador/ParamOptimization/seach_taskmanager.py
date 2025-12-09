@@ -12,6 +12,8 @@ from tortreinador.ParamOptimization.hyperparam import IntParam, FloatParam, LogF
 import logging
 from tortreinador.Events.event_system import EventManager, EventType
 from tortreinador.Events.logger_event import LoggerEvent
+from tortreinador.Events.csv_event_hpo import CsvEventForHPO
+import os
 
 
 def _optuna_suggestion_mapping(trial, param_name, param_obj):
@@ -32,7 +34,7 @@ def _optuna_suggestion_mapping(trial, param_name, param_obj):
 
 class TaskManager:
     def __init__(self, tasks: Union[Task, List[Task]], level: int = logging.INFO, log_dir: str = None,
-                 max_bytes: int = 10 * 1024 * 1024, backup_count: int = 5):
+                 max_bytes: int = 10 * 1024 * 1024, backup_count: int = 5, csv_on: bool = True):
 
         self.tasks = tasks
         self.dataset_needs_search = False
@@ -43,6 +45,11 @@ class TaskManager:
         self.hpo_event_manager = EventManager()
         self.hpo_event_manager.subscribe(event_type=EventType.INFO, event=LoggerEvent(logging.getLogger('Tortreinador.HPO'),
                                                                                       level=level, log_dir=log_dir, max_bytes=max_bytes, backup_count=backup_count))
+        self.hpo_event_manager.subscribe(event_type=[EventType.HPO_COMPONENTS_LOADING_COMPLETE, EventType.HPO_ROUND_SEARCH_FINISHED], event=CsvEventForHPO())
+
+        self.optimize_params = []
+        self.csv_on = csv_on
+        self.csv_init = False
 
         if not isinstance(tasks, list):
             self.tasks = [tasks]
@@ -86,7 +93,7 @@ class TaskManager:
             if isinstance(v, HyperParam):
                 param_name = k
                 hp[k] = _optuna_suggestion_mapping(trial, param_name, v)
-
+                self.optimize_params.append(param_name)
             else:
                 hp[k] = v
 
@@ -128,6 +135,13 @@ class TaskManager:
                                                                                           **task.dataset_hps)
         return train_dataloader, validation_dataloader
 
+    def get_processed_result(self, rfe):
+        result = {}
+        for k, v in rfe.items():
+            result[k] = v.val.detach().cpu().numpy()[-1].item()
+
+        return result
+
     """
      - Only Support the RecorderForEpoch for now
     """
@@ -161,6 +175,8 @@ class TaskManager:
 
                 current_trainer = task.trainer(model=model, optimizer=optimizer, criterion=criterion, **self.get_hps(trial, task.trainer_hps) if self.trainer_config_needs_search else task.trainer_hps)
 
+                train_config = self.get_hps(trial, task.train_configs) if self.trainer_config_needs_search else task.train_configs
+
                 self.hpo_event_manager.trigger(event_type=EventType.INFO, **{
                     'msg': "All Components loaded",
                     'prefix': 'HPO'
@@ -172,17 +188,43 @@ class TaskManager:
                 if self.dataset_needs_search:
                     train_dataloader, validation_dataloader = self.get_processed_loaders_trial(trial, task)
 
+                if self.csv_init is False:
+                    self.hpo_event_manager.trigger(event_type=EventType.HPO_COMPONENTS_LOADING_COMPLETE, trainer=current_trainer, **{
+                        'columns': ['trial_id'] + self.optimize_params + current_trainer.metric_manager.metric_names.tolist(),
+                        'timestamp': current_trainer.timestamp,
+                        'm_p': None if 'model_save_path' not in train_config.keys() else train_config['model_save_path'],
+                        'task_name': task.task_name
+                    })
+
+                    self.csv_init = True
+
                 # ROUND_SEARCH_START
+                result = current_trainer.fit(train_dataloader, validation_dataloader, **config_generator(**train_config))
 
-                result = current_trainer.fit(train_dataloader, validation_dataloader, **config_generator(**self.get_hps(trial, task.train_configs) if self.trainer_config_needs_search else task.train_configs))
-                self.hpo_event_manager.trigger(event_type=EventType.HPO_ROUND_SEARCH_FINISHED, **{
-                    'validation_dataloader': validation_dataloader,
-                    'model': model,
-                    'result': result,
-                    'current_params': trial.params
-                })
+                if current_trainer.data_save_mode == 'recorder':
+                    processed_result = self.get_processed_result(result[0].recorder_for_epoch)
 
-                maximize_param = result[target_param_key].val.detach().cpu().numpy()[-1]
+                else:
+                    if 'model_save_path' in task.train_configs.keys():
+                        csv_path = os.path.join(task.train_configs['model_save_path'], 'train_log', 'log_{}.csv'.format(current_trainer.timestamp))
+
+                    else:
+                        csv_path = os.path.join(os.getcwd(), 'train_log', 'log_{}.csv'.format(current_trainer.timestamp))
+
+                    result_csv = pd.read_csv(csv_path)
+                    result_csv = result_csv.iloc[-1, :].to_dict()
+                    processed_result = {k: v for k, v in result_csv.items() if k != 'epoch'}
+
+
+                maximize_param = processed_result[target_param_key]
+
+                self.hpo_event_manager.trigger(event_type=EventType.HPO_ROUND_SEARCH_FINISHED, trainer=current_trainer,
+                                               **{
+                                                   **processed_result,
+                                                   **trial.params,
+                                                   'trial_id': trial.number
+                                               })
+
                 # ROUND_SEARCH_FINISHED
                 del current_trainer, model, optimizer
 
@@ -201,7 +243,8 @@ class TaskManager:
             })
             study.optimize(objective, n_trials=search_times)
 
-            self.hpo_event_manager.trigger(event_type=EventType.INFO, **{
-                'msg': "Hyperparameter optimization Complete, best {}: {} \n best param: {}".format(target_param_key, study.best_value, study.best_params),
-                'prefix': 'HPO'
-            })
+            self.csv_init = False
+            # self.hpo_event_manager.trigger(event_type=EventType.INFO, **{
+            #     'msg': "Hyperparameter optimization Complete, best {}: {} \n best param: {}".format(target_param_key, study.best_value, study.best_params),
+            #     'prefix': 'HPO'
+            # })

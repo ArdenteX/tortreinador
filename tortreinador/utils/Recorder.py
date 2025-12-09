@@ -123,7 +123,7 @@ class CheckpointRecorder:
             'current_epoch': 0,
             'config': config
         }, checkpoint_path)
-        self.checkpoint = torch.load(checkpoint_path)
+        self.checkpoint = torch.load(checkpoint_path, weights_only=True)
 
     def reload(self, model, optimizer):
         """Load model and optimizer state from an existing checkpoint record."""

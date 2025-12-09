@@ -9,6 +9,7 @@ class EventType(Enum):
     TRAIN_BATCH_METRIC_COLLECTION_COMPLETE = auto()
     TRAIN_BATCH_END = auto()
     TRAIN_EPOCH_END = auto()
+    TRAIN_EPOCH_END_RECORD = auto()
     VALIDATION_START = auto()
     VALIDATION_BATCH_START = auto()
     VALIDATION_BATCH_METRIC_COLLECTION_COMPLETE = auto()
@@ -49,6 +50,8 @@ class EventManager:
     def trigger(self, event_type: EventType, **kwargs):
         for event in self.listener[event_type]:
             event.on_fire(event_type, **kwargs)
+
+
 
 # event_manager = EventManager()
 

@@ -91,27 +91,14 @@ class TorchTrainer:
         else:
             self.metric_manager = MetricManager([MetricDefine('loss', torch.tensor(0.0), 0)])
 
-        # self.recorders = [
-        #     Recorder(self.device.type) for i in range(len(self.metric_manager.metric_list))
-        # ]
-
         self.recorders = {}
         for metric in self.metric_manager.metric_names.tolist():
             self.recorders[metric] = Recorder(self.device.type)
 
-        # self.recorders = np.array(self.recorders)
-
-        if self.data_save_mode == 'recorder':
-        #     self.recorder_for_epoch = [
-        #     RecorderForEpoch(self.device.type) for i in range(len(self.metric_manager.metric_list))
-        # ]
-            self.recorder_for_epoch = {}
-            for metric in self.metric_manager.metric_names.tolist():
-                self.recorder_for_epoch[metric] = RecorderForEpoch(self.device.type)
-            # self.recorder_for_epoch = np.array(self.recorder_for_epoch)
-
         self.event_manager = EventManager()
         self.subscribe(event_type=EventType.TRAIN_INIT, event=ConfigRegisterEvent())
+
+        self.timestamp = self.get_current_time()
 
         print("Epoch:{}, Device: {}".format(epoch, self.device))
 
@@ -190,9 +177,6 @@ class TorchTrainer:
             as the optimization target.
         """
 
-        # current_mode_idx = self.metric_manager.get_metrics_by_mode(mode, idx=True)
-        # current_mode_metrics = self.metric_manager.get_metrics_by_mode(mode)
-
         current_mode_metrics, current_mode_idx = self.metric_manager.get_metrics_by_mode(mode, both=True)
 
         # print(current_mode_idx)
@@ -265,15 +249,14 @@ class TorchTrainer:
 
         Returns:
             tuple: (csv_filename, file_time) where `csv_filename` is the path to the log file and
-            `file_time` is the timestamp suffix used for consistent naming.
         """
-        file_time = self.get_current_time()
+        # file_time = self.get_current_time()
         current_path = os.getcwd()
 
         filepath = os.path.join(current_path, 'train_log')
 
         csv_filename = os.path.join(filepath, 'log_{}.csv'.format(
-            file_time))
+            self.timestamp))
 
         if not os.path.exists(filepath):
             os.mkdir(filepath)
@@ -289,7 +272,7 @@ class TorchTrainer:
                     writer = csv.writer(file)
                     writer.writerow(
                         ['epoch', 'train_loss', 'train_metrics', 'val_loss', 'val_metrics', 'val_extra_metrics'])
-        return csv_filename, file_time
+        return csv_filename
 
     def fit(self, t_l, v_l, checkpoint_=None, **kwargs):
         """
@@ -329,12 +312,12 @@ class TorchTrainer:
 
 
         csv_filename = None
-        file_time = self.get_current_time()
-        if self.data_save_mode == 'csv' and kwargs['train_mode'] == 'new':
-            csv_filename, file_time = self._initial_csv_mode()
+        # file_time = self.get_current_time()
+        # if self.data_save_mode == 'csv' and kwargs['train_mode'] == 'new':
+        #     csv_filename = self._initial_csv_mode()
 
         if kwargs['train_mode'] == 'new' and 'm_p' in kwargs.keys():
-            CHECK_POINT_PATH = os.path.join(kwargs['m_p'], 'check_point_{}.pth'.format(file_time))
+            CHECK_POINT_PATH = os.path.join(kwargs['m_p'], 'check_point_{}.pth'.format(self.timestamp))
             self.checkpoint_recorder = CheckpointRecorder(CHECK_POINT_PATH, self.epoch, kwargs, csv_filename,
                                                           mode='new',
                                                           system=self.system)
@@ -453,7 +436,6 @@ class TorchTrainer:
                                 val_batch_x = x
                                 val_batch_y = y
 
-
                             param_options, _ = self.cal_result(self.calculate(val_batch_x, val_batch_y, mode=2))
 
                             params = {key: "{value:{format}}".format(value=value, format=f)
@@ -472,19 +454,6 @@ class TorchTrainer:
                     # VALIDATION_END
                     self.event_manager.trigger(EventType.VALIDATION_END, val_loss=val_loss, val_metric=val_metric, trainer=self)
 
-                    if self.data_save_mode == 'recorder':
-
-                        for k in self.recorder_for_epoch.keys():
-                            self.recorder_for_epoch[k].update(self.recorders[k].avg().detach())
-
-                    elif self.data_save_mode == 'csv':
-                        with open(csv_filename, 'a', newline='') as file:
-                            writer = csv.writer(file)
-
-                            writer.writerow([e + 1] + [r.avg().detach().item() for r in self.recorders.values()])
-
-                    if self.writer is not None:
-                        visualize_test_loss(self.writer, val_loss_recorder.val[-1], e)
 
             else:
                 VAL_COUNT += 1
@@ -492,12 +461,15 @@ class TorchTrainer:
             # TRAIN_EPOCH_END
             self.event_manager.trigger(EventType.TRAIN_EPOCH_END, trainer=self)
 
+            if self.writer is not None:
+                visualize_test_loss(self.writer, val_loss_recorder.val[-1], e)
+
             for recorder in self.recorders.values():
                 recorder.reset()
 
         # TRAIN_COMPLETE
         if self.data_save_mode == 'recorder':
-            return self.recorder_for_epoch
+            return self.event_manager.listener[EventType.TRAIN_EPOCH_END_RECORD]
 
         elif self.data_save_mode == 'csv':
             return 'OK'

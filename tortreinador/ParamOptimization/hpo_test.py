@@ -44,11 +44,11 @@ model_hps = {
     'c_dim': 4,
     'z_dim': IntParam(32, 64),
     'o_dim': 8,
-    'num_hidden': IntParam(256, 1024),
+    'num_hidden': IntParam(256, 512),
     'mode': 'condition'
 }
 optim_hps = {
-    'lr': LogFloatParam(2e-4, 2e-2),
+    'lr': LogFloatParam(2e-5, 2e-4),
     'weight_decay': LogFloatParam(1e-6, 1e-4)
 }
 dataset_hps = {
@@ -62,19 +62,21 @@ dataset_hps = {
     'only_noise': True
 }
 trainer_hps = {
-    'epoch': 10,
+    'epoch': 5,
     'metric_manager': MetricManager([MetricDefine(metric_name='Loss_avg', metric_mode=0, use_as_criterion=True),
                                      MetricDefine(metric_name='Recon_loss', metric_mode=0),
                                      MetricDefine(metric_name='KLD', metric_mode=0),
-                                     MetricDefine(metric_name='R2', metric_mode=0, use_as_baseline=True)])
+                                     MetricDefine(metric_name='R2', metric_mode=0, use_as_baseline=True)]),
+    'data_save_mode': 'csv'
 }
 
 trainer_configs = {
-    'warmup_epochs': 5,
+    'warmup_epochs': 2,
     'best_metric': 0.8,
     'auto_save': 2,
-    'validation_cycle': 10,
-    'logger_on': True
+    'validation_cycle': 2,
+    'logger_on': True,
+    'model_save_path': 'D:\\Resource\\Tortreinador'
 }
 
 class Trainer(TorchTrainer):
@@ -98,4 +100,4 @@ tasks = [Task(model_class=cVAE, model_hps=model_hps, criterion=CombineLoss, opti
 
 tasks_manager = TaskManager(tasks)
 tasks_manager.search(target_param_key='R2')
-tasks_manager.check_all_hps(tasks_manager.tasks[0])
+# tasks_manager.check_all_hps(tasks_manager.tasks[0])
