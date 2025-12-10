@@ -14,6 +14,8 @@ from tortreinador.Events.event_system import EventManager, EventType
 from tortreinador.Events.logger_event import LoggerEvent
 from tortreinador.Events.csv_event_hpo import CsvEventForHPO
 import os
+from torch.utils.data import DataLoader
+from tortreinador.utils.View import init_weights
 
 
 def _optuna_suggestion_mapping(trial, param_name, param_obj):
@@ -41,6 +43,7 @@ class TaskManager:
         self.model_needs_search = False
         self.optimizer_needs_search = False
         self.trainer_config_needs_search = False
+        self.criterion_needs_search = False
 
         self.hpo_event_manager = EventManager()
         self.hpo_event_manager.subscribe(event_type=EventType.INFO, event=LoggerEvent(logging.getLogger('Tortreinador.HPO'),
@@ -68,6 +71,7 @@ class TaskManager:
         self.model_needs_search = self.check_hps_needs_search(task.model_hps)
         self.trainer_config_needs_search = self.check_hps_needs_search(task.trainer_hps)
         self.optimizer_needs_search = self.check_hps_needs_search(task.optimizer_hps)
+        self.criterion_needs_search = self.check_hps_needs_search(task.criterion_hps)
 
         self.hpo_event_manager.trigger(event_type=EventType.INFO, **{
             'msg': "dataset: {}, model: {}, optimizer: {}, trainer_configs: {}".format(self.dataset_needs_search, self.model_needs_search, self.optimizer_needs_search, self.trainer_config_needs_search),
@@ -121,8 +125,15 @@ class TaskManager:
         # Data Loading
         train_dataloader = None
         validation_dataloader = None
+
         dataset_type = self.check_dataset_type(task)
         if dataset_type == dict:
+
+            if 'Dataset' in task.dataset.keys():
+                train_dataloader = DataLoader(task.dataset['Dataset']['train_dataset'], **task.dataset_hps)
+                validation_dataloader = DataLoader(task.dataset['Dataset']['val_dataset'], **task.dataset_hps)
+                return train_dataloader, validation_dataloader
+
             train_x, train_y = task.dataset['train_x'], task.dataset['train_y']
             val_x, val_y = task.dataset['val_x'], task.dataset['val_y']
             train_dataloader = get_dataloader(train_x,
@@ -168,10 +179,11 @@ class TaskManager:
             # Model, Optimizer, Criterion Loading
             def objective(trial: Trial):
                 model = task.model_class(**self.get_hps(trial, task.model_hps) if self.model_needs_search else task.model_hps)
+                init_weights(model)
 
                 optimizer = task.optimizer_class(model.parameters(), **self.get_hps(trial, task.optimizer_hps) if self.optimizer_needs_search else task.optimizer_hps)
 
-                criterion = task.criterion()
+                criterion = task.criterion(**self.get_hps(trial, task.criterion_hps) if self.criterion_needs_search else task.criterion_hps)
 
                 current_trainer = task.trainer(model=model, optimizer=optimizer, criterion=criterion, **self.get_hps(trial, task.trainer_hps) if self.trainer_config_needs_search else task.trainer_hps)
 

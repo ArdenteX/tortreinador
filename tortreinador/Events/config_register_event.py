@@ -27,11 +27,11 @@ class ConfigRegisterEvent(Event):
             trainer.subscribe([EventType.TRAIN_EPOCH_END, EventType.BEST_MODEL_DETECTED], AutoSave(**{'m_p': kwargs['m_p'], 'auto_save': kwargs['auto_save']}))
 
         if trainer.data_save_mode == 'recorder':
-            trainer.subscribe([EventType.TRAIN_EPOCH_END, EventType.TRAIN_EPOCH_END_RECORD],
+            trainer.subscribe([EventType.VALIDATION_END, EventType.TRAIN_EPOCH_END_RECORD],
                               RecorderEpochEvent(trainer.metric_manager.metric_names.tolist(), trainer.device.type))
 
         if trainer.data_save_mode == 'csv':
-            trainer.subscribe([EventType.TRAIN_EPOCH_END, EventType.TRAIN_EPOCH_END_RECORD],
+            trainer.subscribe([EventType.VALIDATION_END, EventType.TRAIN_EPOCH_END_RECORD],
                               CsvEvent(trainer.timestamp, trainer.metric_manager.metric_names.tolist(), None if 'm_p' not in kwargs.keys() else kwargs['m_p']))
 
         trainer.trigger(EventType.INFO, **{

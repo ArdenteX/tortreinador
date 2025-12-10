@@ -16,6 +16,7 @@ class Task:
 
     # Criterion
     criterion: type = None
+    criterion_hps: Dict[str, Union[int, float, List, IntParam, FloatParam]] = field(default_factory=dict)
 
     # Optimizer
     optimizer_class: type = None
@@ -25,7 +26,7 @@ class Task:
     search_times: int = 10
     task_name: Union[str, None] = 'Unknown Task'
 
-    dataset: Union[pd.DataFrame, Dict[str, torch.Tensor]] = None
+    dataset: Union[pd.DataFrame, Dict[str, Union[torch.Tensor, object]]] = None
     dataset_hps: Dict[str, Union[pd.DataFrame, int, ScalerConfig, bool, list, str, IntParam, ChoiceParam]] = field(default_factory=dict)
     # batch_size_set: Union[ChoiceParam, int] = None
     # dataset_random_seed: int = 42

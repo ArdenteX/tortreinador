@@ -6,7 +6,7 @@ from torch.optim import Optimizer
 from tortreinador.utils.metrics import r2_score, mixture
 from tqdm import tqdm
 from tortreinador.utils.Recorder import Recorder, RecorderForEpoch, CheckpointRecorder, MetricManager, MetricDefine
-from typing import List, Union
+from typing import List, Union, Dict
 from tortreinador.utils.View import visualize_lastlayer, visualize_train_loss, visualize_test_loss
 from tensorboardX import SummaryWriter
 from datetime import datetime
@@ -135,7 +135,7 @@ class TorchTrainer:
 
         return self._standard_return(mode=mode, update_values=metric_return)
 
-    def _standard_return(self, mode: int = None, update_values: list = None):
+    def _standard_return(self, mode: int = None, update_values: Union[List, Dict] = None):
         """
         Update the metric manager for a given mode and return the mode id.
 
@@ -445,15 +445,9 @@ class TorchTrainer:
                             v_epoch.set_postfix(**params)
 
                             # VALIDATION_BATCH_END
-                    val_loss_recorder = self.recorders[self.metric_manager.metric_names[self.metric_manager.criterion_idx]]
-                    val_baseline_metric = self.recorders[self.metric_manager.metric_names[self.metric_manager.baseline_metric_idx]]
-
-                    val_loss = val_loss_recorder.avg().item()
-                    val_metric = val_baseline_metric.avg().item()
 
                     # VALIDATION_END
-                    self.event_manager.trigger(EventType.VALIDATION_END, val_loss=val_loss, val_metric=val_metric, trainer=self)
-
+                    self.event_manager.trigger(EventType.VALIDATION_END, trainer=self)
 
             else:
                 VAL_COUNT += 1
@@ -461,8 +455,8 @@ class TorchTrainer:
             # TRAIN_EPOCH_END
             self.event_manager.trigger(EventType.TRAIN_EPOCH_END, trainer=self)
 
-            if self.writer is not None:
-                visualize_test_loss(self.writer, val_loss_recorder.val[-1], e)
+            # if self.writer is not None:
+            #     visualize_test_loss(self.writer, val_loss_recorder.val[-1], e)
 
             for recorder in self.recorders.values():
                 recorder.reset()
