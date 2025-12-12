@@ -22,7 +22,7 @@ class BestModelDetection(Event):
             val_baseline_metric = val_baseline_metric.avg().item()
 
         except:
-            val_baseline_metric = 'Not Found'
+            val_baseline_metric = 0.0
 
         if self.condition == 0:
 

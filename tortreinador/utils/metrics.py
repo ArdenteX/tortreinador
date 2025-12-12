@@ -78,3 +78,15 @@ def evaluation(y_true, y_pred):
     # print(f"MSLE: {msle}")
 
     return r2, mse, mae, rmse, medae, mape, explained_variance
+
+
+def chamfer_distance(x, y):
+    dist_matrix = ((x - y) ** 2).sum(dim=-1)
+
+    min_distance_x, _ = torch.min(dist_matrix, dim=2)
+    term1 = torch.mean(min_distance_x, dim=-1)
+
+    min_distance_y, _ = torch.min(dist_matrix, dim=1)
+    term2 = torch.mean(min_distance_y, dim=-1)
+
+    return term1 + term2

@@ -13,7 +13,7 @@ class AutoSave(Event):
         if event_type == EventType.BEST_MODEL_DETECTED:
             if self.MODEL_SAVE_PATH is not None:
                 trainer.checkpoint_recorder.update_by_condition(kwargs['condition'],
-                                                             b_m=kwargs['best_metric'] if 'best_metric' in kwargs.keys() else None,
+                                                             b_m=kwargs['best_metric'] if 'best_metric' in kwargs.keys() else -1,
                                                              b_l=kwargs['best_loss'] if 'best_loss' in kwargs.keys() else None)
                 trainer.checkpoint_recorder.update(trainer.current_epoch, model=trainer.model.state_dict(),
                                                 current_optimizer_sd=trainer.optimizer.state_dict(), mode='best')
