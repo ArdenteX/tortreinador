@@ -1,7 +1,7 @@
 # Copyright (c) 2025 ArdenteX
 # Author: ArdenteX (https://github.com/ArdenteX)
 # License: MIT License
-# Package Name: Tortreinador (Nebulor)
+# Package Name: Tortreinador
 import logging
 import warnings
 import torch

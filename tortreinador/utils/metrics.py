@@ -81,12 +81,24 @@ def evaluation(y_true, y_pred):
 
 
 def chamfer_distance(x, y):
+    # Batch Level & Row Level
+    if len(x.shape) == 3:
+        dim_1 = 2
+        dim_2 = 1
+
+    else:
+        dim_1 = 1
+        dim_2 = 0
+
+    x = x.unsqueeze(dim_1)
+    y = y.unsqueeze(dim_2)
+
     dist_matrix = ((x - y) ** 2).sum(dim=-1)
 
-    min_distance_x, _ = torch.min(dist_matrix, dim=2)
+    min_distance_x, _ = torch.min(dist_matrix, dim=dim_1)
     term1 = torch.mean(min_distance_x, dim=-1)
 
-    min_distance_y, _ = torch.min(dist_matrix, dim=1)
+    min_distance_y, _ = torch.min(dist_matrix, dim=dim_2)
     term2 = torch.mean(min_distance_y, dim=-1)
 
     return term1 + term2
