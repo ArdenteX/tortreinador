@@ -202,7 +202,7 @@ class TaskManager:
 
                 if self.csv_init is False:
                     self.hpo_event_manager.trigger(event_type=EventType.HPO_COMPONENTS_LOADING_COMPLETE, trainer=current_trainer, **{
-                        'columns': ['trial_id'] + self.optimize_params + current_trainer.metric_manager.metric_names.tolist(),
+                        'columns': ['trial_id', 'model_id'] + self.optimize_params + current_trainer.metric_manager.metric_names.tolist(),
                         'timestamp': current_trainer.timestamp,
                         'm_p': None if 'model_save_path' not in train_config.keys() else train_config['model_save_path'],
                         'task_name': task.task_name
@@ -234,7 +234,8 @@ class TaskManager:
                                                **{
                                                    **processed_result,
                                                    **trial.params,
-                                                   'trial_id': trial.number
+                                                   'trial_id': trial.number,
+                                                   'model_id': current_trainer.timestamp
                                                })
 
                 # ROUND_SEARCH_FINISHED

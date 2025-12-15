@@ -31,8 +31,11 @@ class ConfigRegisterEvent(Event):
                               RecorderEpochEvent(trainer.metric_manager.metric_names.tolist(), trainer.device.type))
 
         if trainer.data_save_mode == 'csv':
+            current_mode_idx = trainer.metric_manager.get_metrics_by_mode(2, idx=True)
+            metric_names = trainer.metric_manager.metric_names[current_mode_idx]
+
             trainer.subscribe([EventType.VALIDATION_END, EventType.TRAIN_EPOCH_END_RECORD],
-                              CsvEvent(trainer.timestamp, trainer.metric_manager.metric_names.tolist(), None if 'm_p' not in kwargs.keys() else kwargs['m_p']))
+                              CsvEvent(trainer.timestamp, metric_names.tolist(), None if 'm_p' not in kwargs.keys() else kwargs['m_p'], mode=2))
 
         trainer.trigger(EventType.INFO, **{
             'prefix': 'Register',

@@ -4,11 +4,12 @@ import os
 import csv
 
 class CsvEvent(Event):
-    def __init__(self, timestamp, columns, m_p=None):
+    def __init__(self, timestamp, columns, m_p=None, mode=1):
         super().__init__()
         self.TIMESTAMP = timestamp
         self.COL = columns
         self.MODEL_SAVE_PATH = m_p
+        self.MODE = mode
         self.CSV_FILENAME = self._initial_csv_mode()
 
     def _initial_csv_mode(self) -> str:
@@ -27,15 +28,16 @@ class CsvEvent(Event):
         elif self.MODEL_SAVE_PATH is None:
             current_path = os.getcwd()
 
-        filepath = os.path.join(current_path, 'train_log')
-        csv_filename = os.path.join(filepath, 'log_{}.csv'.format(
+        filepath = os.path.join(current_path, 'metric_logs')
+        csv_filename = os.path.join(filepath, '{}_log_{}.csv'.format(
+            'train' if self.MODE == 1 else 'val',
             self.TIMESTAMP))
 
         if not os.path.exists(filepath):
             os.mkdir(filepath)
 
         if not os.path.isfile(csv_filename):
-            with open(csv_filename, 'w') as file:
+            with open(csv_filename, 'w', newline='') as file:
                 writer = csv.writer(file)
                 writer.writerow(['epoch'] + self.COL)
 
@@ -45,5 +47,4 @@ class CsvEvent(Event):
 
         with open(self.CSV_FILENAME, 'a', newline='') as file:
             writer = csv.writer(file)
-
-            writer.writerow([trainer.current_epoch + 1] + [r.avg().detach().item() for r in trainer.recorders.values()])
+            writer.writerow([trainer.current_epoch + 1] + [r.avg().detach().item() for r in [trainer.recorders[name] for name in self.COL]])
