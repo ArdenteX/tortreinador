@@ -185,6 +185,7 @@ class MetricDefine:
     metric_value: Union[torch.Tensor, None] = torch.tensor(0.0)
     metric_mode: Literal[0, 1, 2, None] = None
     use_as_baseline: bool = False
+    use_as_valloss: bool = False
     use_as_criterion: bool = False
 
     def update(self, v):
@@ -200,6 +201,7 @@ class MetricManager:
         self.metric_list = []
         self.metric_names = []
         self.baseline_metric_idx = None
+        self.baseline_loss_idx = None
         self.criterion_idx = None
 
         for idx, m in enumerate(metrics):
@@ -211,6 +213,9 @@ class MetricManager:
 
             if m.use_as_criterion:
                 self.criterion_idx = idx
+
+            if m.use_as_valloss:
+                self.baseline_loss_idx = idx
 
         self.metric_list = np.array(self.metric_list)
         self.metric_names = np.array(self.metric_names)

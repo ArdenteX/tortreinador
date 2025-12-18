@@ -13,7 +13,7 @@ class BestModelDetection(Event):
 
     def on_fire(self, event_type: Union[EventType], trainer, **kwargs):
         val_loss_recorder = trainer.recorders[
-            trainer.metric_manager.metric_names[trainer.metric_manager.criterion_idx]]
+            trainer.metric_manager.metric_names[trainer.metric_manager.baseline_loss_idx]]
         val_loss_recorder = val_loss_recorder.avg().item()
 
         try:

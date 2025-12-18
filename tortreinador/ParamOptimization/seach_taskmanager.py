@@ -218,15 +218,14 @@ class TaskManager:
 
                 else:
                     if 'model_save_path' in task.train_configs.keys():
-                        csv_path = os.path.join(task.train_configs['model_save_path'], 'train_log', 'log_{}.csv'.format(current_trainer.timestamp))
+                        csv_path = os.path.join(task.train_configs['model_save_path'], 'metric_logs', 'val_log_{}.csv'.format(current_trainer.timestamp))
 
                     else:
-                        csv_path = os.path.join(os.getcwd(), 'train_log', 'log_{}.csv'.format(current_trainer.timestamp))
+                        csv_path = os.path.join(os.getcwd(), 'metric_logs', 'val_log_{}.csv'.format(current_trainer.timestamp))
 
                     result_csv = pd.read_csv(csv_path)
                     result_csv = result_csv.iloc[-1, :].to_dict()
                     processed_result = {k: v for k, v in result_csv.items() if k != 'epoch'}
-
 
                 maximize_param = processed_result[target_param_key]
 

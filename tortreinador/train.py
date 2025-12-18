@@ -186,7 +186,7 @@ class TorchTrainer:
         # print(current_mode_idx)
 
         for c_i, c_m in zip(current_mode_idx, current_mode_metrics):
-            current_value = c_m.metric_value if c_i != self.metric_manager.criterion_idx else c_m.metric_value.detach()
+            current_value = c_m.metric_value.detach()
             self.recorders[self.metric_manager.metric_names[c_i]].update(current_value)
 
         return {
