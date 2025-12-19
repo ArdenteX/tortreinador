@@ -278,7 +278,7 @@ class TorchTrainer:
                         ['epoch', 'train_loss', 'train_metrics', 'val_loss', 'val_metrics', 'val_extra_metrics'])
         return csv_filename
 
-    def fit(self, t_l, v_l, checkpoint_=None, **kwargs):
+    def fit(self, t_l, v_l, checkpoint_=None, tqdm_disable=False, **kwargs):
         """
         Execute the training/validation loop with optional checkpoint reloads and LR schedules.
 
@@ -287,6 +287,7 @@ class TorchTrainer:
             v_l: Validation dataloader.
             checkpoint_: Serialized checkpoint dictionary. When provided, its ``config`` field overwrites
                 ``kwargs`` and the checkpoint weights/optimizer state are restored automatically.
+            tqdm_disable: Turn on tqdm or not
             **kwargs: Runtime configuration. Important keys include:
                 - ``train_mode`` (``'new'`` or ``'reload'``): Selects whether to start fresh or continue.
                 - ``m_p``: Directory used to save checkpoints.
@@ -301,6 +302,7 @@ class TorchTrainer:
                 - ``auto_save``: Interval (epochs) for periodic checkpointing.
                 - ``val_cycle``: Validate every ``val_cycle`` epochs instead of each epoch.
                 - ``train_mode`` specific keys like ``log_dir`` when ``data_save_mode`` is ``'csv'``.
+
 
         Returns:
             list[RecorderForEpoch] | str: Recorder list with epoch level summaries when ``data_save_mode``
@@ -374,7 +376,7 @@ class TorchTrainer:
 
                     self._random_event(EVENT_RATE)
 
-            with tqdm(t_l, unit='batch') as t_epoch:
+            with tqdm(t_l, unit='batch', disable=tqdm_disable) as t_epoch:
                 for batch_idx, (x, y) in enumerate(t_epoch):
                     # TRAIN_BATCH_START
 
@@ -427,7 +429,7 @@ class TorchTrainer:
                 with torch.no_grad():
                     self.model.eval()
 
-                    with tqdm(v_l, unit='batch') as v_epoch:
+                    with tqdm(v_l, unit='batch', disable=tqdm_disable) as v_epoch:
                         # VALIDATION_BATCH_START
                         v_epoch.set_description(f"Epoch {e + 1} Validating")
 
