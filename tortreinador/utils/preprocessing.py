@@ -465,3 +465,9 @@ def noise_injection(error_rate, data_x):
     obs_error = np.random.multivariate_normal(mean=[0] * adj_cov_x.shape[-1], cov=adj_cov_x, size=data_x.shape[0])
     return data_x + obs_error
 
+def obs_error_generator(error_rate, data_x, size):
+    error_rate = np.array(error_rate)
+    adj_cov_x = noise_generator(error_rate, data_x)
+    obs_error = np.random.multivariate_normal(mean=[0] * adj_cov_x.shape[-1], cov=adj_cov_x, size=size)
+
+    return obs_error

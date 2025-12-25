@@ -156,7 +156,7 @@ class TaskManager:
     """
      - Only Support the RecorderForEpoch for now
     """
-    def search(self, target_param_key: str = None, direction: str = 'maximize'):
+    def search(self, target_param_key: str = None, direction: str = 'maximize', tqdm_disable=True):
 
         for task in self.tasks:
             # CHECK_ALL_HYPERPARAMETERS
@@ -211,7 +211,7 @@ class TaskManager:
                     self.csv_init = True
 
                 # ROUND_SEARCH_START
-                result = current_trainer.fit(train_dataloader, validation_dataloader, tqdm_disable=True, **config_generator(**train_config))
+                result = current_trainer.fit(train_dataloader, validation_dataloader, tqdm_disable=tqdm_disable, **config_generator(**train_config))
 
                 if current_trainer.data_save_mode == 'recorder':
                     processed_result = self.get_processed_result(result[0].recorder_for_epoch)
