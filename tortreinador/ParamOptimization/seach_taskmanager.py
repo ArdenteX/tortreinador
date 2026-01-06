@@ -224,7 +224,7 @@ class TaskManager:
                         csv_path = os.path.join(os.getcwd(), 'metric_logs', 'val_log_{}.csv'.format(current_trainer.timestamp))
 
                     result_csv = pd.read_csv(csv_path)
-                    result_csv = result_csv.iloc[-1, :].to_dict()
+                    result_csv = result_csv.min().to_dict()
                     processed_result = {k: v for k, v in result_csv.items() if k != 'epoch'}
 
                 maximize_param = processed_result[target_param_key]

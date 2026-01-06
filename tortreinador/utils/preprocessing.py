@@ -184,7 +184,8 @@ class _FunctionController:
 def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: list,
               train_size: float = 0.8, val_size: float = 0.1, normal: ScalerConfig = None,
               if_shuffle: bool = True, num_workers: Union[List, Dict[str, int], Tuple, int] = (0, 0), batch_size: int = 256, random_state=42,
-              if_double: bool = False, add_noise: bool = False, error_rate: list = None, only_noise=True, save_path: str = None, grid_search: bool = False):
+              if_double: bool = False, add_noise: bool = False, error_rate: list = None, only_noise=True, save_path: str = None,
+              grid_search: bool = False, log_injection: bool = False, legal_check: bool = True):
     """
     Load Data and Normalize for Regression Tasks: This function preprocesses data specifically for regression tasks by handling data splitting, optional shuffling, normalization, and DataLoader creation.
 
@@ -206,6 +207,8 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
         only_noise(bool): Flag to determine whether to add noise to dataset or add noised data to dataset.
         save_path(str): Path to save .npy file
         grid_search(bool): Only return the train loader and validation loader if using Grid Search function, defaults to False.
+        log_injection(bool): Whether to use log space noise injection techniques. Defaults to False.
+        legal_check(bool): Flag to determine whether to check for legal noised datas. Defaults to True.
 
         normal(ScalerConfig, optional): Normalization method to use. Defaults to MinMaxScaler()
             - on (bool): Flag to determine whether to normalize the data using MinMaxScaler.
@@ -253,7 +256,29 @@ def load_data(data: pd.DataFrame, input_parameters: list, output_parameters: lis
     data_y = eval("data.{}[:, output_parameters]".format('iloc' if type(output_parameters[0]) == int else 'loc'))
 
     if add_noise:
-        data_x_noise = noise_injection(error_rate, data_x)
+        if log_injection:
+
+            if legal_check:
+                data_x_noise, l_mask = log_space_noise_injection(data_x, error_rate, legal_check=legal_check)
+                data_x_noise = pd.DataFrame(data_x_noise, columns=data_x.columns)
+                data_x_noise = data_x_noise[l_mask]
+                data_y = data_y[l_mask]
+
+            else:
+                data_x_noise = log_space_noise_injection(data_x, error_rate, legal_check=legal_check)
+                data_x_noise = pd.DataFrame(data_x_noise, columns=data_x.columns)
+
+        else:
+            if legal_check:
+
+                data_x_noise, l_mask = noise_injection(error_rate, data_x, legal_check=legal_check)
+                data_x_noise = pd.DataFrame(data_x_noise, columns=data_x.columns)
+                data_x_noise = data_x_noise[l_mask]
+                data_y = data_y[l_mask]
+
+            else:
+                data_x_noise = noise_injection(error_rate, data_x, legal_check=legal_check)
+
         # error_rate = np.array(error_rate)
         # adj_cov_x = noise_generator(error_rate, data_x)
         # obs_error = np.random.multivariate_normal(mean=[0] * adj_cov_x.shape[-1], cov=adj_cov_x, size=data_x.shape[0])
@@ -433,7 +458,7 @@ def cov_adj_compose(pij, sadj):
     return cov_adj
 
 
-def noise_generator(n_r, df):
+def noise_generator(n_r, x):
     """
     Generate an adjusted covariance matrix to synthesize noise scaled by provided error rates.
 
@@ -444,13 +469,13 @@ def noise_generator(n_r, df):
     Returns:
         np.ndarray: Adjusted covariance matrix.
     """
-    cov = np.cov(df.to_numpy().T)
+    cov = np.cov(x.to_numpy().T)
 
     try:
-        m = df.to_numpy().mean(axis=0) * n_r
+        m = x.to_numpy().mean(axis=0) * n_r
 
     except AttributeError:
-        m = df.mean(axis=0) * n_r
+        m = x.mean(axis=0) * n_r
 
     S, U = cov_decompose(cov)
 
@@ -459,15 +484,140 @@ def noise_generator(n_r, df):
     cov_adj = cov_adj_compose(P_ij, S_adj)
     return cov_adj
 
-def noise_injection(error_rate, data_x):
+
+def noise_injection(error_rate, data_x, legal_check: bool = True):
+    if isinstance(error_rate, list):
+        error_rate = np.array(error_rate)
+
     error_rate = np.array(error_rate)
     adj_cov_x = noise_generator(error_rate, data_x)
     obs_error = np.random.multivariate_normal(mean=[0] * adj_cov_x.shape[-1], cov=adj_cov_x, size=data_x.shape[0])
-    return data_x + obs_error
 
-def obs_error_generator(error_rate, data_x, size):
-    error_rate = np.array(error_rate)
-    adj_cov_x = noise_generator(error_rate, data_x)
-    obs_error = np.random.multivariate_normal(mean=[0] * adj_cov_x.shape[-1], cov=adj_cov_x, size=size)
+    data_x_noisy = data_x + obs_error
+    if legal_check:
+        l_m = legal_log_space(data_x_noisy)
 
-    return obs_error
+        return data_x_noisy, l_m
+
+    return data_x_noisy
+
+
+def legal_global(noisy_dataset):
+    noisy_dataset.iloc[:, [2, 3]] = noisy_dataset.iloc[:, [2, 3]].clip(lower=1e-5)
+
+    return noisy_dataset
+
+
+def legal_log_space(noisy_dataset):
+    if not isinstance(noisy_dataset, pd.DataFrame):
+        noisy_dataset_df = pd.DataFrame(noisy_dataset)
+
+    else:
+        noisy_dataset_df = noisy_dataset
+
+    legal_mask = (
+            noisy_dataset_df.iloc[:, 0].between(0.0, 12.0) &
+            noisy_dataset_df.iloc[:, 1].between(0.0, 2.4) &
+            noisy_dataset_df.iloc[:, 2].between(0.0, 6.1) &
+            noisy_dataset_df.iloc[:, 3].between(0.0, 2.4)
+    )
+
+    return legal_mask
+
+def log_space_noise_injection(X, error_rate, legal_check: bool = True):
+    """
+    Injects physics-informed, multivariate log-normal noise into a dataset.
+
+    This function simulates realistic observational uncertainties for exoplanetary
+    parameters (e.g., Mass, Radius, Abundances) by employing a hybrid noise model
+    that operates in log-space. It preserves the covariance structure of the
+    original population to account for systematic correlations between parameters
+    (e.g., M-R relation, stellar-planetary compositional links).
+
+    The noise model combines two components:
+    1. **Noise Floor (Additive):** Dominates at low values (low SNR), anchored to
+       the population median. Simulates instrumental detection limits.
+    2. **Relative Noise (Multiplicative):** Dominates at high values (high SNR).
+       Simulates calibration or model uncertainties.
+
+    The injection is performed via the Cholesky decomposition of the reconstructed
+    covariance matrix for each sample, ensuring that the injected noise respects
+    the inter-parameter correlations of the dataset.
+
+    Parameters
+    ----------
+    X : pd.DataFrame or np.ndarray
+        The clean, synthetic input data. Shape (N_samples, N_features).
+        Values must be strictly positive (physical quantities like Mass, Radius).
+    error_rate : list or np.ndarray
+        A list of error rates (fractions) for each feature.
+        Example: [0.14, 0.04, 0.12, 0.13] implies 14% error for feature 0, etc.
+        Note: These rates scale both the relative noise component and the
+        median-anchored noise floor.
+
+    Returns
+    -------
+    noisy_dataset : np.ndarray
+        The dataset with injected noise. Shape (N_samples, N_features).
+        Guaranteed to be positive due to log-normal sampling.
+
+    Mathematical Formulation
+    ------------------------
+    For each feature $j$ and sample $i$:
+    $$ \sigma_{floor, j} = \text{Median}(X_j) \times \text{rate}_j $$
+    $$ \sigma_{curr, ij} = X_{ij} \times \text{rate}_j $$
+    $$ \sigma_{total, ij} = \sqrt{\sigma_{floor, j}^2 + \sigma_{curr, ij}^2} $$
+
+    The effective relative error is mapped to log-space variance:
+    $$ \sigma^2_{log, ij} \approx [\ln(1 + \frac{\sigma_{total, ij}}{X_{ij}})]^2 $$
+
+    Noise $\eta$ is sampled from $\mathcal{N}(0, \Sigma_{local})$, where $\Sigma_{local}$
+    retains the correlation structure of the input population.
+    $$ X_{noisy} = X_{clean} \cdot e^{\eta} $$
+    """
+    if isinstance(X, pd.DataFrame):
+        X =X.to_numpy()
+
+    cov = np.cov(np.log(X).T)
+
+    X_median = np.median(X, axis=0)
+    noise_floor = X_median * error_rate
+    noise_current = X * error_rate
+
+    sigma_total = np.sqrt(noise_floor ** 2 + noise_current ** 2)
+    r_eff = sigma_total / X
+
+    log_sigma = np.log1p(r_eff) ** 2
+
+    S, U = cov_decompose(cov)
+    P_ij = p_calculation(S, U)
+
+    # lens = np.array([len(x) for x in P_ij], dtype=int)
+    pij_vec = np.concatenate([np.asarray(x, dtype=float) for x in P_ij], axis=0)
+
+    d = log_sigma.shape[-1]
+    r, c = np.triu_indices(d, k=1)
+    diag_r, diag_c = [i for i in range(d)], [i for i in range(d)]
+    scale = np.sqrt(log_sigma[:, r] * log_sigma[:, c])
+    cov_vec = pij_vec * scale
+
+    cov_adjs = np.zeros((X.shape[0], d, d), dtype=float)
+    cov_adjs[:, r, c] = cov_vec
+    cov_adjs[:, c, r] = cov_vec
+    cov_adjs[:, diag_r, diag_c] = log_sigma
+
+    rng = np.random.default_rng(42)
+
+    L = np.linalg.cholesky(cov_adjs + 1e-10 * np.eye(d)[None, :, :])  # (N,d,d)
+    z = rng.standard_normal((X.shape[0], d))  # (N,d)
+    eta = (L @ z[..., None]).squeeze(-1)
+
+    noisy_dataset = X * np.exp(eta)
+
+    if legal_check:
+        legal_mask = legal_log_space(noisy_dataset)
+        return noisy_dataset, legal_mask
+
+    else:
+        return noisy_dataset
+
