@@ -578,6 +578,8 @@ def log_space_noise_injection(X, error_rate, legal_check: bool = True):
     if isinstance(X, pd.DataFrame):
         X =X.to_numpy()
 
+    r_cap = np.array([0.3, 0.046, 0.26, 0.23])
+
     cov = np.cov(np.log(X).T)
 
     X_median = np.median(X, axis=0)
@@ -586,6 +588,7 @@ def log_space_noise_injection(X, error_rate, legal_check: bool = True):
 
     sigma_total = np.sqrt(noise_floor ** 2 + noise_current ** 2)
     r_eff = sigma_total / X
+    r_eff = np.minimum(r_eff, r_cap)
 
     log_sigma = np.log1p(r_eff) ** 2
 
