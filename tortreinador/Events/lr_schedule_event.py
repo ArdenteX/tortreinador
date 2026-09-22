@@ -25,7 +25,7 @@ class LRSchedule(Event):
         if self.lr_configs['lr_milestones']['on']:
             self.LR_MILESTONE_ON = True
             self.lr_schedular = torch.optim.lr_scheduler.MultiStepLR(trainer.optimizer,
-                                                                milestones=self.lr_configs['lr_milestones']['stone_list'],
+                                                                milestones=[m - self.WARMUP_EPOCHS for m in self.lr_configs['lr_milestones']['stone_list']],
                                                                 gamma=self.lr_configs['lr_milestones']['gamma'])
 
         if self.lr_configs['lr_restart']['on']:

@@ -31,7 +31,7 @@ class ConfigRegisterEvent(Event):
                               RecorderEpochEvent(trainer.metric_manager.metric_names.tolist(), trainer.device.type))
 
         if trainer.data_save_mode == 'csv':
-            current_mode_idx = trainer.metric_manager.get_metrics_by_mode(2, idx=True)
+            current_mode_idx = trainer.metric_manager.get_metrics_for_log(idx=True)
             metric_names = trainer.metric_manager.metric_names[current_mode_idx]
 
             trainer.subscribe([EventType.VALIDATION_END, EventType.TRAIN_EPOCH_END_RECORD],

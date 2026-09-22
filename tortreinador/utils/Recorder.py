@@ -187,6 +187,7 @@ class MetricDefine:
     use_as_baseline: bool = False
     use_as_valloss: bool = False
     use_as_criterion: bool = False
+    use_for_log: bool = False
 
     def update(self, v):
         self.metric_value = v
@@ -290,6 +291,27 @@ class MetricManager:
 
         elif idx:
             return idx_by_name
+
+    def get_metrics_for_log(self, idx: bool = False, both: bool = False):
+        metrics_idx = []
+        metrics_ = []
+        for m_idx in range(len(self.metric_list)):
+            current_metric = self.metric_list[m_idx]
+            if current_metric.use_for_log:
+                if not idx:
+                    metrics_.append(current_metric)
+
+                if idx or both:
+                    metrics_idx.append(m_idx)
+
+        if both:
+            return metrics_, metrics_idx
+
+        elif idx:
+            return metrics_idx
+
+        else:
+            return metrics_
 
     def update(self, update_pair: Union[List[torch.Tensor], Dict[str, torch.Tensor]] = None, mode: int = None):
         """Update all metrics belonging to a particular phase with fresh values."""
