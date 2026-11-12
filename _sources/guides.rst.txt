@@ -1,0 +1,28 @@
+User guide
+==========
+
+Follow the training workflow from inputs to saved predictions:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Task
+     - Guide
+   * - Connect your model and loss
+     - :doc:`training` describes batch shapes, gradients and device selection.
+   * - Prepare inputs
+     - :doc:`data` covers tensors, dataframe splits and scaling.
+   * - Measure progress
+     - :doc:`metrics` explains metric modes, aggregation and logging flags.
+   * - Extend the loop
+     - :doc:`events` lists the callbacks actually emitted by the trainer.
+   * - Save and reuse weights
+     - :doc:`checkpoints` explains saved files and inference loading.
+   * - Model conditional distributions
+     - :doc:`mdn` introduces mixture density outputs and likelihood losses.
+   * - Search hyperparameters
+     - :doc:`hpo` introduces Optuna task configuration.
+
+For exact signatures, use :doc:`modules`. For current limitations and their
+reproduction tests, use :doc:`known-issues`.

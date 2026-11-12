@@ -1,25 +1,57 @@
-.. Tortreinador documentation master file, created by
-   sphinx-quickstart on Wed Aug 28 02:52:29 2024.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Tortreinador documentation
+==========================
 
-Welcome to Tortreinador's documentation!
-========================================
+Build your training step. Keep control of your PyTorch model.
+
+Tortreinador connects a model, an optimizer and your calculation code to an
+epoch loop with metrics, events, logging and checkpoints. Start with a complete
+CPU example, then adapt the same workflow to your own data and models.
+
+.. raw:: html
+
+   <div class="guide-grid">
+     <a class="guide-card" href="quickstart.html"><span>01 / START</span><strong>Train your first model</strong><p>A runnable regression example, from tensors to predictions.</p></a>
+     <a class="guide-card" href="guides.html"><span>02 / BUILD</span><strong>Shape your workflow</strong><p>Prepare data, define metrics and connect training events.</p></a>
+     <a class="guide-card" href="modules.html"><span>03 / REFERENCE</span><strong>Explore the API</strong><p>Find signatures for training, models and utilities.</p></a>
+   </div>
+
+Choose a starting point
+-----------------------
+
+* **New to the package?** Follow :doc:`installation` and :doc:`quickstart`.
+* **Bringing an existing model?** Read :doc:`training` for the calculation contract.
+* **Running experiments?** Use :doc:`metrics`, :doc:`events` and :doc:`hpo`.
+* **Checking a result?** Read :doc:`compatibility` for tested environments and known issues.
+
+The guides describe the local 0.2.5 source snapshot audited on November 12, 2026.
+Examples use explicit metric definitions and separate training and validation
+metrics. See :doc:`known-issues` before enabling resume or built-in schedulers.
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Get started
+
+   Install <installation>
+   Quickstart <quickstart>
+
+.. toctree::
+   :maxdepth: 1
+   :caption: User guide
+
+   guides
+   training
+   data
+   metrics
+   events
+   checkpoints
+   mdn
+   hpo
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Reference and development
 
    modules
-
-.. note::
-
-   This project is under active development.
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   compatibility
+   known-issues
+   testing

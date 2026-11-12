@@ -1,217 +1,721 @@
-<!doctype html>
-<html class="no-js" lang="en">
-  <head><meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
+<!DOCTYPE html>
 
-    <!-- Generated with Sphinx 5.3.0 and Furo 2023.03.27 -->
-        <title>tortreinador.utils.preprocessing - Tortreinador documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tortreinador.utils.preprocessing &#8212; Tortreinador documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=2132deff" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../../_static/documentation_options.js?v=cb850272"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/tortreinador/utils/preprocessing';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://ardentex.github.io/tortreinador/_modules/tortreinador/utils/preprocessing.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
     
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
     
-
-
-<style>
-  body {
-    --color-code-background: #f8f8f8;
-  --color-code-foreground: black;
-  
-  }
-  @media not print {
-    body[data-theme="dark"] {
-      --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  
-    }
-    @media (prefers-color-scheme: dark) {
-      body:not([data-theme="light"]) {
-        --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  
-      }
-    }
-  }
-</style></head>
-  <body>
-    
-    <script>
-      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
-    </script>
-    
-
-<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-  <symbol id="svg-toc" viewBox="0 0 24 24">
-    <title>Contents</title>
-    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
-      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
-    </svg>
-  </symbol>
-  <symbol id="svg-menu" viewBox="0 0 24 24">
-    <title>Menu</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="18" x2="21" y2="18"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
-    <title>Expand</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
-      <polyline points="9 18 15 12 9 6"></polyline>
-    </svg>
-  </symbol>
-  <symbol id="svg-sun" viewBox="0 0 24 24">
-    <title>Light mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
-      <circle cx="12" cy="12" r="5"></circle>
-      <line x1="12" y1="1" x2="12" y2="3"></line>
-      <line x1="12" y1="21" x2="12" y2="23"></line>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-      <line x1="1" y1="12" x2="3" y2="12"></line>
-      <line x1="21" y1="12" x2="23" y2="12"></line>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-moon" viewBox="0 0 24 24">
-    <title>Dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
-    </svg>
-  </symbol>
-  <symbol id="svg-sun-half" viewBox="0 0 24 24">
-    <title>Auto light/dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M13 12h5" />
-      <path d="M13 15h4" />
-      <path d="M13 18h1" />
-      <path d="M13 9h4" />
-      <path d="M13 6h1" />
-    </svg>
-  </symbol>
-</svg>
-
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
-<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
-<label class="overlay sidebar-overlay" for="__navigation">
-  <div class="visually-hidden">Hide navigation sidebar</div>
-</label>
-<label class="overlay toc-overlay" for="__toc">
-  <div class="visually-hidden">Hide table of contents sidebar</div>
-</label>
-
-
-
-<div class="page">
-  <header class="mobile-header">
-    <div class="header-left">
-      <label class="nav-overlay-icon" for="__navigation">
-        <div class="visually-hidden">Toggle site navigation sidebar</div>
-        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
-      </label>
-    </div>
-    <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Tortreinador  documentation</div></a>
-    </div>
-    <div class="header-right">
-      <div class="theme-toggle-container theme-toggle-header">
-        <button class="theme-toggle">
-          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
-          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-        </button>
-      </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
-        <div class="visually-hidden">Toggle table of contents sidebar</div>
-        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-      </label>
-    </div>
-  </header>
-  <aside class="sidebar-drawer">
-    <div class="sidebar-container">
-      
-      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
-  
-  
-  <span class="sidebar-brand-text">Tortreinador  documentation</span>
-  
-</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
-  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
-  <input type="hidden" name="check_keywords" value="yes">
-  <input type="hidden" name="area" value="default">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form>
-<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Tortreinador</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../guides.html">
+    User guide
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../training.html">
+    Customize the training step
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../data.html">
+    Prepare data
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../metrics.html">
+    Metrics and logging
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../events.html">
+    Extend training with events
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../checkpoints.html">
+    Save checkpoints and load predictions
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../mdn.html">
+    Mixture density networks
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../hpo.html">
+    Hyperparameter search
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../modules.html">
+    API reference
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../compatibility.html">
+    Compatibility and validation
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../known-issues.html">
+    Known issues in the audited snapshot
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../testing.html">
+    Run tests and build documentation
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ArdenteX/tortreinador" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../installation.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../guides.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../training.html">
+    Customize the training step
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../data.html">
+    Prepare data
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../metrics.html">
+    Metrics and logging
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../events.html">
+    Extend training with events
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../checkpoints.html">
+    Save checkpoints and load predictions
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../mdn.html">
+    Mixture density networks
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../hpo.html">
+    Hyperparameter search
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../modules.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../compatibility.html">
+    Compatibility and validation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../known-issues.html">
+    Known issues in the audited snapshot
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../testing.html">
+    Run tests and build documentation
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ArdenteX/tortreinador" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="guide-navigation" aria-label="Documentation navigation">
+  <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get started</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">tortreinador</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../tortreinador.html">tortreinador package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../tortreinador.models.html">tortreinador.models package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../tortreinador.utils.html">tortreinador.utils package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#create-an-environment">Create an environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#install-pytorch-first">Install PyTorch first</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#install-the-package">Install the package</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#prepare-independent-splits">1. Prepare independent splits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#define-the-calculation">2. Define the calculation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#register-metrics">3. Register metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#run-the-complete-example">4. Run the complete example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../quickstart.html#inspect-the-result">5. Inspect the result</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../guides.html">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../training.html">Customize the training step</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../training.html#the-calculation-contract">The calculation contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../training.html#inside-an-epoch">Inside an epoch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../training.html#configuration">Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data.html">Prepare data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../data.html#start-with-tensors">Start with tensors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../data.html#load-a-dataframe">Load a dataframe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../data.html#understand-split-sizes">Understand split sizes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../data.html#scale-without-leakage">Scale without leakage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../data.html#noise-utilities">Noise utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../metrics.html">Metrics and logging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../metrics.html#define-each-metric-once">Define each metric once</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../metrics.html#update-active-values">Update active values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../metrics.html#interpret-aggregation-correctly">Interpret aggregation correctly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../metrics.html#choose-an-output">Choose an output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../events.html">Extend training with events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../events.html#callbacks-emitted-by-the-current-loop">Callbacks emitted by the current loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../events.html#learning-rate-schedules">Learning-rate schedules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../events.html#logging-events">Logging events</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../checkpoints.html">Save checkpoints and load predictions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../checkpoints.html#write-model-state">Write model state</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../checkpoints.html#load-weights-for-inference">Load weights for inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../checkpoints.html#resume-status">Resume status</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mdn.html">Mixture density networks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../mdn.html#understand-the-loss">Understand the loss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../mdn.html#integrate-with-the-trainer">Integrate with the trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../hpo.html">Hyperparameter search</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../hpo.html#describe-a-search-space">Describe a search space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../hpo.html#configure-one-task">Configure one task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../hpo.html#current-boundaries">Current boundaries</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference and development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tortreinador.html">tortreinador package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tortreinador.events.html">Events API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tortreinador.hpo.html">Hyperparameter search API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compatibility.html">Compatibility and validation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../compatibility.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../compatibility.html#environment">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../compatibility.html#evidence-and-limits">Evidence and limits</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../known-issues.html">Known issues in the audited snapshot</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../known-issues.html#reproduce-failures">Reproduce failures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../known-issues.html#additional-boundaries">Additional boundaries</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../testing.html">Run tests and build documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../testing.html#known-defects-are-visible">Known defects are visible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../testing.html#build-the-user-guide">Build the user guide</a></li>
 </ul>
 </li>
 </ul>
 
-</div>
-</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
 
       </div>
       
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">tortreinador.utils.preprocessing</span></li>
+  </ul>
+</nav>
+</div>
+      
     </div>
-  </aside>
-  <div class="main">
-    <div class="content">
-      <div class="article-container">
-        <a href="#" class="back-to-top muted-link">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
-          </svg>
-          <span>Back to top</span>
-        </a>
-        <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
-            <button class="theme-toggle">
-              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
-              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-            </button>
-          </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
-            <div class="visually-hidden">Toggle table of contents sidebar</div>
-            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-          </label>
-        </div>
-        <article role="main">
-          <h1>Source code for tortreinador.utils.preprocessing</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">TensorDataset</span><span class="p">,</span> <span class="n">DataLoader</span>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for tortreinador.utils.preprocessing</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">joblib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">MinMaxScaler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">TensorDataset</span><span class="p">,</span> <span class="n">DataLoader</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
 
 
-<span class="k">class</span> <span class="nc">_FunctionController</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ScalerConfig">
+<a class="viewcode-back" href="../../../tortreinador.utils.html#tortreinador.utils.preprocessing.ScalerConfig">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ScalerConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Configuration for feature/target normalization.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        on (bool): Whether to enable normalization.</span>
+<span class="sd">        method (str): Either 'MinMaxScaler'/'minmax' or 'StandardScaler'/'standard'.</span>
+<span class="sd">        normal_y (bool): Whether to normalize target columns in addition to features.</span>
+<span class="sd">        feature_range (tuple): Range used by MinMaxScaler.</span>
+<span class="sd">    """</span>
+    <span class="n">on</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">'MinMaxScaler'</span>
+    <span class="n">normal_y</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">feature_range</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ScalerConfig.validate">
+<a class="viewcode-back" href="../../../tortreinador.utils.html#tortreinador.utils.preprocessing.ScalerConfig.validate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Validate scaler configuration before use."""</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">on</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'MinMaxScaler'</span><span class="p">,</span> <span class="s1">'StandardScaler'</span><span class="p">,</span> <span class="s1">'minmax'</span><span class="p">,</span> <span class="s1">'standard'</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">"Currently only 'MinMaxScaler' and 'StandardScaler' are supported for normalization methods ('minmax' and 'standard' are allowed)."</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ScalerConfig.select_scaler">
+<a class="viewcode-back" href="../../../tortreinador.utils.html#tortreinador.utils.preprocessing.ScalerConfig.select_scaler">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">select_scaler</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Instantiate sklearn scaler objects for X and Y.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: A pair of scalers (scaler_x, scaler_y) matching the requested method.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">feature_range</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">feature_range</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">scaler_x</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">scaler_y</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">while</span> <span class="n">success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">scaler_x</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">(</span><span class="n">feature_range</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feature_range</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'MinMaxScaler'</span><span class="p">,</span>
+                                                                                                 <span class="s1">'minmax'</span><span class="p">]</span> <span class="k">else</span> <span class="n">StandardScaler</span><span class="p">()</span>
+                <span class="n">scaler_y</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">(</span><span class="n">feature_range</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feature_range</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">'MinMaxScaler'</span><span class="p">,</span>
+                                                                                                 <span class="s1">'minmax'</span><span class="p">]</span> <span class="k">else</span> <span class="n">StandardScaler</span><span class="p">()</span>
+                <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">except</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">feature_range</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feature_range</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">scaler_x</span><span class="p">,</span> <span class="n">scaler_y</span></div>
+</div>
+
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_FunctionController</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Call function dynamically</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            - requirement_dict (list): Combination of requirement, [[_normal, _shuffle], [_normal, _not_shuffle], [_not_normal, _shuffle], [_not_normal, _not_shuffle]]</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">requirement_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">train_size</span><span class="p">,</span> <span class="n">val_size</span><span class="p">,</span> <span class="n">random_state</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">scaler_x</span><span class="p">,</span> <span class="n">scaler_y</span><span class="p">):</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">requirement_list</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">train_size</span><span class="p">,</span> <span class="n">val_size</span><span class="p">,</span> <span class="n">random_state</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">scaler_x</span><span class="p">,</span> <span class="n">scaler_y</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Args:</span>
+<span class="sd">            requirement_list (dict): Functions to call for normalization and shuffling.</span>
+<span class="sd">            train_size (float): Fraction used for training split.</span>
+<span class="sd">            val_size (float): Fraction of training split reserved for validation.</span>
+<span class="sd">            random_state (int): Seed for deterministic sampling.</span>
+<span class="sd">            x (pd.DataFrame): Feature dataframe.</span>
+<span class="sd">            y (pd.DataFrame): Target dataframe.</span>
+<span class="sd">            scaler_x: Scaler used for features.</span>
+<span class="sd">            scaler_y: Scaler used for targets.</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">r_d</span> <span class="o">=</span> <span class="n">requirement_list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">t_size</span> <span class="o">=</span> <span class="n">train_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">v_size</span> <span class="o">=</span> <span class="n">val_size</span>
@@ -222,24 +726,54 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">s_x</span> <span class="o">=</span> <span class="n">scaler_x</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">s_y</span> <span class="o">=</span> <span class="n">scaler_y</span>
 
-    <span class="k">def</span> <span class="nf">_normal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">x_normal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s_x</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">))</span>
-        <span class="n">y_normal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s_y</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_normal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_</span><span class="p">,</span> <span class="n">y_</span><span class="p">,</span> <span class="n">first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">normal_y</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Normalize features (and optionally targets) using pre-selected scalers.</span>
 
-        <span class="k">return</span> <span class="p">[</span><span class="n">x_normal</span><span class="p">,</span> <span class="n">y_normal</span><span class="p">]</span>
+<span class="sd">        Args:</span>
+<span class="sd">            x_ (pd.DataFrame): Feature slice.</span>
+<span class="sd">            y_ (pd.DataFrame): Target slice.</span>
+<span class="sd">            first (bool): If True, fit scalers; otherwise transform only.</span>
+<span class="sd">            normal_y (bool): Whether to normalize targets.</span>
+<span class="sd">        """</span>
 
-    <span class="k">def</span> <span class="nf">_not_normal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">first</span><span class="p">:</span>
+            <span class="n">x_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s_x</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">x_</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">normal_y</span><span class="p">:</span>
+                <span class="n">y_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s_y</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y_</span><span class="p">))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s_x</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">normal_y</span><span class="p">:</span>
+                <span class="n">y_</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">s_y</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">y_</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">x_</span><span class="p">,</span> <span class="n">y_</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_not_normal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return raw feature/target data without normalization."""</span>
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">_shuffle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-        <span class="n">train_x</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t_size</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
-        <span class="n">train_y</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">train_x</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_shuffle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Shuffle dataset rows and split into train/val/test with optional normalization.</span>
 
-        <span class="n">test_x</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">train_x</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-        <span class="n">test_y</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">test_x</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+<span class="sd">        Args:</span>
+<span class="sd">            args (str): Either '_normal' or '_not_normal' indicating normalization path.</span>
+<span class="sd">        """</span>
+
+        <span class="n">train_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t_size</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
+        <span class="n">train_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">train_x</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+
+        <span class="n">test_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">train_x</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">test_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">test_x</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
 
         <span class="n">val_x</span> <span class="o">=</span> <span class="n">train_x</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">v_size</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
         <span class="n">val_y</span> <span class="o">=</span> <span class="n">train_y</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">val_x</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">args</span> <span class="o">==</span> <span class="s1">'_normal'</span><span class="p">:</span>
+            <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normal</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">first</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">normal_y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">r_d</span><span class="p">[</span><span class="s1">'normal_y'</span><span class="p">])</span>
+            <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normal</span><span class="p">(</span><span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">normal_y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">r_d</span><span class="p">[</span><span class="s1">'normal_y'</span><span class="p">])</span>
+            <span class="n">val_x</span><span class="p">,</span> <span class="n">val_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normal</span><span class="p">(</span><span class="n">val_x</span><span class="p">,</span> <span class="n">val_y</span><span class="p">,</span> <span class="n">first</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">normal_y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">r_d</span><span class="p">[</span><span class="s1">'normal_y'</span><span class="p">])</span>
 
         <span class="n">train_x</span> <span class="o">=</span> <span class="n">train_x</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">val_x</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
         <span class="n">train_y</span> <span class="o">=</span> <span class="n">train_y</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">val_y</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
@@ -253,41 +787,70 @@
 
         <span class="k">return</span> <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">val_x</span><span class="p">,</span> <span class="n">val_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span>
 
-    <span class="k">def</span> <span class="nf">_not_shuffle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-        <span class="n">train_x</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_size</span><span class="p">),</span> <span class="p">:]</span>
-        <span class="n">train_y</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_size</span><span class="p">),</span> <span class="p">:]</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_not_shuffle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Deterministically split dataset without shuffling, preserving original order.</span>
 
-        <span class="n">val_x</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_size</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_size</span><span class="p">)),</span> <span class="p">:]</span>
-        <span class="n">val_y</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_size</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_size</span><span class="p">)),</span> <span class="p">:]</span>
+<span class="sd">        Args:</span>
+<span class="sd">            args (str): Either '_normal' or '_not_normal' indicating normalization path.</span>
+<span class="sd">        """</span>
+        <span class="n">train_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_size</span><span class="p">),</span> <span class="p">:]</span>
+        <span class="n">train_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_size</span><span class="p">),</span> <span class="p">:]</span>
 
-        <span class="n">test_x</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_size</span><span class="p">)):,</span> <span class="p">:]</span>
-        <span class="n">test_y</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_size</span><span class="p">)):,</span> <span class="p">:]</span>
+        <span class="n">val_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_size</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_size</span><span class="p">)),</span> <span class="p">:]</span>
+        <span class="n">val_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_size</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_size</span><span class="p">)),</span> <span class="p">:]</span>
+
+        <span class="n">test_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_size</span><span class="p">)):,</span> <span class="p">:]</span>
+        <span class="n">test_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_size</span><span class="p">)):,</span> <span class="p">:]</span>
+
+        <span class="k">if</span> <span class="n">args</span> <span class="o">==</span> <span class="s1">'_normal'</span><span class="p">:</span>
+            <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normal</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">first</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normal</span><span class="p">(</span><span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">first</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">val_x</span><span class="p">,</span> <span class="n">val_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normal</span><span class="p">(</span><span class="n">val_x</span><span class="p">,</span> <span class="n">val_y</span><span class="p">,</span> <span class="n">first</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">val_x</span><span class="p">,</span> <span class="n">val_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span>
 
-    <span class="k">def</span> <span class="nf">exec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">r_d</span><span class="p">[</span><span class="mi">1</span><span class="p">])(</span><span class="o">*</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">r_d</span><span class="p">[</span><span class="mi">0</span><span class="p">])())</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">exec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Dispatch to shuffle/not-shuffle and normalize/not-normalize implementations."""</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">r_d</span><span class="p">[</span><span class="s1">'shuffle_function'</span><span class="p">])(</span><span class="bp">self</span><span class="o">.</span><span class="n">r_d</span><span class="p">[</span><span class="s1">'normal_function'</span><span class="p">])</span>
 
 
-<div class="viewcode-block" id="load_data"><a class="viewcode-back" href="../../../tortreinador.utils.html#tortreinador.utils.preprocessing.load_data">[docs]</a><span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">input_parameters</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">output_parameters</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
-              <span class="n">feature_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">train_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span> <span class="n">val_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">if_normal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-              <span class="n">if_shuffle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">n_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">256</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">if_double</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="load_data">
+<a class="viewcode-back" href="../../../tortreinador.utils.html#tortreinador.utils.preprocessing.load_data">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_data</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">input_parameters</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">output_parameters</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+              <span class="n">train_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span> <span class="n">val_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">normal</span><span class="p">:</span> <span class="n">ScalerConfig</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+              <span class="n">if_shuffle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">num_workers</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">256</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+              <span class="n">if_double</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">add_noise</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">error_rate</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">only_noise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">save_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+              <span class="n">grid_search</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">log_injection</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">legal_check</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Load Data and Normalize for Regression Tasks: This function preprocesses data specifically for regression tasks by handling data splitting, optional shuffling, normalization, and DataLoader creation.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        data (pd.DataFrame): The complete dataset in a Pandas DataFrame.</span>
 <span class="sd">        input_parameters (list of str or int): Column names or indices representing the input features.</span>
 <span class="sd">        output_parameters (list of str or int): Column names or indices representing the target variables.</span>
-<span class="sd">        feature_range (tuple of (float, float), optional): The range (min, max) used by the MinMaxScaler for scaling data. Defaults to (0, 1).</span>
+
 <span class="sd">        train_size (float): The proportion of the dataset to include in the train split (0 to 1).</span>
 <span class="sd">        val_size (float): The proportion of the training data to use as validation data (0 to 1).</span>
-<span class="sd">        if_normal (bool): Flag to determine whether to normalize the data using MinMaxScaler.</span>
+
 <span class="sd">        if_shuffle (bool): Flag to determine whether to shuffle the data before splitting into training, validation, and test sets.</span>
-<span class="sd">        n_workers (int): The number of subprocesses to use for data loading. More workers can increase the loading speed but consume more CPU cores.</span>
+<span class="sd">        num_workers (int): The number of subprocesses to use for data loading. More workers can increase the loading speed but consume more CPU cores.</span>
 <span class="sd">        batch_size (int): Number of samples per batch to load.</span>
 <span class="sd">        random_state (int, optional): A seed used by the random number generator for reproducibility. Defaults to None.</span>
 <span class="sd">        if_double (bool): Flag to determine whether to convert data to double precision (float64) format.</span>
+<span class="sd">        add_noise(bool): Flag to determine whether to add noise to origin dataset.</span>
+<span class="sd">        error_rate(list): List of error rates to calculate for covariance reflection. Defaults to None.</span>
+<span class="sd">        only_noise(bool): Flag to determine whether to add noise to dataset or add noised data to dataset.</span>
+<span class="sd">        save_path(str): Path to save .npy file</span>
+<span class="sd">        grid_search(bool): Only return the train loader and validation loader if using Grid Search function, defaults to False.</span>
+<span class="sd">        log_injection(bool): Whether to use log space noise injection techniques. Defaults to False.</span>
+<span class="sd">        legal_check(bool): Flag to determine whether to check for legal noised datas. Defaults to True.</span>
+
+<span class="sd">        normal(ScalerConfig, optional): Normalization method to use. Defaults to MinMaxScaler()</span>
+<span class="sd">            - on (bool): Flag to determine whether to normalize the data using MinMaxScaler.</span>
+<span class="sd">            - method (str): MinMaxScaler or StandardScaler</span>
+<span class="sd">            - feature_range (tuple of (float, float), optional): The range (min, max) used by the MinMaxScaler for scaling data. Defaults to (0, 1).</span>
+<span class="sd">            - normal_y(bool): Flag to determine whether to normalize the y using MinMaxScaler.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tuple: Contains Train DataLoader, Validation DataLoader, Test X, Test Y, Scaler for X, and Scaler for Y.</span>
@@ -297,104 +860,504 @@
 <span class="sd">        - Test Y (np.array): Targets of the test dataset.</span>
 <span class="sd">        - Scaler X (sklearn.preprocessing.MinMaxScaler): Scaler object used for the input features.</span>
 <span class="sd">        - Scaler Y (sklearn.preprocessing.MinMaxScaler): Scaler object used for the output targets.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">val_size</span> <span class="o">&gt;=</span> <span class="mf">0.5</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Warning</span><span class="p">(</span><span class="s2">&quot;The percentage of validation data too high will let the training data not enough to train the powerful model. &quot;</span>
-                      <span class="s2">&quot;Usually set the percentage of validation dataset at 0.1-0.3&quot;</span><span class="p">)</span>
-
-    <span class="n">scaler_x</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">scaler_y</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="c1"># Data Normalization</span>
-    <span class="k">if</span> <span class="n">feature_range</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">feature_range</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-
-    <span class="c1"># 8/12 Fixed</span>
-    <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="k">while</span> <span class="n">success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">scaler_x</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">(</span><span class="n">feature_range</span><span class="o">=</span><span class="n">feature_range</span><span class="p">)</span>
-            <span class="n">scaler_y</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">(</span><span class="n">feature_range</span><span class="o">=</span><span class="n">feature_range</span><span class="p">)</span>
-            <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
-
-        <span class="k">except</span><span class="p">:</span>
-            <span class="n">feature_range</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">feature_range</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="s1">&#39;scaler_x&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">()</span> <span class="ow">or</span> <span class="s1">&#39;scaler_y&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Can not define scaler_x or scaler_y, please check the input feature range.&quot;</span><span class="p">)</span>
-
+<span class="sd">    """</span>
     <span class="n">train_x</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">train_y</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">val_x</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">val_y</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">test_x</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">test_y</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">scaler_x</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">scaler_y</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="n">data_x</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s2">&quot;data.</span><span class="si">{}</span><span class="s2">[:, input_parameters]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;iloc&#39;</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">input_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="nb">int</span> <span class="k">else</span> <span class="s1">&#39;loc&#39;</span><span class="p">))</span>
-    <span class="n">data_y</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s2">&quot;data.</span><span class="si">{}</span><span class="s2">[:, output_parameters]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;iloc&#39;</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">output_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="nb">int</span> <span class="k">else</span> <span class="s1">&#39;loc&#39;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">val_size</span> <span class="o">&gt;=</span> <span class="mf">0.5</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">"Warning: The percentage of validation data too high will let the training data not enough to train the powerful model. "</span>
+            <span class="s2">"Usually set the percentage of validation dataset at 0.1-0.3"</span><span class="p">)</span>
 
-    <span class="n">requirement_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;_normal&#39;</span> <span class="k">if</span> <span class="n">if_normal</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="s1">&#39;_not_normal&#39;</span><span class="p">,</span> <span class="s1">&#39;_shuffle&#39;</span> <span class="k">if</span> <span class="n">if_shuffle</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="s1">&#39;_not_shuffle&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">add_noise</span> <span class="ow">and</span> <span class="n">error_rate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Please specify the error rate list (e.g. [0.01, 0.01, 0.01]) when using the add_noise flag"</span><span class="p">)</span>
 
-    <span class="n">controller</span> <span class="o">=</span> <span class="n">_FunctionController</span><span class="p">(</span><span class="n">requirement_list</span><span class="p">,</span> <span class="n">train_size</span><span class="p">,</span> <span class="n">val_size</span><span class="p">,</span> <span class="n">random_state</span><span class="p">,</span> <span class="n">data_x</span><span class="p">,</span> <span class="n">data_y</span><span class="p">,</span> <span class="n">scaler_x</span><span class="p">,</span> <span class="n">scaler_y</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">normal</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">normal</span> <span class="o">=</span> <span class="n">ScalerConfig</span><span class="p">(</span><span class="n">on</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">normal</span><span class="o">.</span><span class="n">on</span><span class="p">:</span>
+        <span class="n">normal</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+        <span class="n">scaler_x</span><span class="p">,</span> <span class="n">scaler_y</span> <span class="o">=</span> <span class="n">normal</span><span class="o">.</span><span class="n">select_scaler</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="s1">'scaler_x'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">()</span> <span class="ow">or</span> <span class="s1">'scaler_y'</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Can not define scaler_x or scaler_y, please check the input feature range."</span><span class="p">)</span>
+
+    <span class="n">data_x</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s2">"data.</span><span class="si">{}</span><span class="s2">[:, input_parameters]"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">'iloc'</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">input_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="nb">int</span> <span class="k">else</span> <span class="s1">'loc'</span><span class="p">))</span>
+    <span class="n">data_y</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s2">"data.</span><span class="si">{}</span><span class="s2">[:, output_parameters]"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">'iloc'</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">output_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="nb">int</span> <span class="k">else</span> <span class="s1">'loc'</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">add_noise</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">log_injection</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">legal_check</span><span class="p">:</span>
+                <span class="n">data_x_noise</span><span class="p">,</span> <span class="n">l_mask</span> <span class="o">=</span> <span class="n">log_space_noise_injection</span><span class="p">(</span><span class="n">data_x</span><span class="p">,</span> <span class="n">error_rate</span><span class="p">,</span> <span class="n">legal_check</span><span class="o">=</span><span class="n">legal_check</span><span class="p">)</span>
+                <span class="n">data_x_noise</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data_x_noise</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">data_x</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+                <span class="n">data_x_noise</span> <span class="o">=</span> <span class="n">data_x_noise</span><span class="p">[</span><span class="n">l_mask</span><span class="p">]</span>
+                <span class="n">data_y</span> <span class="o">=</span> <span class="n">data_y</span><span class="p">[</span><span class="n">l_mask</span><span class="p">]</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">data_x_noise</span> <span class="o">=</span> <span class="n">log_space_noise_injection</span><span class="p">(</span><span class="n">data_x</span><span class="p">,</span> <span class="n">error_rate</span><span class="p">,</span> <span class="n">legal_check</span><span class="o">=</span><span class="n">legal_check</span><span class="p">)</span>
+                <span class="n">data_x_noise</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data_x_noise</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">data_x</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">legal_check</span><span class="p">:</span>
+
+                <span class="n">data_x_noise</span><span class="p">,</span> <span class="n">l_mask</span> <span class="o">=</span> <span class="n">noise_injection</span><span class="p">(</span><span class="n">error_rate</span><span class="p">,</span> <span class="n">data_x</span><span class="p">,</span> <span class="n">legal_check</span><span class="o">=</span><span class="n">legal_check</span><span class="p">)</span>
+                <span class="n">data_x_noise</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data_x_noise</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">data_x</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+                <span class="n">data_x_noise</span> <span class="o">=</span> <span class="n">data_x_noise</span><span class="p">[</span><span class="n">l_mask</span><span class="p">]</span>
+                <span class="n">data_y</span> <span class="o">=</span> <span class="n">data_y</span><span class="p">[</span><span class="n">l_mask</span><span class="p">]</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">data_x_noise</span> <span class="o">=</span> <span class="n">noise_injection</span><span class="p">(</span><span class="n">error_rate</span><span class="p">,</span> <span class="n">data_x</span><span class="p">,</span> <span class="n">legal_check</span><span class="o">=</span><span class="n">legal_check</span><span class="p">)</span>
+
+        <span class="c1"># error_rate = np.array(error_rate)</span>
+        <span class="c1"># adj_cov_x = noise_generator(error_rate, data_x)</span>
+        <span class="c1"># obs_error = np.random.multivariate_normal(mean=[0] * adj_cov_x.shape[-1], cov=adj_cov_x, size=data_x.shape[0])</span>
+        <span class="c1"># data_x_noise = data_x + obs_error</span>
+
+        <span class="k">if</span> <span class="n">only_noise</span><span class="p">:</span>
+            <span class="n">data_x</span> <span class="o">=</span> <span class="n">data_x_noise</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">input_parameters</span><span class="p">:</span>
+                <span class="n">data_x</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="s2">"_noise"</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_x_noise</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span>
+
+    <span class="c1"># requirement_list = ['_normal' if if_normal is True else '_not_normal',</span>
+    <span class="c1">#                     '_shuffle' if if_shuffle is True else '_not_shuffle']</span>
+
+    <span class="n">requirement_list</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">'normal_function'</span><span class="p">:</span> <span class="s1">'_normal'</span> <span class="k">if</span> <span class="n">normal</span><span class="o">.</span><span class="n">on</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="s1">'_not_normal'</span><span class="p">,</span>
+        <span class="s1">'shuffle_function'</span><span class="p">:</span> <span class="s1">'_shuffle'</span> <span class="k">if</span> <span class="n">if_shuffle</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="s1">'_not_shuffle'</span><span class="p">,</span>
+        <span class="s1">'normal_y'</span><span class="p">:</span> <span class="n">normal</span><span class="o">.</span><span class="n">normal_y</span>
+    <span class="p">}</span>
+
+    <span class="n">controller</span> <span class="o">=</span> <span class="n">_FunctionController</span><span class="p">(</span><span class="n">requirement_list</span><span class="p">,</span> <span class="n">train_size</span><span class="p">,</span> <span class="n">val_size</span><span class="p">,</span> <span class="n">random_state</span><span class="p">,</span> <span class="n">data_x</span><span class="p">,</span> <span class="n">data_y</span><span class="p">,</span> <span class="n">scaler_x</span><span class="p">,</span>
+                                     <span class="n">scaler_y</span><span class="p">)</span>
 
     <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">val_x</span><span class="p">,</span> <span class="n">val_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">controller</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span>
 
-    <span class="n">train_x</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;torch.from_numpy(train_x.to_numpy())</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;.double()&#39;</span> <span class="k">if</span> <span class="n">if_double</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
-    <span class="n">train_y</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;torch.from_numpy(train_y.to_numpy())</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;.double()&#39;</span> <span class="k">if</span> <span class="n">if_double</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
-    <span class="n">val_x</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;torch.from_numpy(val_x.to_numpy())</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;.double()&#39;</span> <span class="k">if</span> <span class="n">if_double</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
-    <span class="n">val_y</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;torch.from_numpy(val_y.to_numpy())</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;.double()&#39;</span> <span class="k">if</span> <span class="n">if_double</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
-    <span class="n">test_x</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;torch.from_numpy(test_x.to_numpy())</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;.double()&#39;</span> <span class="k">if</span> <span class="n">if_double</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
-    <span class="n">test_y</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;torch.from_numpy(test_y.to_numpy())</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;.double()&#39;</span> <span class="k">if</span> <span class="n">if_double</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+    <span class="c1"># if add_noise:</span>
+    <span class="c1">#     error_rate = np.array(error_rate)</span>
+    <span class="c1">#     adjusted_cov_train_x = noise_generator(error_rate, train_x)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     adjusted_cov_val_x = noise_generator(error_rate, val_x)</span>
+    <span class="c1">#     adjusted_cov_test_x = noise_generator(error_rate, test_x)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     noise_train_x = np.random.multivariate_normal(mean=[0] * adjusted_cov_train_x.shape[-1], cov=adjusted_cov_train_x,</span>
+    <span class="c1">#                                                   size=train_x.shape[0])</span>
+    <span class="c1">#     noise_val_x = np.random.multivariate_normal(mean=[0] * adjusted_cov_val_x.shape[-1], cov=adjusted_cov_val_x, size=val_x.shape[0])</span>
+    <span class="c1">#     noise_test_x = np.random.multivariate_normal(mean=[0] * adjusted_cov_test_x.shape[-1], cov=adjusted_cov_test_x, size=test_x.shape[0])</span>
+    <span class="c1">#</span>
+    <span class="c1">#     if not only_noise:</span>
+    <span class="c1">#         train_x_noise = train_x + noise_train_x</span>
+    <span class="c1">#         val_x_noise = val_x + noise_val_x</span>
+    <span class="c1">#         test_x_noise = test_x + noise_test_x</span>
+    <span class="c1">#</span>
+    <span class="c1">#     else:</span>
+    <span class="c1">#         train_x_noise = noise_train_x</span>
+    <span class="c1">#         val_x_noise = noise_val_x</span>
+    <span class="c1">#         test_x_noise = noise_test_x</span>
+    <span class="c1">#</span>
+    <span class="c1">#     for i in range(len(input_parameters)):</span>
+    <span class="c1">#         train_x[i + len(input_parameters) + 1] = train_x_noise.loc[:, i] if not only_noise else train_x_noise[:, i]</span>
+    <span class="c1">#         val_x[i + len(input_parameters) + 1] = val_x_noise.loc[:, i] if not only_noise else val_x_noise[:, i]</span>
+    <span class="c1">#         test_x[i + len(input_parameters) + 1] = test_x_noise.loc[:, i] if not only_noise else test_x_noise[:, i]</span>
 
-    <span class="n">t_set</span> <span class="o">=</span> <span class="n">TensorDataset</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">)</span>
-    <span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">t_set</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="n">n_workers</span><span class="p">)</span>
+        <span class="c1"># print(train_x.head())</span>
+    <span class="k">if</span> <span class="n">save_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">save_npy</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">save_path</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">train_x</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'train_x'</span><span class="p">)</span>
+        <span class="n">save_npy</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">save_path</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">train_y</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'train_y'</span><span class="p">)</span>
+        <span class="n">save_npy</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">save_path</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">val_x</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'val_x'</span><span class="p">)</span>
+        <span class="n">save_npy</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">save_path</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">val_y</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'val_y'</span><span class="p">)</span>
+        <span class="n">save_npy</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">save_path</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">test_x</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'test_x'</span><span class="p">)</span>
+        <span class="n">save_npy</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">save_path</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">test_y</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'test_y'</span><span class="p">)</span>
 
-    <span class="n">v_set</span> <span class="o">=</span> <span class="n">TensorDataset</span><span class="p">(</span><span class="n">val_x</span><span class="p">,</span> <span class="n">val_y</span><span class="p">)</span>
-    <span class="n">validation_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">v_set</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="n">n_workers</span><span class="p">)</span>
+        <span class="n">save_scaler</span><span class="p">(</span><span class="n">scaler_x</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">save_path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'scaler_x'</span><span class="p">)</span>
+        <span class="n">save_scaler</span><span class="p">(</span><span class="n">scaler_y</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">save_path</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'scaler_y'</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">validation_loader</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">scaler_x</span><span class="p">,</span> <span class="n">scaler_y</span></div>
+    <span class="n">train_x</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">'torch.from_numpy(train_x.to_numpy())</span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">'.double()'</span> <span class="k">if</span> <span class="n">if_double</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="s1">'.float()'</span><span class="p">))</span>
+    <span class="n">train_y</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">'torch.from_numpy(train_y.to_numpy())</span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">'.double()'</span> <span class="k">if</span> <span class="n">if_double</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="s1">'.float()'</span><span class="p">))</span>
+    <span class="n">val_x</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">'torch.from_numpy(val_x.to_numpy())</span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">'.double()'</span> <span class="k">if</span> <span class="n">if_double</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="s1">'.float()'</span><span class="p">))</span>
+    <span class="n">val_y</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">'torch.from_numpy(val_y.to_numpy())</span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">'.double()'</span> <span class="k">if</span> <span class="n">if_double</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="s1">'.float()'</span><span class="p">))</span>
+    <span class="n">test_x</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">'torch.from_numpy(test_x.to_numpy())</span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">'.double()'</span> <span class="k">if</span> <span class="n">if_double</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="s1">'.float()'</span><span class="p">))</span>
+    <span class="n">test_y</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">'torch.from_numpy(test_y.to_numpy())</span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">'.double()'</span> <span class="k">if</span> <span class="n">if_double</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="s1">'.float()'</span><span class="p">))</span>
+
+    <span class="c1"># t_set = TensorDataset(train_x, train_y)</span>
+    <span class="c1"># train_loader = DataLoader(t_set, batch_size=batch_size, shuffle=False, num_workers=n_workers)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">num_workers</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">num_workers</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="n">train_loader</span> <span class="o">=</span> <span class="n">get_dataloader</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">train_x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">train_y</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># v_set = TensorDataset(val_x, val_y)</span>
+        <span class="c1"># validation_loader = DataLoader(v_set, batch_size=batch_size, shuffle=False, num_workers=n_workers)</span>
+        <span class="n">validation_loader</span> <span class="o">=</span> <span class="n">get_dataloader</span><span class="p">(</span><span class="n">val_x</span><span class="p">,</span> <span class="n">val_y</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">num_workers</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">train_loader</span> <span class="o">=</span> <span class="n">get_dataloader</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">train_x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">train_y</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                      <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">)</span>
+
+        <span class="c1"># v_set = TensorDataset(val_x, val_y)</span>
+        <span class="c1"># validation_loader = DataLoader(v_set, batch_size=batch_size, shuffle=False, num_workers=n_workers)</span>
+        <span class="n">validation_loader</span> <span class="o">=</span> <span class="n">get_dataloader</span><span class="p">(</span><span class="n">val_x</span><span class="p">,</span> <span class="n">val_y</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">num_workers</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">train_loader</span> <span class="o">=</span> <span class="n">get_dataloader</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">train_x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">train_y</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                      <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">[</span><span class="s1">'train_num_workers'</span><span class="p">])</span>
+
+        <span class="c1"># v_set = TensorDataset(val_x, val_y)</span>
+        <span class="c1"># validation_loader = DataLoader(v_set, batch_size=batch_size, shuffle=False, num_workers=n_workers)</span>
+        <span class="n">validation_loader</span> <span class="o">=</span> <span class="n">get_dataloader</span><span class="p">(</span><span class="n">val_x</span><span class="p">,</span> <span class="n">val_y</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">[</span><span class="s1">'val_num_workers'</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">grid_search</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">validation_loader</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">validation_loader</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">scaler_x</span><span class="p">,</span> <span class="n">scaler_y</span></div>
 
 
+
+<div class="viewcode-block" id="save_npy">
+<a class="viewcode-back" href="../../../tortreinador.utils.html#tortreinador.utils.preprocessing.save_npy">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_npy</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Save a dataframe as a NumPy binary file.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        FileNotFoundError: When the destination directory does not exist.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="n">df_to_np</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">".npy"</span><span class="p">),</span> <span class="n">df_to_np</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="save_scaler">
+<a class="viewcode-back" href="../../../tortreinador.utils.html#tortreinador.utils.preprocessing.save_scaler">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_scaler</span><span class="p">(</span><span class="n">scaler</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Persist a fitted scaler with joblib.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        FileNotFoundError: When the destination directory does not exist.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="n">joblib</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">scaler</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">".save"</span><span class="p">))</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="get_dataloader">
+<a class="viewcode-back" href="../../../tortreinador.utils.html#tortreinador.utils.preprocessing.get_dataloader">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_dataloader</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Wrap tensors into a DataLoader with consistent arguments used across the package."""</span>
+    <span class="n">tensor_dataset</span> <span class="o">=</span> <span class="n">TensorDataset</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">data_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">tensor_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="n">shuffle</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data_loader</span></div>
+
+
+<div class="viewcode-block" id="cov_decompose">
+<a class="viewcode-back" href="../../../tortreinador.utils.html#tortreinador.utils.preprocessing.cov_decompose">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">cov_decompose</span><span class="p">(</span><span class="n">cov</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Extract diagonal variances and upper-triangular covariances from a covariance matrix."""</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="p">[</span><span class="n">cov</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cov</span><span class="p">))]</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="p">[[</span><span class="n">cov</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cov</span><span class="p">))]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))]</span>
+    <span class="k">return</span> <span class="n">S</span><span class="p">,</span> <span class="n">U</span></div>
+
+
+
+<div class="viewcode-block" id="p_calculation">
+<a class="viewcode-back" href="../../../tortreinador.utils.html#tortreinador.utils.preprocessing.p_calculation">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">p_calculation</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Convert covariance components into correlation-like coefficients used for noise synthesis."""</span>
+    <span class="n">P_ij</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">)):</span>
+        <span class="n">tmp_u</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">tmp_s</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">tmp_pij</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tmp_u</span><span class="p">)):</span>
+            <span class="n">tmp_s_next</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">s_s_next_sqrt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">tmp_s</span> <span class="o">*</span> <span class="n">tmp_s_next</span><span class="p">)</span>
+            <span class="n">p_ij</span> <span class="o">=</span> <span class="n">tmp_u</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="n">s_s_next_sqrt</span>
+            <span class="n">tmp_pij</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p_ij</span><span class="p">)</span>
+
+        <span class="n">P_ij</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp_pij</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">P_ij</span></div>
+
+
+
+<div class="viewcode-block" id="cov_adj_compose">
+<a class="viewcode-back" href="../../../tortreinador.utils.html#tortreinador.utils.preprocessing.cov_adj_compose">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">cov_adj_compose</span><span class="p">(</span><span class="n">pij</span><span class="p">,</span> <span class="n">sadj</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Recompose an adjusted covariance matrix from correlation coefficients and adjusted variances."""</span>
+    <span class="n">cov_adj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pij</span><span class="p">)):</span>
+        <span class="n">tmp_pij</span> <span class="o">=</span> <span class="n">pij</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">tmp_s</span> <span class="o">=</span> <span class="n">sadj</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tmp_pij</span><span class="p">)):</span>
+            <span class="n">tmp_s_next</span> <span class="o">=</span> <span class="n">sadj</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">s_s_next_sqrt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">tmp_s</span> <span class="o">*</span> <span class="n">tmp_s_next</span><span class="p">)</span>
+            <span class="n">covij</span> <span class="o">=</span> <span class="n">tmp_pij</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">s_s_next_sqrt</span>
+            <span class="n">cov_adj</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">covij</span>
+            <span class="n">cov_adj</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">covij</span>
+
+    <span class="n">cov_adj</span> <span class="o">=</span> <span class="n">cov_adj</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">sadj</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cov_adj</span></div>
+
+
+
+<div class="viewcode-block" id="noise_generator">
+<a class="viewcode-back" href="../../../tortreinador.utils.html#tortreinador.utils.preprocessing.noise_generator">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">noise_generator</span><span class="p">(</span><span class="n">n_r</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Generate an adjusted covariance matrix to synthesize noise scaled by provided error rates.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        n_r (np.ndarray): Error rate multipliers per feature.</span>
+<span class="sd">        df (pd.DataFrame): Data used to compute the base covariance.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: Adjusted covariance matrix.</span>
+<span class="sd">    """</span>
+    <span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">n_r</span>
+
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">n_r</span>
+
+    <span class="n">S</span><span class="p">,</span> <span class="n">U</span> <span class="o">=</span> <span class="n">cov_decompose</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span>
+
+    <span class="n">P_ij</span> <span class="o">=</span> <span class="n">p_calculation</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">U</span><span class="p">)</span>
+    <span class="n">S_adj</span> <span class="o">=</span> <span class="n">m</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">cov_adj</span> <span class="o">=</span> <span class="n">cov_adj_compose</span><span class="p">(</span><span class="n">P_ij</span><span class="p">,</span> <span class="n">S_adj</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cov_adj</span></div>
+
+
+
+<div class="viewcode-block" id="noise_injection">
+<a class="viewcode-back" href="../../../tortreinador.utils.html#tortreinador.utils.preprocessing.noise_injection">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">noise_injection</span><span class="p">(</span><span class="n">error_rate</span><span class="p">,</span> <span class="n">data_x</span><span class="p">,</span> <span class="n">legal_check</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">error_rate</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">error_rate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">error_rate</span><span class="p">)</span>
+
+    <span class="n">error_rate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">error_rate</span><span class="p">)</span>
+    <span class="n">adj_cov_x</span> <span class="o">=</span> <span class="n">noise_generator</span><span class="p">(</span><span class="n">error_rate</span><span class="p">,</span> <span class="n">data_x</span><span class="p">)</span>
+    <span class="n">obs_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">adj_cov_x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">cov</span><span class="o">=</span><span class="n">adj_cov_x</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">data_x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">data_x_noisy</span> <span class="o">=</span> <span class="n">data_x</span> <span class="o">+</span> <span class="n">obs_error</span>
+    <span class="k">if</span> <span class="n">legal_check</span><span class="p">:</span>
+        <span class="n">l_m</span> <span class="o">=</span> <span class="n">legal_log_space</span><span class="p">(</span><span class="n">data_x_noisy</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data_x_noisy</span><span class="p">,</span> <span class="n">l_m</span>
+
+    <span class="k">return</span> <span class="n">data_x_noisy</span></div>
+
+
+
+<div class="viewcode-block" id="legal_global">
+<a class="viewcode-back" href="../../../tortreinador.utils.html#tortreinador.utils.preprocessing.legal_global">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">legal_global</span><span class="p">(</span><span class="n">noisy_dataset</span><span class="p">):</span>
+    <span class="n">noisy_dataset</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]</span> <span class="o">=</span> <span class="n">noisy_dataset</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">lower</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">noisy_dataset</span></div>
+
+
+
+<div class="viewcode-block" id="legal_log_space">
+<a class="viewcode-back" href="../../../tortreinador.utils.html#tortreinador.utils.preprocessing.legal_log_space">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">legal_log_space</span><span class="p">(</span><span class="n">noisy_dataset</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">noisy_dataset</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="n">noisy_dataset_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">noisy_dataset</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">noisy_dataset_df</span> <span class="o">=</span> <span class="n">noisy_dataset</span>
+
+    <span class="n">legal_mask</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">noisy_dataset_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">12.0</span><span class="p">)</span> <span class="o">&amp;</span>
+            <span class="n">noisy_dataset_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">)</span> <span class="o">&amp;</span>
+            <span class="n">noisy_dataset_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">6.1</span><span class="p">)</span> <span class="o">&amp;</span>
+            <span class="n">noisy_dataset_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">legal_mask</span></div>
+
+
+<div class="viewcode-block" id="log_space_noise_injection">
+<a class="viewcode-back" href="../../../tortreinador.utils.html#tortreinador.utils.preprocessing.log_space_noise_injection">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">log_space_noise_injection</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">error_rate</span><span class="p">,</span> <span class="n">legal_check</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Injects physics-informed, multivariate log-normal noise into a dataset.</span>
+
+<span class="sd">    This function simulates realistic observational uncertainties for exoplanetary</span>
+<span class="sd">    parameters (e.g., Mass, Radius, Abundances) by employing a hybrid noise model</span>
+<span class="sd">    that operates in log-space. It preserves the covariance structure of the</span>
+<span class="sd">    original population to account for systematic correlations between parameters</span>
+<span class="sd">    (e.g., M-R relation, stellar-planetary compositional links).</span>
+
+<span class="sd">    The noise model combines two components:</span>
+<span class="sd">    1. **Noise Floor (Additive):** Dominates at low values (low SNR), anchored to</span>
+<span class="sd">       the population median. Simulates instrumental detection limits.</span>
+<span class="sd">    2. **Relative Noise (Multiplicative):** Dominates at high values (high SNR).</span>
+<span class="sd">       Simulates calibration or model uncertainties.</span>
+
+<span class="sd">    The injection is performed via the Cholesky decomposition of the reconstructed</span>
+<span class="sd">    covariance matrix for each sample, ensuring that the injected noise respects</span>
+<span class="sd">    the inter-parameter correlations of the dataset.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X : pd.DataFrame or np.ndarray</span>
+<span class="sd">        The clean, synthetic input data. Shape (N_samples, N_features).</span>
+<span class="sd">        Values must be strictly positive (physical quantities like Mass, Radius).</span>
+<span class="sd">    error_rate : list or np.ndarray</span>
+<span class="sd">        A list of error rates (fractions) for each feature.</span>
+<span class="sd">        Example: [0.14, 0.04, 0.12, 0.13] implies 14% error for feature 0, etc.</span>
+<span class="sd">        Note: These rates scale both the relative noise component and the</span>
+<span class="sd">        median-anchored noise floor.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    noisy_dataset : np.ndarray</span>
+<span class="sd">        The dataset with injected noise. Shape (N_samples, N_features).</span>
+<span class="sd">        Guaranteed to be positive due to log-normal sampling.</span>
+
+<span class="sd">    Mathematical Formulation</span>
+<span class="sd">    ------------------------</span>
+<span class="sd">    For each feature $j$ and sample $i$:</span>
+<span class="sd">    $$ \sigma_{floor, j} = \text{Median}(X_j) \times \text{rate}_j $$</span>
+<span class="sd">    $$ \sigma_{curr, ij} = X_{ij} \times \text{rate}_j $$</span>
+<span class="sd">    $$ \sigma_{total, ij} = \sqrt{\sigma_{floor, j}^2 + \sigma_{curr, ij}^2} $$</span>
+
+<span class="sd">    The effective relative error is mapped to log-space variance:</span>
+<span class="sd">    $$ \sigma^2_{log, ij} \approx [\ln(1 + \frac{\sigma_{total, ij}}{X_{ij}})]^2 $$</span>
+
+<span class="sd">    Noise $\eta$ is sampled from $\mathcal{N}(0, \Sigma_{local})$, where $\Sigma_{local}$</span>
+<span class="sd">    retains the correlation structure of the input population.</span>
+<span class="sd">    $$ X_{noisy} = X_{clean} \cdot e^{\eta} $$</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+    <span class="n">r_cap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.046</span><span class="p">,</span> <span class="mf">0.26</span><span class="p">,</span> <span class="mf">0.23</span><span class="p">])</span>
+
+    <span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+    <span class="n">X_median</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">noise_floor</span> <span class="o">=</span> <span class="n">X_median</span> <span class="o">*</span> <span class="n">error_rate</span>
+    <span class="n">noise_current</span> <span class="o">=</span> <span class="n">X</span> <span class="o">*</span> <span class="n">error_rate</span>
+
+    <span class="n">sigma_total</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">noise_floor</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">noise_current</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">r_eff</span> <span class="o">=</span> <span class="n">sigma_total</span> <span class="o">/</span> <span class="n">X</span>
+    <span class="n">r_eff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">r_eff</span><span class="p">,</span> <span class="n">r_cap</span><span class="p">)</span>
+
+    <span class="n">log_sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">r_eff</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+
+    <span class="n">S</span><span class="p">,</span> <span class="n">U</span> <span class="o">=</span> <span class="n">cov_decompose</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span>
+    <span class="n">P_ij</span> <span class="o">=</span> <span class="n">p_calculation</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">U</span><span class="p">)</span>
+
+    <span class="c1"># lens = np.array([len(x) for x in P_ij], dtype=int)</span>
+    <span class="n">pij_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">P_ij</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">d</span> <span class="o">=</span> <span class="n">log_sigma</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">r</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu_indices</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">diag_r</span><span class="p">,</span> <span class="n">diag_c</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">d</span><span class="p">)],</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">d</span><span class="p">)]</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">log_sigma</span><span class="p">[:,</span> <span class="n">r</span><span class="p">]</span> <span class="o">*</span> <span class="n">log_sigma</span><span class="p">[:,</span> <span class="n">c</span><span class="p">])</span>
+    <span class="n">cov_vec</span> <span class="o">=</span> <span class="n">pij_vec</span> <span class="o">*</span> <span class="n">scale</span>
+
+    <span class="n">cov_adjs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">d</span><span class="p">,</span> <span class="n">d</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">cov_adjs</span><span class="p">[:,</span> <span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">cov_vec</span>
+    <span class="n">cov_adjs</span><span class="p">[:,</span> <span class="n">c</span><span class="p">,</span> <span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="n">cov_vec</span>
+    <span class="n">cov_adjs</span><span class="p">[:,</span> <span class="n">diag_r</span><span class="p">,</span> <span class="n">diag_c</span><span class="p">]</span> <span class="o">=</span> <span class="n">log_sigma</span>
+
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+    <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">cov_adjs</span> <span class="o">+</span> <span class="mf">1e-10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">d</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>  <span class="c1"># (N,d,d)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">((</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">d</span><span class="p">))</span>  <span class="c1"># (N,d)</span>
+    <span class="n">eta</span> <span class="o">=</span> <span class="p">(</span><span class="n">L</span> <span class="o">@</span> <span class="n">z</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">noisy_dataset</span> <span class="o">=</span> <span class="n">X</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">eta</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">legal_check</span><span class="p">:</span>
+        <span class="n">legal_mask</span> <span class="o">=</span> <span class="n">legal_log_space</span><span class="p">(</span><span class="n">noisy_dataset</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">noisy_dataset</span><span class="p">,</span> <span class="n">legal_mask</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">noisy_dataset</span></div>
 
 
 </pre></div>
-        </article>
-      </div>
-      <footer>
-        
-        <div class="related-pages">
-          
-          
-        </div>
-        <div class="bottom-of-page">
-          <div class="left-details">
-            <div class="copyright">
-                Copyright &#169; 2024, Xavier
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
             </div>
-            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
-            <a href="https://github.com/pradyunsg/furo">Furo</a>
             
-          </div>
-          <div class="right-details">
+              
             
           </div>
-        </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
         
-      </footer>
+      </main>
     </div>
-    <aside class="toc-drawer no-toc">
-      
-      
-      
-    </aside>
   </div>
-</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/scripts/furo.js"></script>
-    </body>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Xavier.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.2.0.
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
 </html>

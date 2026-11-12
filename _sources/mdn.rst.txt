@@ -1,0 +1,55 @@
+Mixture density networks
+========================
+
+An MDN predicts a conditional mixture distribution instead of a single value.
+The bundled ``mdn`` module emits log mixture probabilities, means and positive
+standard deviations for diagonal Gaussian components.
+
+.. code-block:: python
+
+   import torch
+   from tortreinador.models.MDN import mdn, NLLLoss, Mixture
+
+   model = mdn(input_size=4, output_size=2, num_gaussian=3, num_hidden=32)
+   x, y = torch.randn(16, 4), torch.randn(16, 2)
+   pi, mu, sigma = model(x)
+   loss = NLLLoss()(pi, mu, sigma, y)
+   loss.backward()
+
+   with torch.no_grad():
+       distribution = Mixture()(pi, mu, sigma)
+       sample = distribution.sample()
+
+For batch size B, K components and D outputs, ``pi`` has shape ``(B, K)``
+and ``mu`` / ``sigma`` have shape ``(B, K, D)``. ``pi`` contains log
+probabilities, so ``pi.exp().sum(-1)`` equals one. ``sigma`` contains scales,
+not variances. Targets have shape ``(B, D)``.
+
+Understand the loss
+-------------------
+
+``NLLLoss`` differentiates through all mixture components. It omits the
+Gaussian normalization constant ``D / 2 * log(2*pi)``. This does not change
+the gradient for fixed D, but changes the reported value relative to a fully
+normalized negative log likelihood. Negative values are possible.
+
+``Mixture`` and ``utils.metrics.mixture`` first choose one component per sample
+and return its Normal distribution. With a ``sample_for`` value other than
+``'train'``, they also return selected indices, means and scales. Sampling is
+stochastic and does not provide a differentiable mixture expectation.
+
+Integrate with the trainer
+--------------------------
+
+For phase-separated loss tracking, subclass the quickstart trainer and replace
+its calculation body with:
+
+.. code-block:: python
+
+   pi, mu, sigma = self.model(x)
+   loss = self.criterion(pi, mu, sigma, y)
+   return self._standard_return(mode=mode, update_values=[loss])
+
+Use an ``mdn`` model, ``NLLLoss`` criterion and the quickstart's separate
+training/validation metric definitions. For a point prediction, the mixture
+mean is ``(pi.exp().unsqueeze(-1) * mu).sum(dim=1)``.

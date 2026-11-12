@@ -1,0 +1,13 @@
+Hyperparameter search API
+=========================
+
+See :doc:`hpo` for a fixed-dataset search and the current return behavior.
+
+.. automodule:: tortreinador.ParamOptimization.hyperparam
+   :members:
+
+.. automodule:: tortreinador.ParamOptimization.seach_task
+   :members:
+
+.. automodule:: tortreinador.ParamOptimization.seach_taskmanager
+   :members:

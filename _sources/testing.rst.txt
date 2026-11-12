@@ -1,0 +1,55 @@
+Run tests and build documentation
+=================================
+
+Install dependencies in an isolated environment, then run from the repository root:
+
+.. code-block:: console
+
+   python -m pip install -e .
+   python -m pip install -r requirements-test.txt
+   python -m pytest
+   python -m pytest --cov=tortreinador --cov-report=term-missing
+
+PyTorch must already be installed; see :doc:`installation`. ``pytest.ini``
+collects the maintained ``tests/`` suite. The older ``test/`` directory also
+contains interactive/manual scripts and is not collected automatically.
+Run its two existing unit-test modules explicitly:
+
+.. code-block:: console
+
+   python -m pytest test/test_train.py test/test_utils.py
+
+Known defects are visible
+-------------------------
+
+``tests/test_known_bugs.py`` asserts desired behavior and uses strict
+``xfail`` marks with issue IDs. These are known failures, not passes. A fixed
+behavior becomes an unexpected pass and fails the suite until its marker is
+removed. To expose all underlying failures directly:
+
+.. code-block:: console
+
+   python -m pytest -m known_bug --runxfail
+
+Tests use fixed seeds, small synthetic data, temporary output directories and
+CPU execution by default. The CUDA test is skipped when CUDA is unavailable.
+Coverage measures executed lines, not proof of correctness for all inputs.
+
+Build the user guide
+--------------------
+
+.. code-block:: console
+
+   python -m pip install -r docs/requirements.txt
+   python -m sphinx -b html -W --keep-going docs/source docs/build/html
+   python -m http.server 8000 --directory docs/build/html
+
+Open ``http://localhost:8000`` to inspect navigation, examples and search.
+The build uses Sphinx and the PyData theme, with tutorial-first navigation and
+an orange accent inspired by the PyTorch documentation. It is an independent
+project and does not use PyTorch branding assets.
+
+The GitHub Pages publication target is the root of ``gh-pages``. Keep
+``.nojekyll`` in that root so ``_static`` and ``_sources`` are served.
+The source-branch workflow builds documentation before publishing; a push to
+the publication branch must not recursively redeploy stale build artifacts.

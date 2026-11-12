@@ -1,0 +1,84 @@
+Prepare data
+============
+
+Start with tensors
+------------------
+
+``get_dataloader`` wraps two tensors in a ``TensorDataset``. The first
+dimension must agree. Match the tensors' floating-point dtype to your model.
+
+.. code-block:: python
+
+   import torch
+   from tortreinador.utils.preprocessing import get_dataloader
+
+   x = torch.randn(100, 4)
+   y = torch.randn(100, 2)
+   loader = get_dataloader(x, y, batch_size=16, shuffle=True, num_workers=0)
+
+On Windows, place training code behind ``if __name__ == '__main__':`` before
+using worker processes. ``get_dataloader`` defaults to eight workers; set the
+value explicitly for small datasets and notebooks.
+
+Load a dataframe
+----------------
+
+``load_data`` accepts column names or integer column positions. Without
+normalization, a sequential split provides a simple reproducible baseline:
+
+.. code-block:: python
+
+   import numpy as np
+   import pandas as pd
+   from tortreinador.utils.preprocessing import load_data, ScalerConfig
+
+   frame = pd.DataFrame({'feature': np.arange(100.), 'target': np.arange(100.) * 2})
+   train, val, test_x, test_y, scaler_x, scaler_y = load_data(
+       frame, ['feature'], ['target'], train_size=0.8, val_size=0.1,
+       if_shuffle=False, normal=ScalerConfig(on=False),
+       batch_size=16, num_workers=0,
+   )
+
+The ordinary return has six elements. ``grid_search=True`` returns only the
+two dataloaders. ``if_double=True`` produces float64 tensors; convert the model
+to the same dtype. ``save_path`` must already exist and receives split arrays
+plus serialized scalers.
+
+Understand split sizes
+----------------------
+
+With ``if_shuffle=False``, ``train_size`` and ``val_size`` are fractions of the
+whole dataset. With ``if_shuffle=True``, validation is sampled from the initial
+training pool. At defaults, 100 rows become 80/10/10 without shuffling and
+72/8/20 with shuffling. Integer rounding can affect small datasets.
+
+Scale without leakage
+---------------------
+
+``ScalerConfig`` supports ``minmax`` / ``MinMaxScaler`` and
+``standard`` / ``StandardScaler``. ``normal_y`` requests target scaling.
+The current ``load_data`` normalization paths have confirmed split and target
+scaling defects (TT-09, TT-10). For independent evaluation, split first and fit
+the scaler only on the training data:
+
+.. code-block:: python
+
+   from sklearn.preprocessing import StandardScaler
+
+   train_x = frame[['feature']].iloc[:80]
+   val_x = frame[['feature']].iloc[80:90]
+   scaler = StandardScaler().fit(train_x)
+   x_train = torch.tensor(scaler.transform(train_x), dtype=torch.float32)
+   x_val = torch.tensor(scaler.transform(val_x), dtype=torch.float32)
+
+Apply the same transformer to held-out and inference inputs. If targets are
+scaled, inverse-transform predictions before reporting metrics in original units.
+
+Noise utilities
+---------------
+
+The covariance/noise helpers currently assume four input features in several
+paths. ``legal_log_space`` applies domain-specific bounds to those four columns;
+it is not a generic validity check. ``log_space_noise_injection`` requires
+positive data. Treat these helpers as specialized utilities, not a default
+augmentation for arbitrary tabular inputs.

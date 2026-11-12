@@ -1,0 +1,69 @@
+Hyperparameter search
+=====================
+
+The ``ParamOptimization`` package wraps Optuna trials in ``Task`` descriptions.
+Install ``optuna`` explicitly. The module names ``seach_task`` and
+``seach_taskmanager`` retain their existing spelling.
+
+Describe a search space
+-----------------------
+
+.. code-block:: python
+
+   from tortreinador.ParamOptimization.hyperparam import (
+       IntParam, FloatParam, LogFloatParam, ChoiceParam,
+   )
+
+   optimizer_hps = {'lr': LogFloatParam(1e-4, 1e-2)}
+   model_hps = {'width': IntParam(16, 64)}
+
+Integers include both endpoints. Floating-point and log-floating-point spaces
+map to Optuna float suggestions; log bounds must be positive. ``ChoiceParam``
+selects an item from its choices. Ordinary values remain fixed.
+
+Configure one task
+------------------
+
+The following continues from the quickstart, with ``RegressionTrainer`` and
+``metrics`` already defined:
+
+.. code-block:: python
+
+   from torch import nn
+   import torch
+   from tortreinador.ParamOptimization.seach_task import Task
+   from tortreinador.ParamOptimization.seach_taskmanager import TaskManager
+
+   task = Task(
+       model_class=nn.Linear,
+       model_hps={'in_features': 1, 'out_features': 1},
+       criterion=nn.MSELoss,
+       optimizer_class=torch.optim.SGD,
+       optimizer_hps={'lr': FloatParam(0.01, 0.1)},
+       trainer=RegressionTrainer,
+       trainer_hps={'is_gpu': False, 'epoch': 10, 'metric_manager': metrics},
+       dataset={'train_x': x[train_idx], 'train_y': y[train_idx],
+                'val_x': x[val_idx], 'val_y': y[val_idx]},
+       dataset_hps={'batch_size': 16, 'shuffle': False, 'num_workers': 0},
+       train_configs={'best_loss': float('inf')},
+       search_times=5,
+       task_name='linear-regression',
+   )
+   manager = TaskManager(task)
+   manager.search(target_param_key='val_loss', direction='minimize')
+
+The key must match a recorded metric. Use ``minimize`` for a loss and
+``maximize`` for a score. The tested path searches optimizer parameters with
+fixed tensor dataloaders and recorder output. A real one-trial search is part
+of the test suite.
+
+Current boundaries
+------------------
+
+``search`` creates an in-memory Optuna study but does not return it; results
+are exposed through logs and CSV files. Do not write
+``study = manager.search(...)`` expecting an Optuna study.
+Dataset-parameter search, train-config search, multiple tasks sharing metric
+instances, and cross-process resume are not covered by the successful smoke
+test. Keep experiment output directories separate and consult
+:doc:`known-issues` for confirmed failures.

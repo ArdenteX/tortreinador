@@ -1,207 +1,636 @@
-<!doctype html>
-<html class="no-js" lang="en">
-  <head><meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="tortreinador.models package" href="tortreinador.models.html" /><link rel="prev" title="tortreinador" href="modules.html" />
+<!DOCTYPE html>
 
-    <!-- Generated with Sphinx 5.3.0 and Furo 2023.03.27 -->
-        <title>tortreinador package - Tortreinador documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>tortreinador package &#8212; Tortreinador documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=2132deff" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="_static/documentation_options.js?v=cb850272"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tortreinador';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://ardentex.github.io/tortreinador/tortreinador.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="tortreinador.models package" href="tortreinador.models.html" />
+    <link rel="prev" title="API reference" href="modules.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
     
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
     
-
-
-<style>
-  body {
-    --color-code-background: #f8f8f8;
-  --color-code-foreground: black;
-  
-  }
-  @media not print {
-    body[data-theme="dark"] {
-      --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  
-    }
-    @media (prefers-color-scheme: dark) {
-      body:not([data-theme="light"]) {
-        --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  
-      }
-    }
-  }
-</style></head>
-  <body>
-    
-    <script>
-      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
-    </script>
-    
-
-<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-  <symbol id="svg-toc" viewBox="0 0 24 24">
-    <title>Contents</title>
-    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
-      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
-    </svg>
-  </symbol>
-  <symbol id="svg-menu" viewBox="0 0 24 24">
-    <title>Menu</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="18" x2="21" y2="18"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
-    <title>Expand</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
-      <polyline points="9 18 15 12 9 6"></polyline>
-    </svg>
-  </symbol>
-  <symbol id="svg-sun" viewBox="0 0 24 24">
-    <title>Light mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
-      <circle cx="12" cy="12" r="5"></circle>
-      <line x1="12" y1="1" x2="12" y2="3"></line>
-      <line x1="12" y1="21" x2="12" y2="23"></line>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-      <line x1="1" y1="12" x2="3" y2="12"></line>
-      <line x1="21" y1="12" x2="23" y2="12"></line>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-moon" viewBox="0 0 24 24">
-    <title>Dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
-    </svg>
-  </symbol>
-  <symbol id="svg-sun-half" viewBox="0 0 24 24">
-    <title>Auto light/dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M13 12h5" />
-      <path d="M13 15h4" />
-      <path d="M13 18h1" />
-      <path d="M13 9h4" />
-      <path d="M13 6h1" />
-    </svg>
-  </symbol>
-</svg>
-
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
-<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
-<label class="overlay sidebar-overlay" for="__navigation">
-  <div class="visually-hidden">Hide navigation sidebar</div>
-</label>
-<label class="overlay toc-overlay" for="__toc">
-  <div class="visually-hidden">Hide table of contents sidebar</div>
-</label>
-
-
-
-<div class="page">
-  <header class="mobile-header">
-    <div class="header-left">
-      <label class="nav-overlay-icon" for="__navigation">
-        <div class="visually-hidden">Toggle site navigation sidebar</div>
-        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
-      </label>
-    </div>
-    <div class="header-center">
-      <a href="index.html"><div class="brand">Tortreinador  documentation</div></a>
-    </div>
-    <div class="header-right">
-      <div class="theme-toggle-container theme-toggle-header">
-        <button class="theme-toggle">
-          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
-          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-        </button>
-      </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
-        <div class="visually-hidden">Toggle table of contents sidebar</div>
-        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-      </label>
-    </div>
-  </header>
-  <aside class="sidebar-drawer">
-    <div class="sidebar-container">
-      
-      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
-  
-  
-  <span class="sidebar-brand-text">Tortreinador  documentation</span>
-  
-</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
-  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
-  <input type="hidden" name="check_keywords" value="yes">
-  <input type="hidden" name="area" value="default">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form>
-<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current has-children"><a class="reference internal" href="modules.html">tortreinador</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2 current has-children current-page"><a class="current reference internal" href="#">tortreinador package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="tortreinador.models.html">tortreinador.models package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html">tortreinador.utils package</a></li>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Tortreinador</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="guides.html">
+    User guide
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="training.html">
+    Customize the training step
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="data.html">
+    Prepare data
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="metrics.html">
+    Metrics and logging
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="events.html">
+    Extend training with events
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="checkpoints.html">
+    Save checkpoints and load predictions
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="mdn.html">
+    Mixture density networks
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="hpo.html">
+    Hyperparameter search
+  </a>
+</li>
+
+
+<li class=" current active">
+  <a class="nav-link dropdown-item nav-internal" href="modules.html">
+    API reference
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="compatibility.html">
+    Compatibility and validation
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="known-issues.html">
+    Known issues in the audited snapshot
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="testing.html">
+    Run tests and build documentation
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ArdenteX/tortreinador" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="guides.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="training.html">
+    Customize the training step
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="data.html">
+    Prepare data
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="metrics.html">
+    Metrics and logging
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="events.html">
+    Extend training with events
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="checkpoints.html">
+    Save checkpoints and load predictions
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="mdn.html">
+    Mixture density networks
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="hpo.html">
+    Hyperparameter search
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="modules.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="compatibility.html">
+    Compatibility and validation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="known-issues.html">
+    Known issues in the audited snapshot
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="testing.html">
+    Run tests and build documentation
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ArdenteX/tortreinador" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="guide-navigation" aria-label="Documentation navigation">
+  <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#create-an-environment">Create an environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#install-pytorch-first">Install PyTorch first</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#install-the-package">Install the package</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#prepare-independent-splits">1. Prepare independent splits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#define-the-calculation">2. Define the calculation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#register-metrics">3. Register metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#run-the-complete-example">4. Run the complete example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#inspect-the-result">5. Inspect the result</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides.html">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="training.html">Customize the training step</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="training.html#the-calculation-contract">The calculation contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training.html#inside-an-epoch">Inside an epoch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training.html#configuration">Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Prepare data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data.html#start-with-tensors">Start with tensors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#load-a-dataframe">Load a dataframe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#understand-split-sizes">Understand split sizes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#scale-without-leakage">Scale without leakage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#noise-utilities">Noise utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics and logging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#define-each-metric-once">Define each metric once</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#update-active-values">Update active values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#interpret-aggregation-correctly">Interpret aggregation correctly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#choose-an-output">Choose an output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="events.html">Extend training with events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="events.html#callbacks-emitted-by-the-current-loop">Callbacks emitted by the current loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html#learning-rate-schedules">Learning-rate schedules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html#logging-events">Logging events</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="checkpoints.html">Save checkpoints and load predictions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="checkpoints.html#write-model-state">Write model state</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoints.html#load-weights-for-inference">Load weights for inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoints.html#resume-status">Resume status</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mdn.html">Mixture density networks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mdn.html#understand-the-loss">Understand the loss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mdn.html#integrate-with-the-trainer">Integrate with the trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hpo.html">Hyperparameter search</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpo.html#describe-a-search-space">Describe a search space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpo.html#configure-one-task">Configure one task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpo.html#current-boundaries">Current boundaries</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference and development</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">tortreinador package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tortreinador.events.html">Events API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tortreinador.hpo.html">Hyperparameter search API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="compatibility.html">Compatibility and validation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="compatibility.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compatibility.html#environment">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compatibility.html#evidence-and-limits">Evidence and limits</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="known-issues.html">Known issues in the audited snapshot</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="known-issues.html#reproduce-failures">Reproduce failures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="known-issues.html#additional-boundaries">Additional boundaries</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Run tests and build documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#known-defects-are-visible">Known defects are visible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#build-the-user-guide">Build the user guide</a></li>
 </ul>
 </li>
 </ul>
 
-</div>
-</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
 
       </div>
       
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="modules.html" class="nav-link">API reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">tortreinador package</span></li>
+  </ul>
+</nav>
+</div>
+      
     </div>
-  </aside>
-  <div class="main">
-    <div class="content">
-      <div class="article-container">
-        <a href="#" class="back-to-top muted-link">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
-          </svg>
-          <span>Back to top</span>
-        </a>
-        <div class="content-icon-container">
-          
-<div class="theme-toggle-container theme-toggle-content">
-            <button class="theme-toggle">
-              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
-              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-            </button>
-          </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
-            <div class="visually-hidden">Toggle table of contents sidebar</div>
-            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-          </label>
-        </div>
-        <article role="main">
-          <section id="tortreinador-package">
-<h1>tortreinador package<a class="headerlink" href="#tortreinador-package" title="Permalink to this heading">#</a></h1>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="tortreinador-package">
+<h1>tortreinador package<a class="headerlink" href="#tortreinador-package" title="Link to this heading">#</a></h1>
 <section id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading">#</a></h2>
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tortreinador.models.html">tortreinador.models package</a><ul>
@@ -209,27 +638,22 @@
 <li class="toctree-l2"><a class="reference internal" href="tortreinador.models.html#module-tortreinador.models.MDN">tortreinador.models.MDN module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="tortreinador.models.html#tortreinador.models.MDN.Mixture"><code class="docutils literal notranslate"><span class="pre">Mixture</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="tortreinador.models.html#tortreinador.models.MDN.Mixture.forward"><code class="docutils literal notranslate"><span class="pre">Mixture.forward()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="tortreinador.models.html#tortreinador.models.MDN.Mixture.training"><code class="docutils literal notranslate"><span class="pre">Mixture.training</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="tortreinador.models.html#tortreinador.models.MDN.NLLLoss"><code class="docutils literal notranslate"><span class="pre">NLLLoss</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="tortreinador.models.html#tortreinador.models.MDN.NLLLoss.forward"><code class="docutils literal notranslate"><span class="pre">NLLLoss.forward()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="tortreinador.models.html#tortreinador.models.MDN.NLLLoss.training"><code class="docutils literal notranslate"><span class="pre">NLLLoss.training</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="tortreinador.models.html#tortreinador.models.MDN.NLLLoss_Version_2"><code class="docutils literal notranslate"><span class="pre">NLLLoss_Version_2</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="tortreinador.models.html#tortreinador.models.MDN.NLLLoss_Version_2.forward"><code class="docutils literal notranslate"><span class="pre">NLLLoss_Version_2.forward()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="tortreinador.models.html#tortreinador.models.MDN.NLLLoss_Version_2.training"><code class="docutils literal notranslate"><span class="pre">NLLLoss_Version_2.training</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="tortreinador.models.html#tortreinador.models.MDN.RelativeError"><code class="docutils literal notranslate"><span class="pre">RelativeError</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="tortreinador.models.html#tortreinador.models.MDN.RelativeError.forward"><code class="docutils literal notranslate"><span class="pre">RelativeError.forward()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="tortreinador.models.html#tortreinador.models.MDN.RelativeError.training"><code class="docutils literal notranslate"><span class="pre">RelativeError.training</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="tortreinador.models.html#tortreinador.models.MDN.mdn"><code class="docutils literal notranslate"><span class="pre">mdn</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="tortreinador.models.html#tortreinador.models.MDN.mdn.forward"><code class="docutils literal notranslate"><span class="pre">mdn.forward()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="tortreinador.models.html#tortreinador.models.MDN.mdn.training"><code class="docutils literal notranslate"><span class="pre">mdn.training</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -240,6 +664,32 @@
 <li class="toctree-l1"><a class="reference internal" href="tortreinador.utils.html">tortreinador.utils package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tortreinador.utils.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tortreinador.utils.html#module-tortreinador.utils.Recorder">tortreinador.utils.Recorder module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.CheckpointRecorder"><code class="docutils literal notranslate"><span class="pre">CheckpointRecorder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.CheckpointRecorder.initial"><code class="docutils literal notranslate"><span class="pre">CheckpointRecorder.initial()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.CheckpointRecorder.reload"><code class="docutils literal notranslate"><span class="pre">CheckpointRecorder.reload()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.CheckpointRecorder.update"><code class="docutils literal notranslate"><span class="pre">CheckpointRecorder.update()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.CheckpointRecorder.update_by_condition"><code class="docutils literal notranslate"><span class="pre">CheckpointRecorder.update_by_condition()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.MetricDefine"><code class="docutils literal notranslate"><span class="pre">MetricDefine</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.MetricDefine.metric_mode"><code class="docutils literal notranslate"><span class="pre">MetricDefine.metric_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.MetricDefine.metric_name"><code class="docutils literal notranslate"><span class="pre">MetricDefine.metric_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.MetricDefine.metric_value"><code class="docutils literal notranslate"><span class="pre">MetricDefine.metric_value</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.MetricDefine.update"><code class="docutils literal notranslate"><span class="pre">MetricDefine.update()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.MetricDefine.use_as_baseline"><code class="docutils literal notranslate"><span class="pre">MetricDefine.use_as_baseline</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.MetricDefine.use_as_criterion"><code class="docutils literal notranslate"><span class="pre">MetricDefine.use_as_criterion</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.MetricDefine.use_as_valloss"><code class="docutils literal notranslate"><span class="pre">MetricDefine.use_as_valloss</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.MetricDefine.use_for_log"><code class="docutils literal notranslate"><span class="pre">MetricDefine.use_for_log</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.MetricManager"><code class="docutils literal notranslate"><span class="pre">MetricManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.MetricManager.check_metric_exist"><code class="docutils literal notranslate"><span class="pre">MetricManager.check_metric_exist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.MetricManager.get_metrics_by_mode"><code class="docutils literal notranslate"><span class="pre">MetricManager.get_metrics_by_mode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.MetricManager.get_metrics_by_name"><code class="docutils literal notranslate"><span class="pre">MetricManager.get_metrics_by_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.MetricManager.get_metrics_for_log"><code class="docutils literal notranslate"><span class="pre">MetricManager.get_metrics_for_log()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.MetricManager.update"><code class="docutils literal notranslate"><span class="pre">MetricManager.update()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.Recorder"><code class="docutils literal notranslate"><span class="pre">Recorder</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.Recorder.avg"><code class="docutils literal notranslate"><span class="pre">Recorder.avg()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.Recorder.reset"><code class="docutils literal notranslate"><span class="pre">Recorder.reset()</span></code></a></li>
@@ -256,6 +706,9 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tortreinador.utils.html#module-tortreinador.utils.View">tortreinador.utils.View module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.View.get_lastlayer_params"><code class="docutils literal notranslate"><span class="pre">get_lastlayer_params()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.View.he_init_normal"><code class="docutils literal notranslate"><span class="pre">he_init_normal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.View.he_init_uniform"><code class="docutils literal notranslate"><span class="pre">he_init_uniform()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.View.init_bias"><code class="docutils literal notranslate"><span class="pre">init_bias()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.View.init_weights"><code class="docutils literal notranslate"><span class="pre">init_weights()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.View.split_weights"><code class="docutils literal notranslate"><span class="pre">split_weights()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.View.visualize_lastlayer"><code class="docutils literal notranslate"><span class="pre">visualize_lastlayer()</span></code></a></li>
@@ -265,6 +718,7 @@
 <li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.View.visualize_test_acc"><code class="docutils literal notranslate"><span class="pre">visualize_test_acc()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.View.visualize_test_loss"><code class="docutils literal notranslate"><span class="pre">visualize_test_loss()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.View.visualize_train_loss"><code class="docutils literal notranslate"><span class="pre">visualize_train_loss()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.View.xavier_init"><code class="docutils literal notranslate"><span class="pre">xavier_init()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tortreinador.utils.html#module-tortreinador.utils.WarmUpLR">tortreinador.utils.WarmUpLR module</a><ul>
@@ -275,6 +729,8 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tortreinador.utils.html#module-tortreinador.utils.metrics">tortreinador.utils.metrics module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.metrics.chamfer_distance"><code class="docutils literal notranslate"><span class="pre">chamfer_distance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.metrics.evaluation"><code class="docutils literal notranslate"><span class="pre">evaluation()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.metrics.mixture"><code class="docutils literal notranslate"><span class="pre">mixture()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.metrics.r2_score"><code class="docutils literal notranslate"><span class="pre">r2_score()</span></code></a></li>
 </ul>
@@ -285,7 +741,27 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tortreinador.utils.html#module-tortreinador.utils.preprocessing">tortreinador.utils.preprocessing module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.preprocessing.ScalerConfig"><code class="docutils literal notranslate"><span class="pre">ScalerConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.preprocessing.ScalerConfig.feature_range"><code class="docutils literal notranslate"><span class="pre">ScalerConfig.feature_range</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.preprocessing.ScalerConfig.method"><code class="docutils literal notranslate"><span class="pre">ScalerConfig.method</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.preprocessing.ScalerConfig.normal_y"><code class="docutils literal notranslate"><span class="pre">ScalerConfig.normal_y</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.preprocessing.ScalerConfig.on"><code class="docutils literal notranslate"><span class="pre">ScalerConfig.on</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.preprocessing.ScalerConfig.select_scaler"><code class="docutils literal notranslate"><span class="pre">ScalerConfig.select_scaler()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.preprocessing.ScalerConfig.validate"><code class="docutils literal notranslate"><span class="pre">ScalerConfig.validate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.preprocessing.cov_adj_compose"><code class="docutils literal notranslate"><span class="pre">cov_adj_compose()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.preprocessing.cov_decompose"><code class="docutils literal notranslate"><span class="pre">cov_decompose()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.preprocessing.get_dataloader"><code class="docutils literal notranslate"><span class="pre">get_dataloader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.preprocessing.legal_global"><code class="docutils literal notranslate"><span class="pre">legal_global()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.preprocessing.legal_log_space"><code class="docutils literal notranslate"><span class="pre">legal_log_space()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.preprocessing.load_data"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.preprocessing.log_space_noise_injection"><code class="docutils literal notranslate"><span class="pre">log_space_noise_injection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.preprocessing.noise_generator"><code class="docutils literal notranslate"><span class="pre">noise_generator()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.preprocessing.noise_injection"><code class="docutils literal notranslate"><span class="pre">noise_injection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.preprocessing.p_calculation"><code class="docutils literal notranslate"><span class="pre">p_calculation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.preprocessing.save_npy"><code class="docutils literal notranslate"><span class="pre">save_npy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.preprocessing.save_scaler"><code class="docutils literal notranslate"><span class="pre">save_scaler()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="tortreinador.utils.html#module-tortreinador.utils.tools">tortreinador.utils.tools module</a><ul>
@@ -300,437 +776,285 @@
 </div>
 </section>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">#</a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
 </section>
 <section id="module-tortreinador.train">
-<span id="tortreinador-train-module"></span><h2>tortreinador.train module<a class="headerlink" href="#module-tortreinador.train" title="Permalink to this heading">#</a></h2>
+<span id="tortreinador-train-module"></span><h2>tortreinador.train module<a class="headerlink" href="#module-tortreinador.train" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="tortreinador.train.TorchTrainer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tortreinador.train.</span></span><span class="sig-name descname"><span class="pre">TorchTrainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_gpu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Module</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Optimizer</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Module</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Module</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_save_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'recorder'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/train.html#TorchTrainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.train.TorchTrainer" title="Permalink to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">tortreinador.train.</span></span><span class="sig-name descname"><span class="pre">TorchTrainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_gpu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optimizer</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_manager</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.MetricManager" title="tortreinador.utils.Recorder.MetricManager"><span class="pre">MetricManager</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_save_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'recorder'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/train.html#TorchTrainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.train.TorchTrainer" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A class to implement the training and validation loop based on PyTorch.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.epoch">
-<span class="sig-name descname"><span class="pre">epoch</span></span><a class="headerlink" href="#tortreinador.train.TorchTrainer.epoch" title="Permalink to this definition">#</a></dt>
-<dd><p>The number of epochs to train the model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.model">
-<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#tortreinador.train.TorchTrainer.model" title="Permalink to this definition">#</a></dt>
-<dd><p>The model to be trained.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>nn.Module</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.optimizer">
-<span class="sig-name descname"><span class="pre">optimizer</span></span><a class="headerlink" href="#tortreinador.train.TorchTrainer.optimizer" title="Permalink to this definition">#</a></dt>
-<dd><p>The optimizer used for training the model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Optimizer</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.criterion">
-<span class="sig-name descname"><span class="pre">criterion</span></span><a class="headerlink" href="#tortreinador.train.TorchTrainer.criterion" title="Permalink to this definition">#</a></dt>
-<dd><p>The loss function used for training.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>nn.Module</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.data_save_mode">
-<span class="sig-name descname"><span class="pre">data_save_mode</span></span><a class="headerlink" href="#tortreinador.train.TorchTrainer.data_save_mode" title="Permalink to this definition">#</a></dt>
-<dd><p>The mode to save data (‘recorder’ or ‘csv’).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.device">
-<span class="sig-name descname"><span class="pre">device</span></span><a class="headerlink" href="#tortreinador.train.TorchTrainer.device" title="Permalink to this definition">#</a></dt>
-<dd><p>The device (CPU or GPU) on which the model will be trained.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>torch.device</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.writer">
-<span class="sig-name descname"><span class="pre">writer</span></span><a class="headerlink" href="#tortreinador.train.TorchTrainer.writer" title="Permalink to this definition">#</a></dt>
-<dd><p>TensorBoard writer for visualizing training metrics.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>SummaryWriter</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.train_loss_recorder">
-<span class="sig-name descname"><span class="pre">train_loss_recorder</span></span><a class="headerlink" href="#tortreinador.train.TorchTrainer.train_loss_recorder" title="Permalink to this definition">#</a></dt>
-<dd><p>Recorder for tracking training loss.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.Recorder" title="tortreinador.utils.Recorder.Recorder">Recorder</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.val_loss_recorder">
-<span class="sig-name descname"><span class="pre">val_loss_recorder</span></span><a class="headerlink" href="#tortreinador.train.TorchTrainer.val_loss_recorder" title="Permalink to this definition">#</a></dt>
-<dd><p>Recorder for tracking validation loss.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.Recorder" title="tortreinador.utils.Recorder.Recorder">Recorder</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.train_metric_recorder">
-<span class="sig-name descname"><span class="pre">train_metric_recorder</span></span><a class="headerlink" href="#tortreinador.train.TorchTrainer.train_metric_recorder" title="Permalink to this definition">#</a></dt>
-<dd><p>Recorder for tracking training metrics.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.Recorder" title="tortreinador.utils.Recorder.Recorder">Recorder</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.val_metric_recorder">
-<span class="sig-name descname"><span class="pre">val_metric_recorder</span></span><a class="headerlink" href="#tortreinador.train.TorchTrainer.val_metric_recorder" title="Permalink to this definition">#</a></dt>
-<dd><p>Recorder for tracking validation metrics.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.Recorder" title="tortreinador.utils.Recorder.Recorder">Recorder</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.epoch_train_loss">
-<span class="sig-name descname"><span class="pre">epoch_train_loss</span></span><a class="headerlink" href="#tortreinador.train.TorchTrainer.epoch_train_loss" title="Permalink to this definition">#</a></dt>
-<dd><p>Recorder for tracking loss across epochs (only if <cite>data_save_mode</cite> is ‘recorder’).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.RecorderForEpoch" title="tortreinador.utils.Recorder.RecorderForEpoch">RecorderForEpoch</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.epoch_val_loss">
-<span class="sig-name descname"><span class="pre">epoch_val_loss</span></span><a class="headerlink" href="#tortreinador.train.TorchTrainer.epoch_val_loss" title="Permalink to this definition">#</a></dt>
-<dd><p>Recorder for tracking validation loss across epochs (only if <cite>data_save_mode</cite> is ‘recorder’).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.RecorderForEpoch" title="tortreinador.utils.Recorder.RecorderForEpoch">RecorderForEpoch</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.epoch_train_metric">
-<span class="sig-name descname"><span class="pre">epoch_train_metric</span></span><a class="headerlink" href="#tortreinador.train.TorchTrainer.epoch_train_metric" title="Permalink to this definition">#</a></dt>
-<dd><p>Recorder for tracking training metrics across epochs (only if <cite>data_save_mode</cite> is ‘recorder’).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.RecorderForEpoch" title="tortreinador.utils.Recorder.RecorderForEpoch">RecorderForEpoch</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.epoch_val_metric">
-<span class="sig-name descname"><span class="pre">epoch_val_metric</span></span><a class="headerlink" href="#tortreinador.train.TorchTrainer.epoch_val_metric" title="Permalink to this definition">#</a></dt>
-<dd><p>Recorder for tracking validation metrics across epochs (only if <cite>data_save_mode</cite> is ‘recorder’).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.RecorderForEpoch" title="tortreinador.utils.Recorder.RecorderForEpoch">RecorderForEpoch</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.epoch_extra_metric">
-<span class="sig-name descname"><span class="pre">epoch_extra_metric</span></span><a class="headerlink" href="#tortreinador.train.TorchTrainer.epoch_extra_metric" title="Permalink to this definition">#</a></dt>
-<dd><p>Recorder for tracking additional metrics across epochs.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="tortreinador.utils.html#tortreinador.utils.Recorder.RecorderForEpoch" title="tortreinador.utils.Recorder.RecorderForEpoch">RecorderForEpoch</a>, optional</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.csv_filename">
-<span class="sig-name descname"><span class="pre">csv_filename</span></span><a class="headerlink" href="#tortreinador.train.TorchTrainer.csv_filename" title="Permalink to this definition">#</a></dt>
-<dd><p>The filename for saving data in CSV format (only if <cite>data_save_mode</cite> is ‘csv’).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str, optional</p>
-</dd>
-</dl>
-</dd></dl>
-
+<p>High level training utility that wires a PyTorch model, optimizer, and loss into a
+metric-aware training/validation loop with optional checkpointing and logging.</p>
+<p>The trainer keeps a <cite>MetricManager</cite> plus per-metric <cite>Recorder</cite> instances that gather batch
+statistics, and it can either persist those numbers in memory (<cite>recorder</cite> mode) or to CSV
+files. Learning-rate warmup, multi-step decay, cosine restarts, and two mix strategies are
+supported out of the box.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.cal_result">
-<span class="sig-name descname"><span class="pre">cal_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/train.html#TorchTrainer.cal_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.train.TorchTrainer.cal_result" title="Permalink to this definition">#</a></dt>
-<dd><p>Updates the loss and metric recorders based on the results from the current epoch.</p>
+<span class="sig-name descname"><span class="pre">cal_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/train.html#TorchTrainer.cal_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.train.TorchTrainer.cal_result" title="Link to this definition">#</a></dt>
+<dd><p>Consolidate per-batch metrics into averaged statistics for the requested mode.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>*args</strong> – A variable-length argument list containing the results from the epoch.</p>
+<dd class="field-odd"><p><strong>mode</strong> – 1 for training or 2 for validation. Determines which subset of metrics get read.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A dictionary containing the updated loss and metrics.</p>
+<dd class="field-even"><p>(formatted_metrics, criterion_value) where <code class="docutils literal notranslate"><span class="pre">formatted_metrics</span></code> is a dict that maps
+metric names to (value, print_format) tuples and <code class="docutils literal notranslate"><span class="pre">criterion_value</span></code> is the metric selected
+as the optimization target.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict</p>
+<dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.calculate">
-<span class="sig-name descname"><span class="pre">calculate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'t'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/train.html#TorchTrainer.calculate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.train.TorchTrainer.calculate" title="Permalink to this definition">#</a></dt>
-<dd><p>Performs a forward pass of the model, calculates the loss and metrics.</p>
+<span class="sig-name descname"><span class="pre">calculate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/train.html#TorchTrainer.calculate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.train.TorchTrainer.calculate" title="Link to this definition">#</a></dt>
+<dd><p>Forward pass helper that computes metrics and updates the MetricManager cache.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>torch.Tensor</em>) – Input data.</p></li>
-<li><p><strong>y</strong> (<em>torch.Tensor</em>) – Target data.</p></li>
-<li><p><strong>mode</strong> (<em>str</em>) – Mode of operation - ‘t’ for training, ‘v’ for validation.</p></li>
+<li><p><strong>x</strong> – Batch of inputs for the model.</p></li>
+<li><p><strong>y</strong> – Batch of targets that match <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p></li>
+<li><p><strong>mode</strong> – 1 when called from the training loop and 2 for validation. The mode determines which
+metric slots get updated.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A list containing the loss, metric, and other relevant information based on the mode.</p>
+<dd class="field-even"><p>The <code class="docutils literal notranslate"><span class="pre">mode</span></code> value, propagated so callers can feed it back into <code class="docutils literal notranslate"><span class="pre">cal_result</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list</p>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.continue_fit">
+<span class="sig-name descname"><span class="pre">continue_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/train.html#TorchTrainer.continue_fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.train.TorchTrainer.continue_fit" title="Link to this definition">#</a></dt>
+<dd><p>Resume training from an on-disk checkpoint produced by <a class="reference internal" href="#tortreinador.train.TorchTrainer.fit" title="tortreinador.train.TorchTrainer.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t_l</strong> – Training dataloader.</p></li>
+<li><p><strong>v_l</strong> – Validation dataloader.</p></li>
+<li><p><strong>checkpoint_path</strong> – Path to the <code class="docutils literal notranslate"><span class="pre">.pth</span></code> checkpoint produced by <code class="xref py py-class docutils literal notranslate"><span class="pre">CheckpointRecorder</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Same as <a class="reference internal" href="#tortreinador.train.TorchTrainer.fit" title="tortreinador.train.TorchTrainer.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code></a>. The checkpoint config is injected so no additional kwargs are required.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_l</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/train.html#TorchTrainer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.train.TorchTrainer.fit" title="Permalink to this definition">#</a></dt>
-<dd><p>Trains and validates a machine learning model using the provided training and validation data loaders,
-applying specific learning rate schedules and warm-up periods. The function also handles the saving of the model
-based on validation performance metrics.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>t_l</strong> (<em>DataLoader</em>) – DataLoader containing the training data.</p></li>
-<li><p><strong>v_l</strong> (<em>DataLoader</em>) – DataLoader containing the validation data.</p></li>
-<li><p><strong>**kwargs</strong> – A dictionary of additional keyword arguments:
-m_p (str): Path where the model should be saved.
-w_e (int, optional): Number of initial epochs during which the learning rate is increased linearly.
-l_m (list of int, optional): Epoch indices at which the learning rate should be decreased.
-gamma (float, optional): Multiplicative factor by which the learning rate is decayed at each milestone.
-b_m (float, optional): Threshold for a performance metric (e.g., accuracy) to determine the best model.
-b_l (float, optional): Threshold for the loss value to determine the best model.
-condition(int): Decided by b_m and b_l. If b_m and b_l are not None, condition=2, if b_m is not None and b_l is None, condition=0, if b_m is None and b_l is not None, condition=1, note that this parameter can not be specified.</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="simple">
-<dt>Process:</dt><dd><ol class="arabic simple">
-<li><p>The function initializes required devices and settings for training.</p></li>
-<li><p>It enters a training loop for the specified number of epochs, handling both training and validation phases.</p></li>
-<li><p>During the training phase, it optionally applies a warm-up schedule and adjusts the learning rate based on milestones.</p></li>
-<li><p>Post each epoch, it checks if the current model outperforms previous metrics using the <cite>b_m</cite> value and potentially saves the model.</p></li>
-<li><p>Outputs training progress and validation metrics after each epoch.</p></li>
-</ol>
-</dd>
-</dl>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><ul class="simple">
-<li><p>epoch_train_loss (MetricTracker): Tracker for training loss across epochs.</p></li>
-<li><p>epoch_val_loss (MetricTracker): Tracker for validation loss across epochs.</p></li>
-<li><p>epoch_val_metric (MetricTracker): Tracker for validation metric specified by <cite>b_m</cite>.</p></li>
-<li><p>epoch_train_metric (MetricTracker): Tracker for training metric.</p></li>
-<li><p>epoch_extra_metric (MetricTracker, optional): Additional metrics tracker if <cite>extra_metric</cite> is True.</p></li>
-</ul>
-</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>A tuple of collected metrics over epochs</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ValueError</strong> – If required parameters in <cite>kwargs</cite> like <cite>b_m</cite> are missing or if validation metrics exceed expected boundaries.</p>
-</dd>
-</dl>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tqdm_disable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/train.html#TorchTrainer.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.train.TorchTrainer.fit" title="Link to this definition">#</a></dt>
+<dd><p>Run training and validation with a configuration from <code class="docutils literal notranslate"><span class="pre">config_generator</span></code>.</p>
+<p>Pass training and validation dataloaders, <code class="docutils literal notranslate"><span class="pre">tqdm_disable</span></code> and the unpacked
+configuration dictionary. Recorder mode returns a list of recording events;
+CSV mode returns <code class="docutils literal notranslate"><span class="pre">'OK'</span></code>. See the training guide for configuration and the
+checkpoint guide for the current resume limitations.</p>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.get_current_time">
+<span class="sig-name descname"><span class="pre">get_current_time</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/train.html#TorchTrainer.get_current_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.train.TorchTrainer.get_current_time" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.subscribe">
+<span class="sig-name descname"><span class="pre">subscribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="tortreinador.events.html#tortreinador.Events.event_system.EventType" title="tortreinador.Events.event_system.EventType"><span class="pre">EventType</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="tortreinador.events.html#tortreinador.Events.event_system.EventType" title="tortreinador.Events.event_system.EventType"><span class="pre">EventType</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/train.html#TorchTrainer.subscribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.train.TorchTrainer.subscribe" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tortreinador.train.TorchTrainer.trigger">
+<span class="sig-name descname"><span class="pre">trigger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="tortreinador.events.html#tortreinador.Events.event_system.EventType" title="tortreinador.Events.event_system.EventType"><span class="pre">EventType</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/train.html#TorchTrainer.trigger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.train.TorchTrainer.trigger" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tortreinador.train.config_generator">
-<span class="sig-prename descclassname"><span class="pre">tortreinador.train.</span></span><span class="sig-name descname"><span class="pre">config_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmup_epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_milestones</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_decay_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">best_metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">best_loss</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/train.html#config_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.train.config_generator" title="Permalink to this definition">#</a></dt>
-<dd><p>Generates a configuration dictionary for model training based on specified parameters.</p>
+<span class="sig-prename descclassname"><span class="pre">tortreinador.train.</span></span><span class="sig-name descname"><span class="pre">config_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmup_epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_milestones</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_decay_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">best_metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">best_loss</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_cycle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_save</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">if_mix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmup_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_restart</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_mult</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restart_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'batch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_on</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Logger</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_file_max_bytes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10485760</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_file_backup_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/train.html#config_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.train.config_generator" title="Link to this definition">#</a></dt>
+<dd><p>Build a <code class="docutils literal notranslate"><span class="pre">fit</span></code> configuration dictionary using explicit keyword arguments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>model_save_path</strong> (<em>str</em>) – Path where the model should be saved.</p></li>
-<li><p><strong>warmup_epochs</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of initial epochs during which the learning rate is increased linearly.</p></li>
-<li><p><strong>lr_milestones</strong> (<em>list</em><em> of </em><em>int</em><em>, </em><em>optional</em>) – Epoch indices at which the learning rate should be decreased.</p></li>
-<li><p><strong>lr_decay_rate</strong> (<em>float</em><em>, </em><em>optional</em>) – Multiplicative factor by which the learning rate is decayed at each milestone.</p></li>
-<li><p><strong>best_metric</strong> (<em>float</em><em>, </em><em>optional</em>) – Threshold for a performance metric (e.g., accuracy) to determine the best model.</p></li>
-<li><p><strong>best_loss</strong> (<em>float</em><em>, </em><em>optional</em>) – Threshold for the loss value to determine the best model.</p></li>
-<li><p><strong>validation_rate</strong> (<em>float</em>) – Fraction of the validation set which split by training data(developing)</p></li>
+<li><p><strong>model_save_path</strong> – Directory for checkpoints. Required when <code class="docutils literal notranslate"><span class="pre">auto_save</span></code> is used.</p></li>
+<li><p><strong>warmup_epochs</strong> – Number of warmup epochs for <code class="xref py py-class docutils literal notranslate"><span class="pre">WarmUpLR</span></code>.</p></li>
+<li><p><strong>lr_milestones</strong> – Epoch indices for MultiStepLR.</p></li>
+<li><p><strong>lr_decay_rate</strong> – Multiplicative decay applied at each milestone.</p></li>
+<li><p><strong>best_metric</strong> – Initial threshold for the validation metric used to detect improvements.</p></li>
+<li><p><strong>best_loss</strong> – Initial threshold for validation loss.</p></li>
+<li><p><strong>validation_cycle</strong> – Validate every <code class="docutils literal notranslate"><span class="pre">validation_cycle</span></code> epochs.</p></li>
+<li><p><strong>auto_save</strong> – Save a checkpoint every <code class="docutils literal notranslate"><span class="pre">auto_save</span></code> epochs. Only active when <code class="docutils literal notranslate"><span class="pre">model_save_path</span></code> is set.</p></li>
+<li><p><strong>if_mix</strong> – Toggle mix strategy use. Additional keyword arguments define the chosen strategy.</p></li>
+<li><p><strong>initial_rate</strong> – Starting error rate for mix strategy 1.</p></li>
+<li><p><strong>final_rate</strong> – Target error rate for mix strategies.</p></li>
+<li><p><strong>warmup_error</strong> – Number of epochs before mix strategy transitions to steady state.</p></li>
+<li><p><strong>event_rate</strong> – Probability that mix strategy 2 triggers a synthetic mix event.</p></li>
+<li><p><strong>lambda_factor</strong> – Mixing coefficient for strategy 2.</p></li>
+<li><p><strong>lr_restart</strong> – Whether to configure cosine annealing restarts.</p></li>
+<li><p><strong>T_0</strong> – Number of iterations for the first cosine period.</p></li>
+<li><p><strong>t_mult</strong> – Multiplicative increase applied to <code class="docutils literal notranslate"><span class="pre">T_0</span></code> for every restart.</p></li>
+<li><p><strong>eta_min</strong> – Minimum learning rate for cosine restart schedules.</p></li>
+<li><p><strong>restart_mode</strong> – <code class="docutils literal notranslate"><span class="pre">'batch'</span></code> or <code class="docutils literal notranslate"><span class="pre">'epoch'</span></code>; determines when the restart scheduler steps.</p></li>
+<li><p><strong>logger_on</strong></p></li>
+<li><p><strong>logger</strong></p></li>
+<li><p><strong>logger_level</strong></p></li>
+<li><p><strong>logger_file_max_bytes</strong></p></li>
+<li><p><strong>logger_file_backup_count</strong></p></li>
+<li><p><strong>logger_dir</strong></p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Fully-populated configuration dictionary ready to be passed to <a class="reference internal" href="#tortreinador.train.TorchTrainer.fit" title="tortreinador.train.TorchTrainer.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">TorchTrainer.fit()</span></code></a>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If <cite>model_save_path</cite> is None or if <cite>lr_milestones</cite> is set but <cite>lr_decay_rate</cite> is not provided.</p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><dl class="simple">
-<dt>Configuration dictionary containing all settings necessary for model training, including paths,</dt><dd><p>learning rate schedules, and performance thresholds.</p>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>dict</p>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If mutually exclusive mix parameters are provided or when learning-rate milestones</p></li>
+<li><p><strong>are given without a decay rate.</strong> – </p></li>
+</ul>
 </dd>
 </dl>
-<p>This function constructs a dictionary that includes settings for saving the model, applying warmup periods and
-learning rate schedules, and monitoring specific performance metrics or loss values to save the best model during training.</p>
 </dd></dl>
 
 </section>
 <section id="module-tortreinador">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tortreinador" title="Permalink to this heading">#</a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tortreinador" title="Link to this heading">#</a></h2>
 </section>
 </section>
 
-        </article>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="modules.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">API reference</p>
       </div>
-      <footer>
-        
-        <div class="related-pages">
-          <a class="next-page" href="tortreinador.models.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">tortreinador.models package</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
-          <a class="prev-page" href="modules.html">
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-              <div class="page-info">
-                <div class="context">
-                  <span>Previous</span>
-                </div>
-                
-                <div class="title">tortreinador</div>
-                
-              </div>
-            </a>
-        </div>
-        <div class="bottom-of-page">
-          <div class="left-details">
-            <div class="copyright">
-                Copyright &#169; 2024, Xavier
+    </a>
+    <a class="right-next"
+       href="tortreinador.models.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">tortreinador.models package</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
             </div>
-            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
-            <a href="https://github.com/pradyunsg/furo">Furo</a>
             
-          </div>
-          <div class="right-details">
-            
-          </div>
-        </div>
-        
-      </footer>
-    </div>
-    <aside class="toc-drawer">
-      
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">tortreinador package</a><ul>
-<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-tortreinador.train">tortreinador.train module</a><ul>
-<li><a class="reference internal" href="#tortreinador.train.TorchTrainer"><code class="docutils literal notranslate"><span class="pre">TorchTrainer</span></code></a><ul>
-<li><a class="reference internal" href="#tortreinador.train.TorchTrainer.epoch"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.epoch</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.train.TorchTrainer.model"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.model</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.train.TorchTrainer.optimizer"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.optimizer</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.train.TorchTrainer.criterion"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.criterion</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.train.TorchTrainer.data_save_mode"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.data_save_mode</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.train.TorchTrainer.device"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.device</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.train.TorchTrainer.writer"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.writer</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.train.TorchTrainer.train_loss_recorder"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.train_loss_recorder</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.train.TorchTrainer.val_loss_recorder"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.val_loss_recorder</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.train.TorchTrainer.train_metric_recorder"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.train_metric_recorder</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.train.TorchTrainer.val_metric_recorder"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.val_metric_recorder</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.train.TorchTrainer.epoch_train_loss"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.epoch_train_loss</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.train.TorchTrainer.epoch_val_loss"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.epoch_val_loss</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.train.TorchTrainer.epoch_train_metric"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.epoch_train_metric</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.train.TorchTrainer.epoch_val_metric"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.epoch_val_metric</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.train.TorchTrainer.epoch_extra_metric"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.epoch_extra_metric</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.train.TorchTrainer.csv_filename"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.csv_filename</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.train.TorchTrainer.cal_result"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.cal_result()</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.train.TorchTrainer.calculate"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.calculate()</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.train.TorchTrainer.fit"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.fit()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#tortreinador.train.config_generator"><code class="docutils literal notranslate"><span class="pre">config_generator()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-tortreinador">Module contents</a></li>
-</ul>
-</li>
-</ul>
+              
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-          </div>
-        </div>
-      </div>
-      
-      
-    </aside>
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
   </div>
-</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/scripts/furo.js"></script>
-    </body>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subpackages">Subpackages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-tortreinador.train">tortreinador.train module</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.train.TorchTrainer"><code class="docutils literal notranslate"><span class="pre">TorchTrainer</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.train.TorchTrainer.cal_result"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.cal_result()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.train.TorchTrainer.calculate"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.calculate()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.train.TorchTrainer.continue_fit"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.continue_fit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.train.TorchTrainer.fit"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.fit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.train.TorchTrainer.get_current_time"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.get_current_time()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.train.TorchTrainer.subscribe"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.subscribe()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.train.TorchTrainer.trigger"><code class="docutils literal notranslate"><span class="pre">TorchTrainer.trigger()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.train.config_generator"><code class="docutils literal notranslate"><span class="pre">config_generator()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-tortreinador">Module contents</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="_sources/tortreinador.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Xavier.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.2.0.
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
 </html>

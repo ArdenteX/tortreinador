@@ -1,0 +1,19 @@
+Events API
+==========
+
+See :doc:`events` for the subset of events emitted by the current trainer.
+
+.. automodule:: tortreinador.Events.event_system
+   :members:
+
+.. automodule:: tortreinador.Events.autosave
+   :members:
+
+.. automodule:: tortreinador.Events.best_model_detection
+   :members:
+
+.. automodule:: tortreinador.Events.csv_event
+   :members:
+
+.. automodule:: tortreinador.Events.logger_event
+   :members:

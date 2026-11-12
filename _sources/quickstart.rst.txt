@@ -1,0 +1,55 @@
+Quickstart: train a regression model
+====================================
+
+This tutorial fits ``y = 2x + 1`` on synthetic data. It runs on CPU, downloads
+no data and demonstrates the complete training contract.
+
+1. Prepare independent splits
+-----------------------------
+
+Create input and target tensors with shape ``(samples, features)``. Shuffle the
+indices once, reserve validation samples and wrap both splits in dataloaders.
+Use ``num_workers=0`` for a portable first run.
+
+2. Define the calculation
+-------------------------
+
+Subclass ``TorchTrainer`` and implement ``calculate(x, y, mode)``. Compute the
+loss and return ``self._standard_return(...)``. The trainer performs
+``zero_grad()``, ``backward()`` and ``step()``; do not repeat them here.
+
+3. Register metrics
+-------------------
+
+Use separate ``train_loss`` and ``val_loss`` definitions. Mode 1 runs during
+training; mode 2 runs during validation. Exactly one training metric is the
+criterion used for backpropagation. A validation loss can also drive best-model
+detection. This separation keeps validation statistics independent of training.
+
+4. Run the complete example
+---------------------------
+
+.. literalinclude:: ../examples/quickstart.py
+   :language: python
+
+Save this script or :download:`download quickstart.py <../examples/quickstart.py>`.
+After installing the package, run:
+
+.. code-block:: console
+
+   python docs/examples/quickstart.py
+
+The validation MSE should approach zero and the prediction should approach
+``2.0``. Small floating-point differences are normal. No checkpoint is written
+because this example does not configure a save path or autosave interval.
+
+5. Inspect the result
+---------------------
+
+In recorder mode, ``fit`` returns a list of event listeners. For a fresh trainer,
+``history[0].recorder_for_epoch`` maps metric names to ``RecorderForEpoch``
+objects. Their ``.val`` tensors contain values captured on validation epochs.
+With ``validation_cycle=2``, history therefore has one entry every two epochs.
+
+Continue with :doc:`training` to adapt this example to an existing model,
+or :doc:`data` to prepare a tabular dataset.

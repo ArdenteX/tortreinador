@@ -1,0 +1,53 @@
+Install Tortreinador
+====================
+
+Create an environment
+---------------------
+
+Use an isolated environment for each project. The audited environment uses
+CPython 3.15.2 and PyTorch 2.15.0 on Windows x86-64 with CPU execution.
+This confirms that the package can run on the latest stable Python; the
+:doc:`compatibility` page explains why it is not a blanket stability guarantee.
+
+.. code-block:: console
+
+   python -m venv .venv
+
+Activate it with ``.venv\Scripts\Activate.ps1`` in PowerShell or
+``source .venv/bin/activate`` on Linux/macOS.
+
+Install PyTorch first
+---------------------
+
+The package does not declare PyTorch as an automatic dependency. For a CPU
+environment matching the audit:
+
+.. code-block:: console
+
+   python -m pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu
+
+For GPU execution, use the command for your platform from the
+`PyTorch installation selector <https://pytorch.org/get-started/locally/>`_.
+The CPU audit does not validate a CUDA driver or accelerator combination.
+
+Install the package
+-------------------
+
+.. code-block:: console
+
+   python -m pip install tortreinador
+
+For this source checkout, run the following from the repository root:
+
+.. code-block:: console
+
+   python -m pip install -e .
+   python -m pip install -r requirements-test.txt
+   python -c "import torch; from tortreinador.train import TorchTrainer; print(torch.__version__)"
+
+The editable source checkout is the reference for these guides. PyPI releases
+may not contain the same code. Hyperparameter search requires ``optuna``;
+install it explicitly because it is currently absent from package metadata.
+Excel readers may require an engine such as ``openpyxl``.
+
+Next: :doc:`quickstart`.

@@ -1,0 +1,69 @@
+Customize the training step
+===========================
+
+Keep your model as an ordinary ``torch.nn.Module``. Construct its optimizer
+from the same model instance, and pass a loss implemented as an ``nn.Module``.
+The trainer checks these types at construction time.
+
+The calculation contract
+------------------------
+
+.. code-block:: python
+
+   class MyTrainer(TorchTrainer):
+       def calculate(self, x, y, mode=1):
+           prediction = self.model(x)
+           loss = self.criterion(prediction, y)
+           return self._standard_return(mode=mode, update_values=[loss])
+
+The returned mode tells the trainer which metrics to read. Values in a list
+must follow the order of metrics active in that mode. Named dictionaries are
+also accepted. A criterion tensor must retain its autograd graph; do not call
+``item()`` or ``detach()`` on the loss before returning it.
+
+The default ``TorchTrainer.calculate`` expects an MDN returning
+``(pi, mu, sigma)`` and computes loss plus R². Override it for an ordinary
+regression model, classification, or any different output structure.
+Always provide a ``MetricManager``; the current default manager is invalid.
+
+Inside an epoch
+---------------
+
+The loop selects training mode, moves tensor batches to the chosen device,
+computes metrics, backpropagates the criterion and updates the optimizer.
+Validation uses ``model.eval()`` and ``torch.no_grad()``. Recorders reset at
+the end of each epoch, so use separate mode-1 and mode-2 definitions for values
+that must not be mixed. See :doc:`metrics`.
+
+Configuration
+-------------
+
+Pass ``**config_generator(...)`` to ``fit(train_loader, val_loader, ...)``.
+Calling ``fit`` without the generated configuration raises a missing-key error.
+
+.. list-table:: Common options
+   :header-rows: 1
+
+   * - Option
+     - Meaning
+   * - ``epoch`` (constructor)
+     - Total number of epochs; examples use positive integers.
+   * - ``is_gpu`` (constructor)
+     - Use CUDA if requested and available, otherwise CPU. No automatic MPS selection.
+   * - ``validation_cycle``
+     - Validate every N epochs, with N greater than zero.
+   * - ``best_loss`` / ``best_metric``
+     - Initial lower-is-better loss / higher-is-better score threshold.
+   * - ``model_save_path`` / ``auto_save``
+     - Existing output directory and positive periodic-save interval.
+   * - ``tqdm_disable`` (fit)
+     - Hide progress bars, useful in tests and batch jobs.
+
+Warmup is available through ``warmup_epochs``. Milestone decay without warmup
+and cosine restarts have confirmed defects; see :doc:`known-issues` before use.
+Mix configuration exposes ``current_error_rate``, ``event_occurs`` and
+``lambda_factor`` for custom calculation code. It does not apply a generic
+augmentation to your model automatically.
+
+Use a fresh trainer for each independent run. Repeated ``fit`` calls register
+additional event listeners; they are not an audited resume mechanism.

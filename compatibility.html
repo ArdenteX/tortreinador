@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Compatibility and validation &#8212; Tortreinador documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=2132deff" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="_static/documentation_options.js?v=cb850272"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'compatibility';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://ardentex.github.io/tortreinador/compatibility.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Known issues in the audited snapshot" href="known-issues.html" />
+    <link rel="prev" title="Hyperparameter search API" href="tortreinador.hpo.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Tortreinador</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="guides.html">
+    User guide
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="training.html">
+    Customize the training step
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="data.html">
+    Prepare data
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="metrics.html">
+    Metrics and logging
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="events.html">
+    Extend training with events
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="checkpoints.html">
+    Save checkpoints and load predictions
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="mdn.html">
+    Mixture density networks
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="hpo.html">
+    Hyperparameter search
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="modules.html">
+    API reference
+  </a>
+</li>
+
+
+<li class=" current active">
+  <a class="nav-link dropdown-item nav-internal" href="#" aria-current="page">
+    Compatibility and validation
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="known-issues.html">
+    Known issues in the audited snapshot
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="testing.html">
+    Run tests and build documentation
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ArdenteX/tortreinador" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="guides.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="training.html">
+    Customize the training step
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="data.html">
+    Prepare data
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="metrics.html">
+    Metrics and logging
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="events.html">
+    Extend training with events
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="checkpoints.html">
+    Save checkpoints and load predictions
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="mdn.html">
+    Mixture density networks
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="hpo.html">
+    Hyperparameter search
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="modules.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#" aria-current="page">
+    Compatibility and validation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="known-issues.html">
+    Known issues in the audited snapshot
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="testing.html">
+    Run tests and build documentation
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ArdenteX/tortreinador" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="guide-navigation" aria-label="Documentation navigation">
+  <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#create-an-environment">Create an environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#install-pytorch-first">Install PyTorch first</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#install-the-package">Install the package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#prepare-independent-splits">1. Prepare independent splits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#define-the-calculation">2. Define the calculation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#register-metrics">3. Register metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#run-the-complete-example">4. Run the complete example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#inspect-the-result">5. Inspect the result</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides.html">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="training.html">Customize the training step</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="training.html#the-calculation-contract">The calculation contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training.html#inside-an-epoch">Inside an epoch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training.html#configuration">Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Prepare data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data.html#start-with-tensors">Start with tensors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#load-a-dataframe">Load a dataframe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#understand-split-sizes">Understand split sizes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#scale-without-leakage">Scale without leakage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#noise-utilities">Noise utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics and logging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#define-each-metric-once">Define each metric once</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#update-active-values">Update active values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#interpret-aggregation-correctly">Interpret aggregation correctly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#choose-an-output">Choose an output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="events.html">Extend training with events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="events.html#callbacks-emitted-by-the-current-loop">Callbacks emitted by the current loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html#learning-rate-schedules">Learning-rate schedules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html#logging-events">Logging events</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="checkpoints.html">Save checkpoints and load predictions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="checkpoints.html#write-model-state">Write model state</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoints.html#load-weights-for-inference">Load weights for inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoints.html#resume-status">Resume status</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mdn.html">Mixture density networks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mdn.html#understand-the-loss">Understand the loss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mdn.html#integrate-with-the-trainer">Integrate with the trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hpo.html">Hyperparameter search</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpo.html#describe-a-search-space">Describe a search space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpo.html#configure-one-task">Configure one task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpo.html#current-boundaries">Current boundaries</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference and development</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tortreinador.html">tortreinador package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tortreinador.events.html">Events API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tortreinador.hpo.html">Hyperparameter search API</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Compatibility and validation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#environment">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#evidence-and-limits">Evidence and limits</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="known-issues.html">Known issues in the audited snapshot</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="known-issues.html#reproduce-failures">Reproduce failures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="known-issues.html#additional-boundaries">Additional boundaries</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Run tests and build documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#known-defects-are-visible">Known defects are visible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#build-the-user-guide">Build the user guide</a></li>
+</ul>
+</li>
+</ul>
+
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Compatibility and validation</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="compatibility-and-validation">
+<h1>Compatibility and validation<a class="headerlink" href="#compatibility-and-validation" title="Link to this heading">#</a></h1>
+<p>Audit date: <strong>November 12, 2026</strong>. Source version: <strong>0.2.5</strong>, local checkout
+based on commit <code class="docutils literal notranslate"><span class="pre">a3d1265deb4bae915d42a5fbd8b7caa19b020d0e</span></code>.</p>
+<section id="result">
+<h2>Result<a class="headerlink" href="#result" title="Link to this heading">#</a></h2>
+<p>The project installs, imports and performs real CPU training on
+<strong>CPython 3.15.2 with PyTorch 2.15.0+cpu</strong> on Windows x86-64. It cannot yet be
+described as fully stable: the suite reproduces functional defects in resume,
+validation aggregation, preprocessing and scheduling. See <a class="reference internal" href="known-issues.html"><span class="doc">Known issues in the audited snapshot</span></a>.
+No production implementation was modified in this audit.</p>
+<p>The current stable Python version was checked against the
+<a class="reference external" href="https://www.python.org/downloads/">Python downloads page</a>. PyTorch wheel
+availability was checked against <a class="reference external" href="https://pypi.org/pypi/torch/json">PyPI metadata</a>
+and verified by installing the CPU wheel. These observations are dated, not
+a promise about future dependency releases.</p>
+</section>
+<section id="environment">
+<h2>Environment<a class="headerlink" href="#environment" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Component</p></th>
+<th class="head"><p>Tested version / scope</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Python</p></td>
+<td><p>3.15.2, standard CPython build</p></td>
+</tr>
+<tr class="row-odd"><td><p>PyTorch</p></td>
+<td><p>2.15.0+cpu</p></td>
+</tr>
+<tr class="row-even"><td><p>NumPy / pandas</p></td>
+<td><p>2.5.4 / 3.1.1</p></td>
+</tr>
+<tr class="row-odd"><td><p>scikit-learn / Optuna</p></td>
+<td><p>1.9.1 / 5.0.0</p></td>
+</tr>
+<tr class="row-even"><td><p>Platform</p></td>
+<td><p>Windows x86-64; no Linux/macOS or free-threaded runtime certification</p></td>
+</tr>
+<tr class="row-odd"><td><p>Accelerator</p></td>
+<td><p>CPU tested; the CUDA regression is conditional and skipped in this environment</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The older local Python 3.9.23 / PyTorch 2.5.1+cu124 environment was used only
+to run the two existing unit-test modules: <strong>12 passed, 1 failed</strong> (Recorder
+dtype handling). This establishes that TT-01 predates the Python upgrade;
+it is not a full compatibility certification for that older environment.</p>
+</section>
+<section id="evidence-and-limits">
+<h2>Evidence and limits<a class="headerlink" href="#evidence-and-limits" title="Link to this heading">#</a></h2>
+<p>The maintained suite contains <strong>118 cases: 102 passed, 15 expected failures
+covering 14 known defects, and 1 CUDA skip</strong>. Line coverage is <strong>86%</strong>
+(1,410 of 1,641 statements executed). Expected failures remain unresolved.</p>
+<p><code class="docutils literal notranslate"><span class="pre">validation/pytest-315.xml</span></code> and <code class="docutils literal notranslate"><span class="pre">validation/pytest-315.txt</span></code> record the
+maintained suite results. <code class="docutils literal notranslate"><span class="pre">validation/coverage.xml</span></code> records line coverage,
+and <code class="docutils literal notranslate"><span class="pre">validation/environment-315.txt</span></code> captures installed dependencies.
+The downloadable quickstart is executed by the tests and checked for prediction
+accuracy. Packaging was built and installed from an isolated copy, preserving
+the user’s existing metadata files.</p>
+<p>Successful tests cover actual optimization, MDN gradients, independent numerical
+checks, recorder behavior, event dispatch, CSV/TensorBoard output, checkpoint
+files, preprocessing, clustering, plotting and one real Optuna trial.
+They do not prove every possible input or device combination correct.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="tortreinador.hpo.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Hyperparameter search API</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="known-issues.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Known issues in the audited snapshot</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#result">Result</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment">Environment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evidence-and-limits">Evidence and limits</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="_sources/compatibility.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Xavier.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.2.0.
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,258 +1,823 @@
-<!doctype html>
-<html class="no-js" lang="en">
-  <head><meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="tortreinador.models package" href="tortreinador.models.html" />
+<!DOCTYPE html>
 
-    <!-- Generated with Sphinx 5.3.0 and Furo 2023.03.27 -->
-        <title>tortreinador.utils package - Tortreinador documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>tortreinador.utils package &#8212; Tortreinador documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=2132deff" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="_static/documentation_options.js?v=cb850272"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tortreinador.utils';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="https://ardentex.github.io/tortreinador/tortreinador.utils.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Events API" href="tortreinador.events.html" />
+    <link rel="prev" title="tortreinador.models package" href="tortreinador.models.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
     
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
     
-
-
-<style>
-  body {
-    --color-code-background: #f8f8f8;
-  --color-code-foreground: black;
-  
-  }
-  @media not print {
-    body[data-theme="dark"] {
-      --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  
-    }
-    @media (prefers-color-scheme: dark) {
-      body:not([data-theme="light"]) {
-        --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  
-      }
-    }
-  }
-</style></head>
-  <body>
-    
-    <script>
-      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
-    </script>
-    
-
-<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-  <symbol id="svg-toc" viewBox="0 0 24 24">
-    <title>Contents</title>
-    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
-      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
-    </svg>
-  </symbol>
-  <symbol id="svg-menu" viewBox="0 0 24 24">
-    <title>Menu</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="18" x2="21" y2="18"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
-    <title>Expand</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
-      <polyline points="9 18 15 12 9 6"></polyline>
-    </svg>
-  </symbol>
-  <symbol id="svg-sun" viewBox="0 0 24 24">
-    <title>Light mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
-      <circle cx="12" cy="12" r="5"></circle>
-      <line x1="12" y1="1" x2="12" y2="3"></line>
-      <line x1="12" y1="21" x2="12" y2="23"></line>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-      <line x1="1" y1="12" x2="3" y2="12"></line>
-      <line x1="21" y1="12" x2="23" y2="12"></line>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-moon" viewBox="0 0 24 24">
-    <title>Dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
-    </svg>
-  </symbol>
-  <symbol id="svg-sun-half" viewBox="0 0 24 24">
-    <title>Auto light/dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M13 12h5" />
-      <path d="M13 15h4" />
-      <path d="M13 18h1" />
-      <path d="M13 9h4" />
-      <path d="M13 6h1" />
-    </svg>
-  </symbol>
-</svg>
-
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
-<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
-<label class="overlay sidebar-overlay" for="__navigation">
-  <div class="visually-hidden">Hide navigation sidebar</div>
-</label>
-<label class="overlay toc-overlay" for="__toc">
-  <div class="visually-hidden">Hide table of contents sidebar</div>
-</label>
-
-
-
-<div class="page">
-  <header class="mobile-header">
-    <div class="header-left">
-      <label class="nav-overlay-icon" for="__navigation">
-        <div class="visually-hidden">Toggle site navigation sidebar</div>
-        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
-      </label>
-    </div>
-    <div class="header-center">
-      <a href="index.html"><div class="brand">Tortreinador  documentation</div></a>
-    </div>
-    <div class="header-right">
-      <div class="theme-toggle-container theme-toggle-header">
-        <button class="theme-toggle">
-          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
-          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-        </button>
-      </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
-        <div class="visually-hidden">Toggle table of contents sidebar</div>
-        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-      </label>
-    </div>
-  </header>
-  <aside class="sidebar-drawer">
-    <div class="sidebar-container">
-      
-      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
-  
-  
-  <span class="sidebar-brand-text">Tortreinador  documentation</span>
-  
-</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
-  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
-  <input type="hidden" name="check_keywords" value="yes">
-  <input type="hidden" name="area" value="default">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form>
-<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current has-children"><a class="reference internal" href="modules.html">tortreinador</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2 current has-children"><a class="reference internal" href="tortreinador.html">tortreinador package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="tortreinador.models.html">tortreinador.models package</a></li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">tortreinador.utils package</a></li>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Tortreinador</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="guides.html">
+    User guide
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="training.html">
+    Customize the training step
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="data.html">
+    Prepare data
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="metrics.html">
+    Metrics and logging
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="events.html">
+    Extend training with events
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="checkpoints.html">
+    Save checkpoints and load predictions
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="mdn.html">
+    Mixture density networks
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="hpo.html">
+    Hyperparameter search
+  </a>
+</li>
+
+
+<li class=" current active">
+  <a class="nav-link dropdown-item nav-internal" href="modules.html">
+    API reference
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="compatibility.html">
+    Compatibility and validation
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="known-issues.html">
+    Known issues in the audited snapshot
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="testing.html">
+    Run tests and build documentation
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ArdenteX/tortreinador" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="guides.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="training.html">
+    Customize the training step
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="data.html">
+    Prepare data
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="metrics.html">
+    Metrics and logging
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="events.html">
+    Extend training with events
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="checkpoints.html">
+    Save checkpoints and load predictions
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="mdn.html">
+    Mixture density networks
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="hpo.html">
+    Hyperparameter search
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="modules.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="compatibility.html">
+    Compatibility and validation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="known-issues.html">
+    Known issues in the audited snapshot
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="testing.html">
+    Run tests and build documentation
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ArdenteX/tortreinador" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="guide-navigation" aria-label="Documentation navigation">
+  <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#create-an-environment">Create an environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#install-pytorch-first">Install PyTorch first</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#install-the-package">Install the package</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#prepare-independent-splits">1. Prepare independent splits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#define-the-calculation">2. Define the calculation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#register-metrics">3. Register metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#run-the-complete-example">4. Run the complete example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#inspect-the-result">5. Inspect the result</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides.html">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="training.html">Customize the training step</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="training.html#the-calculation-contract">The calculation contract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training.html#inside-an-epoch">Inside an epoch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="training.html#configuration">Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Prepare data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data.html#start-with-tensors">Start with tensors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#load-a-dataframe">Load a dataframe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#understand-split-sizes">Understand split sizes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#scale-without-leakage">Scale without leakage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#noise-utilities">Noise utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics and logging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#define-each-metric-once">Define each metric once</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#update-active-values">Update active values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#interpret-aggregation-correctly">Interpret aggregation correctly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#choose-an-output">Choose an output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="events.html">Extend training with events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="events.html#callbacks-emitted-by-the-current-loop">Callbacks emitted by the current loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html#learning-rate-schedules">Learning-rate schedules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html#logging-events">Logging events</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="checkpoints.html">Save checkpoints and load predictions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="checkpoints.html#write-model-state">Write model state</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoints.html#load-weights-for-inference">Load weights for inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkpoints.html#resume-status">Resume status</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mdn.html">Mixture density networks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mdn.html#understand-the-loss">Understand the loss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mdn.html#integrate-with-the-trainer">Integrate with the trainer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hpo.html">Hyperparameter search</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpo.html#describe-a-search-space">Describe a search space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpo.html#configure-one-task">Configure one task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpo.html#current-boundaries">Current boundaries</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference and development</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="tortreinador.html">tortreinador package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tortreinador.events.html">Events API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tortreinador.hpo.html">Hyperparameter search API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="compatibility.html">Compatibility and validation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="compatibility.html#result">Result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compatibility.html#environment">Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compatibility.html#evidence-and-limits">Evidence and limits</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="known-issues.html">Known issues in the audited snapshot</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="known-issues.html#reproduce-failures">Reproduce failures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="known-issues.html#additional-boundaries">Additional boundaries</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Run tests and build documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#known-defects-are-visible">Known defects are visible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#build-the-user-guide">Build the user guide</a></li>
 </ul>
 </li>
 </ul>
 
-</div>
-</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
 
       </div>
       
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="modules.html" class="nav-link">API reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="tortreinador.html" class="nav-link">tortreinador package</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">tortreinador.utils package</span></li>
+  </ul>
+</nav>
+</div>
+      
     </div>
-  </aside>
-  <div class="main">
-    <div class="content">
-      <div class="article-container">
-        <a href="#" class="back-to-top muted-link">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
-          </svg>
-          <span>Back to top</span>
-        </a>
-        <div class="content-icon-container">
-          
-<div class="theme-toggle-container theme-toggle-content">
-            <button class="theme-toggle">
-              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
-              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-            </button>
-          </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
-            <div class="visually-hidden">Toggle table of contents sidebar</div>
-            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-          </label>
-        </div>
-        <article role="main">
-          <section id="tortreinador-utils-package">
-<h1>tortreinador.utils package<a class="headerlink" href="#tortreinador-utils-package" title="Permalink to this heading">#</a></h1>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="tortreinador-utils-package">
+<h1>tortreinador.utils package<a class="headerlink" href="#tortreinador-utils-package" title="Link to this heading">#</a></h1>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">#</a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
 </section>
 <section id="module-tortreinador.utils.Recorder">
-<span id="tortreinador-utils-recorder-module"></span><h2>tortreinador.utils.Recorder module<a class="headerlink" href="#module-tortreinador.utils.Recorder" title="Permalink to this heading">#</a></h2>
+<span id="tortreinador-utils-recorder-module"></span><h2>tortreinador.utils.Recorder module<a class="headerlink" href="#module-tortreinador.utils.Recorder" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tortreinador.utils.Recorder.CheckpointRecorder">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">tortreinador.utils.Recorder.</span></span><span class="sig-name descname"><span class="pre">CheckpointRecorder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">checkpoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_epoch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dir</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'new'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">system</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#CheckpointRecorder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.CheckpointRecorder" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Recording training information including ‘total epoch’, ‘current epoch’, ‘optimizer parameters’, ‘best model(path)’,
+‘current model(path), ‘config’, ‘log_dir’ ‘</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tortreinador.utils.Recorder.CheckpointRecorder.initial">
+<span class="sig-name descname"><span class="pre">initial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">checkpoint_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#CheckpointRecorder.initial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.CheckpointRecorder.initial" title="Link to this definition">#</a></dt>
+<dd><p>Initialize checkpoint content on disk.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tortreinador.utils.Recorder.CheckpointRecorder.reload">
+<span class="sig-name descname"><span class="pre">reload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#CheckpointRecorder.reload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.CheckpointRecorder.reload" title="Link to this definition">#</a></dt>
+<dd><p>Load model and optimizer state from an existing checkpoint record.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tortreinador.utils.Recorder.CheckpointRecorder.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_optimizer_sd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'current'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#CheckpointRecorder.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.CheckpointRecorder.update" title="Link to this definition">#</a></dt>
+<dd><p>Persist current model/optimizer states and training progress to disk.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tortreinador.utils.Recorder.CheckpointRecorder.update_by_condition">
+<span class="sig-name descname"><span class="pre">update_by_condition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">condition</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b_m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b_l</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#CheckpointRecorder.update_by_condition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.CheckpointRecorder.update_by_condition" title="Link to this definition">#</a></dt>
+<dd><p>Update tracked best metric/loss values according to training condition.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tortreinador.utils.Recorder.MetricDefine">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">tortreinador.utils.Recorder.</span></span><span class="sig-name descname"><span class="pre">MetricDefine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Unknown</span> <span class="pre">Metric'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">tensor(0.)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">0</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">2</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_as_baseline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_as_valloss</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_as_criterion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_for_log</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#MetricDefine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.MetricDefine" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Describe a named tensor metric and its role in the training loop.</p>
+<p><code class="docutils literal notranslate"><span class="pre">metric_mode</span></code> selects both phases (0), training (1), or validation (2).
+<code class="docutils literal notranslate"><span class="pre">use_as_criterion</span></code> selects the tensor for backpropagation.
+<code class="docutils literal notranslate"><span class="pre">use_as_valloss</span></code> and <code class="docutils literal notranslate"><span class="pre">use_as_baseline</span></code> select checkpoint comparison values.
+<code class="docutils literal notranslate"><span class="pre">use_for_log</span></code> selects CSV columns. See the metrics guide for aggregation.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tortreinador.utils.Recorder.MetricDefine.metric_mode">
+<span class="sig-name descname"><span class="pre">metric_mode</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">0</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">2</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#tortreinador.utils.Recorder.MetricDefine.metric_mode" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tortreinador.utils.Recorder.MetricDefine.metric_name">
+<span class="sig-name descname"><span class="pre">metric_name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Unknown</span> <span class="pre">Metric'</span></span><a class="headerlink" href="#tortreinador.utils.Recorder.MetricDefine.metric_name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tortreinador.utils.Recorder.MetricDefine.metric_value">
+<span class="sig-name descname"><span class="pre">metric_value</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">tensor(0.)</span></span><a class="headerlink" href="#tortreinador.utils.Recorder.MetricDefine.metric_value" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tortreinador.utils.Recorder.MetricDefine.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#MetricDefine.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.MetricDefine.update" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tortreinador.utils.Recorder.MetricDefine.use_as_baseline">
+<span class="sig-name descname"><span class="pre">use_as_baseline</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#tortreinador.utils.Recorder.MetricDefine.use_as_baseline" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tortreinador.utils.Recorder.MetricDefine.use_as_criterion">
+<span class="sig-name descname"><span class="pre">use_as_criterion</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#tortreinador.utils.Recorder.MetricDefine.use_as_criterion" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tortreinador.utils.Recorder.MetricDefine.use_as_valloss">
+<span class="sig-name descname"><span class="pre">use_as_valloss</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#tortreinador.utils.Recorder.MetricDefine.use_as_valloss" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tortreinador.utils.Recorder.MetricDefine.use_for_log">
+<span class="sig-name descname"><span class="pre">use_for_log</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#tortreinador.utils.Recorder.MetricDefine.use_for_log" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tortreinador.utils.Recorder.MetricManager">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">tortreinador.utils.Recorder.</span></span><span class="sig-name descname"><span class="pre">MetricManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#tortreinador.utils.Recorder.MetricDefine" title="tortreinador.utils.Recorder.MetricDefine"><span class="pre">MetricDefine</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#MetricManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.MetricManager" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tortreinador.utils.Recorder.MetricManager.check_metric_exist">
+<span class="sig-name descname"><span class="pre">check_metric_exist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#MetricManager.check_metric_exist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.MetricManager.check_metric_exist" title="Link to this definition">#</a></dt>
+<dd><p>Return True if a metric with the given name substring is registered.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tortreinador.utils.Recorder.MetricManager.get_metrics_by_mode">
+<span class="sig-name descname"><span class="pre">get_metrics_by_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">both</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#MetricManager.get_metrics_by_mode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.MetricManager.get_metrics_by_mode" title="Link to this definition">#</a></dt>
+<dd><p>Retrieve metrics filtered by their mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mode</strong> (<em>int</em>) – 0 for both train/val, 1 for train-only, 2 for val-only.</p></li>
+<li><p><strong>idx</strong> (<em>bool</em>) – Return indices instead of MetricDefine objects when True.</p></li>
+<li><p><strong>both</strong> (<em>bool</em>) – Return both metric instant and idx</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tortreinador.utils.Recorder.MetricManager.get_metrics_by_name">
+<span class="sig-name descname"><span class="pre">get_metrics_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#tortreinador.utils.Recorder.MetricDefine" title="tortreinador.utils.Recorder.MetricDefine"><span class="pre">MetricDefine</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#MetricManager.get_metrics_by_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.MetricManager.get_metrics_by_name" title="Link to this definition">#</a></dt>
+<dd><p>Fetch metrics whose names contain the provided substring.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tortreinador.utils.Recorder.MetricManager.get_metrics_for_log">
+<span class="sig-name descname"><span class="pre">get_metrics_for_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">both</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#MetricManager.get_metrics_for_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.MetricManager.get_metrics_for_log" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tortreinador.utils.Recorder.MetricManager.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update_pair</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#MetricManager.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.MetricManager.update" title="Link to this definition">#</a></dt>
+<dd><p>Update all metrics belonging to a particular phase with fresh values.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="tortreinador.utils.Recorder.Recorder">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tortreinador.utils.Recorder.</span></span><span class="sig-name descname"><span class="pre">Recorder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#Recorder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.Recorder" title="Permalink to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">tortreinador.utils.Recorder.</span></span><span class="sig-name descname"><span class="pre">Recorder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#Recorder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.Recorder" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="tortreinador.utils.Recorder.Recorder.avg">
-<span class="sig-name descname"><span class="pre">avg</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#Recorder.avg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.Recorder.avg" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">avg</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#Recorder.avg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.Recorder.avg" title="Link to this definition">#</a></dt>
+<dd><p>Return average value or zero tensor when no samples are recorded.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="tortreinador.utils.Recorder.Recorder.reset">
-<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#Recorder.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.Recorder.reset" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#Recorder.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.Recorder.reset" title="Link to this definition">#</a></dt>
+<dd><p>Clear stored values while keeping device placement.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="tortreinador.utils.Recorder.Recorder.update">
-<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#Recorder.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.Recorder.update" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#Recorder.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.Recorder.update" title="Link to this definition">#</a></dt>
+<dd><p>Accumulate a metric value and keep dtype consistent after first update.</p>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="tortreinador.utils.Recorder.RecorderForEpoch">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tortreinador.utils.Recorder.</span></span><span class="sig-name descname"><span class="pre">RecorderForEpoch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#RecorderForEpoch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.RecorderForEpoch" title="Permalink to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">tortreinador.utils.Recorder.</span></span><span class="sig-name descname"><span class="pre">RecorderForEpoch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#RecorderForEpoch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.RecorderForEpoch" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="tortreinador.utils.Recorder.RecorderForEpoch.avg">
-<span class="sig-name descname"><span class="pre">avg</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#RecorderForEpoch.avg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.RecorderForEpoch.avg" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">avg</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#RecorderForEpoch.avg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.RecorderForEpoch.avg" title="Link to this definition">#</a></dt>
+<dd><p>Return the mean across all recorded epochs.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="tortreinador.utils.Recorder.RecorderForEpoch.reset">
-<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#RecorderForEpoch.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.RecorderForEpoch.reset" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#RecorderForEpoch.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.RecorderForEpoch.reset" title="Link to this definition">#</a></dt>
+<dd><p>Reset history to an empty tensor on the same device.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="tortreinador.utils.Recorder.RecorderForEpoch.update">
-<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#RecorderForEpoch.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.RecorderForEpoch.update" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/Recorder.html#RecorderForEpoch.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.Recorder.RecorderForEpoch.update" title="Link to this definition">#</a></dt>
+<dd><p>Append a new value to the history, aligning dtype on first use.</p>
+</dd></dl>
 
 </dd></dl>
 
 </section>
 <section id="module-tortreinador.utils.View">
-<span id="tortreinador-utils-view-module"></span><h2>tortreinador.utils.View module<a class="headerlink" href="#module-tortreinador.utils.View" title="Permalink to this heading">#</a></h2>
+<span id="tortreinador-utils-view-module"></span><h2>tortreinador.utils.View module<a class="headerlink" href="#module-tortreinador.utils.View" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="tortreinador.utils.View.get_lastlayer_params">
-<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">get_lastlayer_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#get_lastlayer_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.get_lastlayer_params" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">get_lastlayer_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#get_lastlayer_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.get_lastlayer_params" title="Link to this definition">#</a></dt>
 <dd><p>get last trainable layer of a net
 :param network architectur:</p>
 <dl class="field-list simple">
@@ -263,8 +828,23 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="tortreinador.utils.View.he_init_normal">
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">he_init_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#he_init_normal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.he_init_normal" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tortreinador.utils.View.he_init_uniform">
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">he_init_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#he_init_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.he_init_uniform" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tortreinador.utils.View.init_bias">
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">init_bias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#init_bias"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.init_bias" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="tortreinador.utils.View.init_weights">
-<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">init_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#init_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.init_weights" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">init_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#init_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.init_weights" title="Link to this definition">#</a></dt>
 <dd><p>the weights of conv layer and fully connected layers
 are both initilized with Xavier algorithm, In particular,
 we set the parameters to random values uniformly drawn from [-a, a]
@@ -274,7 +854,7 @@ layers, y=1, b=0, all bias initialized to 0.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tortreinador.utils.View.split_weights">
-<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">split_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#split_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.split_weights" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">split_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#split_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.split_weights" title="Link to this definition">#</a></dt>
 <dd><p>split network weights into to categlories,
 one are weights in conv layer and linear layer,
 others are other learnable paramters(conv bias,
@@ -289,59 +869,64 @@ bn weights, bn bias, linear bias)
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tortreinador.utils.View.visualize_lastlayer">
-<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">visualize_lastlayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">net</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#visualize_lastlayer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.visualize_lastlayer" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">visualize_lastlayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">net</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#visualize_lastlayer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.visualize_lastlayer" title="Link to this definition">#</a></dt>
 <dd><p>visualize last layer grads</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tortreinador.utils.View.visualize_learning_rate">
-<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">visualize_learning_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#visualize_learning_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.visualize_learning_rate" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">visualize_learning_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#visualize_learning_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.visualize_learning_rate" title="Link to this definition">#</a></dt>
 <dd><p>visualize learning rate</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tortreinador.utils.View.visualize_network">
-<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">visualize_network</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">net</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#visualize_network"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.visualize_network" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">visualize_network</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">net</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#visualize_network"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.visualize_network" title="Link to this definition">#</a></dt>
 <dd><p>visualize network architecture</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tortreinador.utils.View.visualize_param_hist">
-<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">visualize_param_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">net</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#visualize_param_hist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.visualize_param_hist" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">visualize_param_hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">net</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#visualize_param_hist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.visualize_param_hist" title="Link to this definition">#</a></dt>
 <dd><p>visualize histogram of params</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tortreinador.utils.View.visualize_test_acc">
-<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">visualize_test_acc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#visualize_test_acc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.visualize_test_acc" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">visualize_test_acc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#visualize_test_acc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.visualize_test_acc" title="Link to this definition">#</a></dt>
 <dd><p>visualize test acc</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tortreinador.utils.View.visualize_test_loss">
-<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">visualize_test_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#visualize_test_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.visualize_test_loss" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">visualize_test_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#visualize_test_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.visualize_test_loss" title="Link to this definition">#</a></dt>
 <dd><p>visualize test loss</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tortreinador.utils.View.visualize_train_loss">
-<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">visualize_train_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#visualize_train_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.visualize_train_loss" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">visualize_train_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#visualize_train_loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.visualize_train_loss" title="Link to this definition">#</a></dt>
 <dd><p>visualize training loss</p>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="tortreinador.utils.View.xavier_init">
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.View.</span></span><span class="sig-name descname"><span class="pre">xavier_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/View.html#xavier_init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.View.xavier_init" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="module-tortreinador.utils.WarmUpLR">
-<span id="tortreinador-utils-warmuplr-module"></span><h2>tortreinador.utils.WarmUpLR module<a class="headerlink" href="#module-tortreinador.utils.WarmUpLR" title="Permalink to this heading">#</a></h2>
+<span id="tortreinador-utils-warmuplr-module"></span><h2>tortreinador.utils.WarmUpLR module<a class="headerlink" href="#module-tortreinador.utils.WarmUpLR" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="tortreinador.utils.WarmUpLR.WarmUpLR">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tortreinador.utils.WarmUpLR.</span></span><span class="sig-name descname"><span class="pre">WarmUpLR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_iters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_epoch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/WarmUpLR.html#WarmUpLR"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.WarmUpLR.WarmUpLR" title="Permalink to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">tortreinador.utils.WarmUpLR.</span></span><span class="sig-name descname"><span class="pre">WarmUpLR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_iters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_epoch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/WarmUpLR.html#WarmUpLR"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.WarmUpLR.WarmUpLR" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_LRScheduler</span></code></p>
 <p>warmup_training learning rate scheduler
 :param optimizer: optimzier(e.g. SGD)
 :param total_iters: totoal_iters of warmup phase</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="tortreinador.utils.WarmUpLR.WarmUpLR.get_lr">
-<span class="sig-name descname"><span class="pre">get_lr</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/WarmUpLR.html#WarmUpLR.get_lr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.WarmUpLR.WarmUpLR.get_lr" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_lr</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/WarmUpLR.html#WarmUpLR.get_lr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.WarmUpLR.WarmUpLR.get_lr" title="Link to this definition">#</a></dt>
 <dd><p>we will use the first m batches, and set the learning
 rate to base_lr * m / total_iters</p>
 </dd></dl>
@@ -350,15 +935,25 @@ rate to base_lr * m / total_iters</p>
 
 </section>
 <section id="module-tortreinador.utils.metrics">
-<span id="tortreinador-utils-metrics-module"></span><h2>tortreinador.utils.metrics module<a class="headerlink" href="#module-tortreinador.utils.metrics" title="Permalink to this heading">#</a></h2>
+<span id="tortreinador-utils-metrics-module"></span><h2>tortreinador.utils.metrics module<a class="headerlink" href="#module-tortreinador.utils.metrics" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="tortreinador.utils.metrics.chamfer_distance">
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.metrics.</span></span><span class="sig-name descname"><span class="pre">chamfer_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/metrics.html#chamfer_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.metrics.chamfer_distance" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tortreinador.utils.metrics.evaluation">
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.metrics.</span></span><span class="sig-name descname"><span class="pre">evaluation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/metrics.html#evaluation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.metrics.evaluation" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="tortreinador.utils.metrics.mixture">
-<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.metrics.</span></span><span class="sig-name descname"><span class="pre">mixture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_for</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'train'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/metrics.html#mixture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.metrics.mixture" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.metrics.</span></span><span class="sig-name descname"><span class="pre">mixture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_for</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'train'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/metrics.html#mixture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.metrics.mixture" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tortreinador.utils.metrics.r2_score">
-<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.metrics.</span></span><span class="sig-name descname"><span class="pre">r2_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_ture</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/metrics.html#r2_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.metrics.r2_score" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.metrics.</span></span><span class="sig-name descname"><span class="pre">r2_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/metrics.html#r2_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.metrics.r2_score" title="Link to this definition">#</a></dt>
 <dd><p>r2 score function for the data in GPU</p>
 <blockquote>
 <div><dl class="simple">
@@ -373,17 +968,17 @@ rate to base_lr * m / total_iters</p>
 
 </section>
 <section id="module-tortreinador.utils.plot">
-<span id="tortreinador-utils-plot-module"></span><h2>tortreinador.utils.plot module<a class="headerlink" href="#module-tortreinador.utils.plot" title="Permalink to this heading">#</a></h2>
+<span id="tortreinador-utils-plot-module"></span><h2>tortreinador.utils.plot module<a class="headerlink" href="#module-tortreinador.utils.plot" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="tortreinador.utils.plot.calculate_GMM">
-<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.plot.</span></span><span class="sig-name descname"><span class="pre">calculate_GMM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/plot.html#calculate_GMM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.plot.calculate_GMM" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.plot.</span></span><span class="sig-name descname"><span class="pre">calculate_GMM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/plot.html#calculate_GMM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.plot.calculate_GMM" title="Link to this definition">#</a></dt>
 <dd><p>Calculate the probability density function of the Gaussian Mixture Model</p>
 <blockquote>
 <div><dl class="simple">
 <dt>Args:</dt><dd><ul class="simple">
-<li><p>param p: pi</p></li>
-<li><p>param m: mean</p></li>
-<li><p>param s: standard deviation</p></li>
+<li><p>param p: pi (batch size, 10)</p></li>
+<li><p>param m: mean (batch size, 10 , 8)</p></li>
+<li><p>param s: standard deviation (batch size, 10 , 8)</p></li>
 <li><p>param y_label: e.g. np.arange(0, 1, 0.001)</p></li>
 </ul>
 </dd>
@@ -393,7 +988,7 @@ rate to base_lr * m / total_iters</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tortreinador.utils.plot.plot_line_2">
-<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.plot.</span></span><span class="sig-name descname"><span class="pre">plot_line_2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(10,</span> <span class="pre">6)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">300</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/plot.html#plot_line_2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.plot.plot_line_2" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.plot.</span></span><span class="sig-name descname"><span class="pre">plot_line_2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(10,</span> <span class="pre">6)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">300</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/plot.html#plot_line_2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.plot.plot_line_2" title="Link to this definition">#</a></dt>
 <dd><p>Plot Merge Line (2 Lines) using Seaborn</p>
 <blockquote>
 <div><p>Args:</p>
@@ -413,10 +1008,95 @@ rate to base_lr * m / total_iters</p>
 
 </section>
 <section id="module-tortreinador.utils.preprocessing">
-<span id="tortreinador-utils-preprocessing-module"></span><h2>tortreinador.utils.preprocessing module<a class="headerlink" href="#module-tortreinador.utils.preprocessing" title="Permalink to this heading">#</a></h2>
+<span id="tortreinador-utils-preprocessing-module"></span><h2>tortreinador.utils.preprocessing module<a class="headerlink" href="#module-tortreinador.utils.preprocessing" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tortreinador.utils.preprocessing.ScalerConfig">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">tortreinador.utils.preprocessing.</span></span><span class="sig-name descname"><span class="pre">ScalerConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">on</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'MinMaxScaler'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal_y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0,</span> <span class="pre">1)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/preprocessing.html#ScalerConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.preprocessing.ScalerConfig" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Configuration for feature/target normalization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>on</strong> (<em>bool</em>) – Whether to enable normalization.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Either ‘MinMaxScaler’/’minmax’ or ‘StandardScaler’/’standard’.</p></li>
+<li><p><strong>normal_y</strong> (<em>bool</em>) – Whether to normalize target columns in addition to features.</p></li>
+<li><p><strong>feature_range</strong> (<em>tuple</em>) – Range used by MinMaxScaler.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tortreinador.utils.preprocessing.ScalerConfig.feature_range">
+<span class="sig-name descname"><span class="pre">feature_range</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(0,</span> <span class="pre">1)</span></span><a class="headerlink" href="#tortreinador.utils.preprocessing.ScalerConfig.feature_range" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tortreinador.utils.preprocessing.ScalerConfig.method">
+<span class="sig-name descname"><span class="pre">method</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'MinMaxScaler'</span></span><a class="headerlink" href="#tortreinador.utils.preprocessing.ScalerConfig.method" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tortreinador.utils.preprocessing.ScalerConfig.normal_y">
+<span class="sig-name descname"><span class="pre">normal_y</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></span><a class="headerlink" href="#tortreinador.utils.preprocessing.ScalerConfig.normal_y" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tortreinador.utils.preprocessing.ScalerConfig.on">
+<span class="sig-name descname"><span class="pre">on</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></span><a class="headerlink" href="#tortreinador.utils.preprocessing.ScalerConfig.on" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tortreinador.utils.preprocessing.ScalerConfig.select_scaler">
+<span class="sig-name descname"><span class="pre">select_scaler</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/preprocessing.html#ScalerConfig.select_scaler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.preprocessing.ScalerConfig.select_scaler" title="Link to this definition">#</a></dt>
+<dd><p>Instantiate sklearn scaler objects for X and Y.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A pair of scalers (scaler_x, scaler_y) matching the requested method.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tortreinador.utils.preprocessing.ScalerConfig.validate">
+<span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/preprocessing.html#ScalerConfig.validate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.preprocessing.ScalerConfig.validate" title="Link to this definition">#</a></dt>
+<dd><p>Validate scaler configuration before use.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tortreinador.utils.preprocessing.cov_adj_compose">
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.preprocessing.</span></span><span class="sig-name descname"><span class="pre">cov_adj_compose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pij</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sadj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/preprocessing.html#cov_adj_compose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.preprocessing.cov_adj_compose" title="Link to this definition">#</a></dt>
+<dd><p>Recompose an adjusted covariance matrix from correlation coefficients and adjusted variances.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tortreinador.utils.preprocessing.cov_decompose">
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.preprocessing.</span></span><span class="sig-name descname"><span class="pre">cov_decompose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cov</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/preprocessing.html#cov_decompose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.preprocessing.cov_decompose" title="Link to this definition">#</a></dt>
+<dd><p>Extract diagonal variances and upper-triangular covariances from a covariance matrix.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tortreinador.utils.preprocessing.get_dataloader">
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.preprocessing.</span></span><span class="sig-name descname"><span class="pre">get_dataloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/preprocessing.html#get_dataloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.preprocessing.get_dataloader" title="Link to this definition">#</a></dt>
+<dd><p>Wrap tensors into a DataLoader with consistent arguments used across the package.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tortreinador.utils.preprocessing.legal_global">
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.preprocessing.</span></span><span class="sig-name descname"><span class="pre">legal_global</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">noisy_dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/preprocessing.html#legal_global"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.preprocessing.legal_global" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tortreinador.utils.preprocessing.legal_log_space">
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.preprocessing.</span></span><span class="sig-name descname"><span class="pre">legal_log_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">noisy_dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/preprocessing.html#legal_log_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.preprocessing.legal_log_space" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="tortreinador.utils.preprocessing.load_data">
-<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.preprocessing.</span></span><span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">if_normal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">if_shuffle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">if_double</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/preprocessing.html#load_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.preprocessing.load_data" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.preprocessing.</span></span><span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#tortreinador.utils.preprocessing.ScalerConfig" title="tortreinador.utils.preprocessing.ScalerConfig"><span class="pre">ScalerConfig</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">if_shuffle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">if_double</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_noise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_search</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_injection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legal_check</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/preprocessing.html#load_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.preprocessing.load_data" title="Link to this definition">#</a></dt>
 <dd><p>Load Data and Normalize for Regression Tasks: This function preprocesses data specifically for regression tasks by handling data splitting, optional shuffling, normalization, and DataLoader creation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -424,15 +1104,25 @@ rate to base_lr * m / total_iters</p>
 <li><p><strong>data</strong> (<em>pd.DataFrame</em>) – The complete dataset in a Pandas DataFrame.</p></li>
 <li><p><strong>input_parameters</strong> (<em>list</em><em> of </em><em>str</em><em> or </em><em>int</em>) – Column names or indices representing the input features.</p></li>
 <li><p><strong>output_parameters</strong> (<em>list</em><em> of </em><em>str</em><em> or </em><em>int</em>) – Column names or indices representing the target variables.</p></li>
-<li><p><strong>feature_range</strong> (<em>tuple</em><em> of </em><em>(</em><em>float</em><em>, </em><em>float</em><em>)</em><em>, </em><em>optional</em>) – The range (min, max) used by the MinMaxScaler for scaling data. Defaults to (0, 1).</p></li>
 <li><p><strong>train_size</strong> (<em>float</em>) – The proportion of the dataset to include in the train split (0 to 1).</p></li>
 <li><p><strong>val_size</strong> (<em>float</em>) – The proportion of the training data to use as validation data (0 to 1).</p></li>
-<li><p><strong>if_normal</strong> (<em>bool</em>) – Flag to determine whether to normalize the data using MinMaxScaler.</p></li>
 <li><p><strong>if_shuffle</strong> (<em>bool</em>) – Flag to determine whether to shuffle the data before splitting into training, validation, and test sets.</p></li>
-<li><p><strong>n_workers</strong> (<em>int</em>) – The number of subprocesses to use for data loading. More workers can increase the loading speed but consume more CPU cores.</p></li>
+<li><p><strong>num_workers</strong> (<em>int</em>) – The number of subprocesses to use for data loading. More workers can increase the loading speed but consume more CPU cores.</p></li>
 <li><p><strong>batch_size</strong> (<em>int</em>) – Number of samples per batch to load.</p></li>
 <li><p><strong>random_state</strong> (<em>int</em><em>, </em><em>optional</em>) – A seed used by the random number generator for reproducibility. Defaults to None.</p></li>
 <li><p><strong>if_double</strong> (<em>bool</em>) – Flag to determine whether to convert data to double precision (float64) format.</p></li>
+<li><p><strong>add_noise</strong> (<em>bool</em>) – Flag to determine whether to add noise to origin dataset.</p></li>
+<li><p><strong>error_rate</strong> (<em>list</em>) – List of error rates to calculate for covariance reflection. Defaults to None.</p></li>
+<li><p><strong>only_noise</strong> (<em>bool</em>) – Flag to determine whether to add noise to dataset or add noised data to dataset.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em>) – Path to save .npy file</p></li>
+<li><p><strong>grid_search</strong> (<em>bool</em>) – Only return the train loader and validation loader if using Grid Search function, defaults to False.</p></li>
+<li><p><strong>log_injection</strong> (<em>bool</em>) – Whether to use log space noise injection techniques. Defaults to False.</p></li>
+<li><p><strong>legal_check</strong> (<em>bool</em>) – Flag to determine whether to check for legal noised datas. Defaults to True.</p></li>
+<li><p><strong>normal</strong> (<a class="reference internal" href="#tortreinador.utils.preprocessing.ScalerConfig" title="tortreinador.utils.preprocessing.ScalerConfig"><em>ScalerConfig</em></a><em>, </em><em>optional</em>) – Normalization method to use. Defaults to MinMaxScaler()
+- on (bool): Flag to determine whether to normalize the data using MinMaxScaler.
+- method (str): MinMaxScaler or StandardScaler
+- feature_range (tuple of (float, float), optional): The range (min, max) used by the MinMaxScaler for scaling data. Defaults to (0, 1).
+- normal_y(bool): Flag to determine whether to normalize the y using MinMaxScaler.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -450,146 +1140,302 @@ rate to base_lr * m / total_iters</p>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="tortreinador.utils.preprocessing.log_space_noise_injection">
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.preprocessing.</span></span><span class="sig-name descname"><span class="pre">log_space_noise_injection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legal_check</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/preprocessing.html#log_space_noise_injection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.preprocessing.log_space_noise_injection" title="Link to this definition">#</a></dt>
+<dd><p>Inject correlated multiplicative noise into positive four-feature data.</p>
+<p>The current implementation uses fixed four-feature caps and a fixed random
+seed. With <code class="docutils literal notranslate"><span class="pre">legal_check=True</span></code>, return the noisy array and a domain-specific
+validity mask; otherwise return the noisy array alone. See the data guide.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tortreinador.utils.preprocessing.noise_generator">
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.preprocessing.</span></span><span class="sig-name descname"><span class="pre">noise_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/preprocessing.html#noise_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.preprocessing.noise_generator" title="Link to this definition">#</a></dt>
+<dd><p>Generate an adjusted covariance matrix to synthesize noise scaled by provided error rates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_r</strong> (<em>np.ndarray</em>) – Error rate multipliers per feature.</p></li>
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Data used to compute the base covariance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Adjusted covariance matrix.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tortreinador.utils.preprocessing.noise_injection">
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.preprocessing.</span></span><span class="sig-name descname"><span class="pre">noise_injection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">error_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legal_check</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/preprocessing.html#noise_injection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.preprocessing.noise_injection" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tortreinador.utils.preprocessing.p_calculation">
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.preprocessing.</span></span><span class="sig-name descname"><span class="pre">p_calculation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/preprocessing.html#p_calculation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.preprocessing.p_calculation" title="Link to this definition">#</a></dt>
+<dd><p>Convert covariance components into correlation-like coefficients used for noise synthesis.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tortreinador.utils.preprocessing.save_npy">
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.preprocessing.</span></span><span class="sig-name descname"><span class="pre">save_npy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/preprocessing.html#save_npy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.preprocessing.save_npy" title="Link to this definition">#</a></dt>
+<dd><p>Save a dataframe as a NumPy binary file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>FileNotFoundError</strong> – When the destination directory does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tortreinador.utils.preprocessing.save_scaler">
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.preprocessing.</span></span><span class="sig-name descname"><span class="pre">save_scaler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scaler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/preprocessing.html#save_scaler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.preprocessing.save_scaler" title="Link to this definition">#</a></dt>
+<dd><p>Persist a fitted scaler with joblib.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>FileNotFoundError</strong> – When the destination directory does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="module-tortreinador.utils.tools">
-<span id="tortreinador-utils-tools-module"></span><h2>tortreinador.utils.tools module<a class="headerlink" href="#module-tortreinador.utils.tools" title="Permalink to this heading">#</a></h2>
+<span id="tortreinador-utils-tools-module"></span><h2>tortreinador.utils.tools module<a class="headerlink" href="#module-tortreinador.utils.tools" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="tortreinador.utils.tools.check_outlier">
-<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.tools.</span></span><span class="sig-name descname"><span class="pre">check_outlier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">validation_set</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">windows_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_score_threshold</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/tools.html#check_outlier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.tools.check_outlier" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.tools.</span></span><span class="sig-name descname"><span class="pre">check_outlier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">validation_set</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">windows_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_score_threshold</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/tools.html#check_outlier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.tools.check_outlier" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tortreinador.utils.tools.xavier_init">
-<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.tools.</span></span><span class="sig-name descname"><span class="pre">xavier_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/tools.html#xavier_init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.tools.xavier_init" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">tortreinador.utils.tools.</span></span><span class="sig-name descname"><span class="pre">xavier_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tortreinador/utils/tools.html#xavier_init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tortreinador.utils.tools.xavier_init" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </section>
 <section id="module-tortreinador.utils">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tortreinador.utils" title="Permalink to this heading">#</a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tortreinador.utils" title="Link to this heading">#</a></h2>
 </section>
 </section>
 
-        </article>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="tortreinador.models.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">tortreinador.models package</p>
       </div>
-      <footer>
-        
-        <div class="related-pages">
-          
-          <a class="prev-page" href="tortreinador.models.html">
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-              <div class="page-info">
-                <div class="context">
-                  <span>Previous</span>
-                </div>
-                
-                <div class="title">tortreinador.models package</div>
-                
-              </div>
-            </a>
-        </div>
-        <div class="bottom-of-page">
-          <div class="left-details">
-            <div class="copyright">
-                Copyright &#169; 2024, Xavier
+    </a>
+    <a class="right-next"
+       href="tortreinador.events.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Events API</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
             </div>
-            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
-            <a href="https://github.com/pradyunsg/furo">Furo</a>
             
-          </div>
-          <div class="right-details">
-            
-          </div>
-        </div>
-        
-      </footer>
-    </div>
-    <aside class="toc-drawer">
-      
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">tortreinador.utils package</a><ul>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-tortreinador.utils.Recorder">tortreinador.utils.Recorder module</a><ul>
-<li><a class="reference internal" href="#tortreinador.utils.Recorder.Recorder"><code class="docutils literal notranslate"><span class="pre">Recorder</span></code></a><ul>
-<li><a class="reference internal" href="#tortreinador.utils.Recorder.Recorder.avg"><code class="docutils literal notranslate"><span class="pre">Recorder.avg()</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.utils.Recorder.Recorder.reset"><code class="docutils literal notranslate"><span class="pre">Recorder.reset()</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.utils.Recorder.Recorder.update"><code class="docutils literal notranslate"><span class="pre">Recorder.update()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#tortreinador.utils.Recorder.RecorderForEpoch"><code class="docutils literal notranslate"><span class="pre">RecorderForEpoch</span></code></a><ul>
-<li><a class="reference internal" href="#tortreinador.utils.Recorder.RecorderForEpoch.avg"><code class="docutils literal notranslate"><span class="pre">RecorderForEpoch.avg()</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.utils.Recorder.RecorderForEpoch.reset"><code class="docutils literal notranslate"><span class="pre">RecorderForEpoch.reset()</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.utils.Recorder.RecorderForEpoch.update"><code class="docutils literal notranslate"><span class="pre">RecorderForEpoch.update()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-tortreinador.utils.View">tortreinador.utils.View module</a><ul>
-<li><a class="reference internal" href="#tortreinador.utils.View.get_lastlayer_params"><code class="docutils literal notranslate"><span class="pre">get_lastlayer_params()</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.utils.View.init_weights"><code class="docutils literal notranslate"><span class="pre">init_weights()</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.utils.View.split_weights"><code class="docutils literal notranslate"><span class="pre">split_weights()</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.utils.View.visualize_lastlayer"><code class="docutils literal notranslate"><span class="pre">visualize_lastlayer()</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.utils.View.visualize_learning_rate"><code class="docutils literal notranslate"><span class="pre">visualize_learning_rate()</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.utils.View.visualize_network"><code class="docutils literal notranslate"><span class="pre">visualize_network()</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.utils.View.visualize_param_hist"><code class="docutils literal notranslate"><span class="pre">visualize_param_hist()</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.utils.View.visualize_test_acc"><code class="docutils literal notranslate"><span class="pre">visualize_test_acc()</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.utils.View.visualize_test_loss"><code class="docutils literal notranslate"><span class="pre">visualize_test_loss()</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.utils.View.visualize_train_loss"><code class="docutils literal notranslate"><span class="pre">visualize_train_loss()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-tortreinador.utils.WarmUpLR">tortreinador.utils.WarmUpLR module</a><ul>
-<li><a class="reference internal" href="#tortreinador.utils.WarmUpLR.WarmUpLR"><code class="docutils literal notranslate"><span class="pre">WarmUpLR</span></code></a><ul>
-<li><a class="reference internal" href="#tortreinador.utils.WarmUpLR.WarmUpLR.get_lr"><code class="docutils literal notranslate"><span class="pre">WarmUpLR.get_lr()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-tortreinador.utils.metrics">tortreinador.utils.metrics module</a><ul>
-<li><a class="reference internal" href="#tortreinador.utils.metrics.mixture"><code class="docutils literal notranslate"><span class="pre">mixture()</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.utils.metrics.r2_score"><code class="docutils literal notranslate"><span class="pre">r2_score()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-tortreinador.utils.plot">tortreinador.utils.plot module</a><ul>
-<li><a class="reference internal" href="#tortreinador.utils.plot.calculate_GMM"><code class="docutils literal notranslate"><span class="pre">calculate_GMM()</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.utils.plot.plot_line_2"><code class="docutils literal notranslate"><span class="pre">plot_line_2()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-tortreinador.utils.preprocessing">tortreinador.utils.preprocessing module</a><ul>
-<li><a class="reference internal" href="#tortreinador.utils.preprocessing.load_data"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-tortreinador.utils.tools">tortreinador.utils.tools module</a><ul>
-<li><a class="reference internal" href="#tortreinador.utils.tools.check_outlier"><code class="docutils literal notranslate"><span class="pre">check_outlier()</span></code></a></li>
-<li><a class="reference internal" href="#tortreinador.utils.tools.xavier_init"><code class="docutils literal notranslate"><span class="pre">xavier_init()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-tortreinador.utils">Module contents</a></li>
-</ul>
-</li>
-</ul>
+              
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-          </div>
-        </div>
-      </div>
-      
-      
-    </aside>
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
   </div>
-</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/scripts/furo.js"></script>
-    </body>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-tortreinador.utils.Recorder">tortreinador.utils.Recorder module</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.CheckpointRecorder"><code class="docutils literal notranslate"><span class="pre">CheckpointRecorder</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.CheckpointRecorder.initial"><code class="docutils literal notranslate"><span class="pre">CheckpointRecorder.initial()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.CheckpointRecorder.reload"><code class="docutils literal notranslate"><span class="pre">CheckpointRecorder.reload()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.CheckpointRecorder.update"><code class="docutils literal notranslate"><span class="pre">CheckpointRecorder.update()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.CheckpointRecorder.update_by_condition"><code class="docutils literal notranslate"><span class="pre">CheckpointRecorder.update_by_condition()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.MetricDefine"><code class="docutils literal notranslate"><span class="pre">MetricDefine</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.MetricDefine.metric_mode"><code class="docutils literal notranslate"><span class="pre">MetricDefine.metric_mode</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.MetricDefine.metric_name"><code class="docutils literal notranslate"><span class="pre">MetricDefine.metric_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.MetricDefine.metric_value"><code class="docutils literal notranslate"><span class="pre">MetricDefine.metric_value</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.MetricDefine.update"><code class="docutils literal notranslate"><span class="pre">MetricDefine.update()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.MetricDefine.use_as_baseline"><code class="docutils literal notranslate"><span class="pre">MetricDefine.use_as_baseline</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.MetricDefine.use_as_criterion"><code class="docutils literal notranslate"><span class="pre">MetricDefine.use_as_criterion</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.MetricDefine.use_as_valloss"><code class="docutils literal notranslate"><span class="pre">MetricDefine.use_as_valloss</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.MetricDefine.use_for_log"><code class="docutils literal notranslate"><span class="pre">MetricDefine.use_for_log</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.MetricManager"><code class="docutils literal notranslate"><span class="pre">MetricManager</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.MetricManager.check_metric_exist"><code class="docutils literal notranslate"><span class="pre">MetricManager.check_metric_exist()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.MetricManager.get_metrics_by_mode"><code class="docutils literal notranslate"><span class="pre">MetricManager.get_metrics_by_mode()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.MetricManager.get_metrics_by_name"><code class="docutils literal notranslate"><span class="pre">MetricManager.get_metrics_by_name()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.MetricManager.get_metrics_for_log"><code class="docutils literal notranslate"><span class="pre">MetricManager.get_metrics_for_log()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.MetricManager.update"><code class="docutils literal notranslate"><span class="pre">MetricManager.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.Recorder"><code class="docutils literal notranslate"><span class="pre">Recorder</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.Recorder.avg"><code class="docutils literal notranslate"><span class="pre">Recorder.avg()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.Recorder.reset"><code class="docutils literal notranslate"><span class="pre">Recorder.reset()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.Recorder.update"><code class="docutils literal notranslate"><span class="pre">Recorder.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.RecorderForEpoch"><code class="docutils literal notranslate"><span class="pre">RecorderForEpoch</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.RecorderForEpoch.avg"><code class="docutils literal notranslate"><span class="pre">RecorderForEpoch.avg()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.RecorderForEpoch.reset"><code class="docutils literal notranslate"><span class="pre">RecorderForEpoch.reset()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.Recorder.RecorderForEpoch.update"><code class="docutils literal notranslate"><span class="pre">RecorderForEpoch.update()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-tortreinador.utils.View">tortreinador.utils.View module</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.View.get_lastlayer_params"><code class="docutils literal notranslate"><span class="pre">get_lastlayer_params()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.View.he_init_normal"><code class="docutils literal notranslate"><span class="pre">he_init_normal()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.View.he_init_uniform"><code class="docutils literal notranslate"><span class="pre">he_init_uniform()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.View.init_bias"><code class="docutils literal notranslate"><span class="pre">init_bias()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.View.init_weights"><code class="docutils literal notranslate"><span class="pre">init_weights()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.View.split_weights"><code class="docutils literal notranslate"><span class="pre">split_weights()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.View.visualize_lastlayer"><code class="docutils literal notranslate"><span class="pre">visualize_lastlayer()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.View.visualize_learning_rate"><code class="docutils literal notranslate"><span class="pre">visualize_learning_rate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.View.visualize_network"><code class="docutils literal notranslate"><span class="pre">visualize_network()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.View.visualize_param_hist"><code class="docutils literal notranslate"><span class="pre">visualize_param_hist()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.View.visualize_test_acc"><code class="docutils literal notranslate"><span class="pre">visualize_test_acc()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.View.visualize_test_loss"><code class="docutils literal notranslate"><span class="pre">visualize_test_loss()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.View.visualize_train_loss"><code class="docutils literal notranslate"><span class="pre">visualize_train_loss()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.View.xavier_init"><code class="docutils literal notranslate"><span class="pre">xavier_init()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-tortreinador.utils.WarmUpLR">tortreinador.utils.WarmUpLR module</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.WarmUpLR.WarmUpLR"><code class="docutils literal notranslate"><span class="pre">WarmUpLR</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.WarmUpLR.WarmUpLR.get_lr"><code class="docutils literal notranslate"><span class="pre">WarmUpLR.get_lr()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-tortreinador.utils.metrics">tortreinador.utils.metrics module</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.metrics.chamfer_distance"><code class="docutils literal notranslate"><span class="pre">chamfer_distance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.metrics.evaluation"><code class="docutils literal notranslate"><span class="pre">evaluation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.metrics.mixture"><code class="docutils literal notranslate"><span class="pre">mixture()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.metrics.r2_score"><code class="docutils literal notranslate"><span class="pre">r2_score()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-tortreinador.utils.plot">tortreinador.utils.plot module</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.plot.calculate_GMM"><code class="docutils literal notranslate"><span class="pre">calculate_GMM()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.plot.plot_line_2"><code class="docutils literal notranslate"><span class="pre">plot_line_2()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-tortreinador.utils.preprocessing">tortreinador.utils.preprocessing module</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.preprocessing.ScalerConfig"><code class="docutils literal notranslate"><span class="pre">ScalerConfig</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.preprocessing.ScalerConfig.feature_range"><code class="docutils literal notranslate"><span class="pre">ScalerConfig.feature_range</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.preprocessing.ScalerConfig.method"><code class="docutils literal notranslate"><span class="pre">ScalerConfig.method</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.preprocessing.ScalerConfig.normal_y"><code class="docutils literal notranslate"><span class="pre">ScalerConfig.normal_y</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.preprocessing.ScalerConfig.on"><code class="docutils literal notranslate"><span class="pre">ScalerConfig.on</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.preprocessing.ScalerConfig.select_scaler"><code class="docutils literal notranslate"><span class="pre">ScalerConfig.select_scaler()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.preprocessing.ScalerConfig.validate"><code class="docutils literal notranslate"><span class="pre">ScalerConfig.validate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.preprocessing.cov_adj_compose"><code class="docutils literal notranslate"><span class="pre">cov_adj_compose()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.preprocessing.cov_decompose"><code class="docutils literal notranslate"><span class="pre">cov_decompose()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.preprocessing.get_dataloader"><code class="docutils literal notranslate"><span class="pre">get_dataloader()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.preprocessing.legal_global"><code class="docutils literal notranslate"><span class="pre">legal_global()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.preprocessing.legal_log_space"><code class="docutils literal notranslate"><span class="pre">legal_log_space()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.preprocessing.load_data"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.preprocessing.log_space_noise_injection"><code class="docutils literal notranslate"><span class="pre">log_space_noise_injection()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.preprocessing.noise_generator"><code class="docutils literal notranslate"><span class="pre">noise_generator()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.preprocessing.noise_injection"><code class="docutils literal notranslate"><span class="pre">noise_injection()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.preprocessing.p_calculation"><code class="docutils literal notranslate"><span class="pre">p_calculation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.preprocessing.save_npy"><code class="docutils literal notranslate"><span class="pre">save_npy()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.preprocessing.save_scaler"><code class="docutils literal notranslate"><span class="pre">save_scaler()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-tortreinador.utils.tools">tortreinador.utils.tools module</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.tools.check_outlier"><code class="docutils literal notranslate"><span class="pre">check_outlier()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tortreinador.utils.tools.xavier_init"><code class="docutils literal notranslate"><span class="pre">xavier_init()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-tortreinador.utils">Module contents</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="_sources/tortreinador.utils.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Xavier.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.2.0.
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
 </html>

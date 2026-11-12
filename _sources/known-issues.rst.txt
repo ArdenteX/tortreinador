@@ -1,0 +1,80 @@
+Known issues in the audited snapshot
+====================================
+
+These defects were reproduced without changing production code. Their strict
+regression tests assert the intended behavior. ``xfail`` reports an outstanding
+defect; it does not certify the feature as working.
+
+.. list-table:: Confirmed defects
+   :header-rows: 1
+   :widths: 12 43 45
+
+   * - ID
+     - Observed behavior
+     - Practical consequence / current approach
+   * - TT-01
+     - Recorder fails on float updates after an integer tensor.
+     - Supply floating-point metric tensors consistently.
+   * - TT-02
+     - Default trainer metric manager has no criterion.
+     - Always provide explicit metric definitions.
+   * - TT-03
+     - ``continue_fit`` raises ``KeyError: lr_schedule``.
+     - Automatic resume is unavailable.
+   * - TT-04
+     - Checkpoint reload expects ``optimizer``, which is not saved under that key.
+     - Saved state dictionaries work for inference; resume needs a future fix.
+   * - TT-05
+     - Milestone scheduling without warmup subtracts ``None``.
+     - Use an explicit scheduler callback for that configuration.
+   * - TT-06
+     - Cosine restart mode is never assigned; learning rate stays unchanged.
+     - Both batch and epoch configurations have reproduction tests.
+   * - TT-07
+     - Mode-0 metrics aggregate training and validation batches together.
+     - Use separate training and validation metric names/modes.
+   * - TT-08
+     - ``TRAIN_COMPLETE`` is declared but not dispatched.
+     - Run completion actions after ``fit`` returns.
+   * - TT-09
+     - Sequential normalized splitting ignores ``normal_y=False``.
+     - Scale explicitly after splitting if targets must stay in original units.
+   * - TT-10
+     - Shuffled normalized splitting overlaps training and validation samples.
+     - Split independently, fit scalers on training data only, then transform.
+   * - TT-11
+     - ``evaluation`` passes the removed sklearn ``squared=False`` argument.
+     - Compute RMSE using the current sklearn API directly.
+   * - TT-12
+     - Incomplete metric update lists silently retain stale values.
+     - Match the active metric count; use named updates carefully.
+   * - TT-13
+     - LossMaintainer statistics are unimplemented.
+     - Treat the class as experimental data collection, not loss stabilization.
+   * - TT-14
+     - HPO dataset search reads fixed dataloaders before initialization.
+     - Keep dataset parameters fixed for the tested HPO path.
+
+Reproduce failures
+------------------
+
+.. code-block:: console
+
+   python -m pytest -m known_bug --runxfail
+
+TT-14 is in ``tests/test_hpo.py``; the other failures are in
+``tests/test_known_bugs.py``. TT-06 has two parameterized cases.
+
+Additional boundaries
+---------------------
+
+The package metadata still advertises Python 3.7 even though imports include
+``typing.Literal`` and dependency requirements have evolved. PyTorch and Optuna
+are not both declared as install dependencies. ``setup.py``, ``pyproject.toml``
+and ``requirements.txt`` disagree on some dependency minima. The audit leaves
+these declarations unchanged as requested.
+
+Other cases needing dedicated validation include empty loaders, invalid split
+fractions, constant-target R², weighted epoch aggregation, repeated ``fit`` on
+one trainer, optimizer/device migration, and interruption recovery. A source
+docstring also emits an invalid escape-sequence SyntaxWarning on fresh import.

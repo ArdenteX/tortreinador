@@ -1,7 +1,13 @@
-tortreinador
-============
+API reference
+=============
+
+Signatures below are generated from the current source checkout. The user
+guides explain the recommended workflows; :doc:`known-issues` takes precedence
+where a legacy docstring describes behavior that does not currently work.
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 2
 
    tortreinador
+   tortreinador.events
+   tortreinador.hpo

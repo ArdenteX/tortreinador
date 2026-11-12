@@ -1,0 +1,75 @@
+Metrics and logging
+===================
+
+Define each metric once
+-----------------------
+
+.. code-block:: python
+
+   from tortreinador.utils.Recorder import MetricDefine, MetricManager
+
+   manager = MetricManager([
+       MetricDefine('train_loss', metric_mode=1, use_as_criterion=True),
+       MetricDefine('val_loss', metric_mode=2, use_as_valloss=True, use_for_log=True),
+       MetricDefine('val_r2', metric_mode=2, use_as_baseline=True, use_for_log=True),
+   ])
+
+.. list-table:: Metric flags
+   :header-rows: 1
+
+   * - Field
+     - Behavior
+   * - ``metric_mode=0``
+     - Updated in both phases. It does not mean an averaging algorithm.
+   * - ``metric_mode=1`` / ``2``
+     - Training-only / validation-only.
+   * - ``use_as_criterion``
+     - Retain the tensor graph and use this value for backward.
+   * - ``use_as_valloss``
+     - Select the loss compared against ``best_loss``.
+   * - ``use_as_baseline``
+     - Select the higher-is-better score compared against ``best_metric``.
+   * - ``use_for_log``
+     - Include this metric in the built-in CSV output.
+
+Set exactly one criterion and explicit modes. Set a validation loss flag even
+when selecting checkpoints by a score: the detector reads the loss recorder too.
+
+Update active values
+--------------------
+
+For the manager above, return ``[loss]`` in training mode and ``[loss, r2]`` in
+validation mode. Named updates such as ``{'val_loss': loss, 'val_r2': score}``
+avoid ordering mistakes. Provide tensors, not Python floats. Non-criterion
+metrics are detached automatically. Missing list entries are not rejected by
+the current implementation (TT-12), so verify your list length.
+
+Interpret aggregation correctly
+-------------------------------
+
+``Recorder`` averages batch values with equal weight per batch. An incomplete
+last batch therefore receives the same weight as a full batch. Averaged batch
+R² is not the same as R² over all validation samples. For a dataset-level score,
+collect predictions and compute it once after inference.
+
+Mode-0 recorders currently combine training and validation observations until
+the epoch ends. Use distinct mode-1 and mode-2 metric names, as in the
+:doc:`quickstart`, when reporting held-out performance.
+
+Choose an output
+----------------
+
+* ``data_save_mode='recorder'`` returns event listeners containing history tensors.
+* ``data_save_mode='csv'`` writes selected metrics to
+  ``metric_logs/val_log_<timestamp>.csv`` and returns ``'OK'``.
+* ``data_save_mode=None`` disables those history/CSV listeners and returns ``None``.
+
+CSV files are placed under ``model_save_path`` when supplied, otherwise under
+the current directory. Rows use one-based epoch numbers and are emitted on
+validation epochs. Timestamp granularity is one minute; use separate run
+directories to avoid collisions.
+
+Set ``log_dir`` on the trainer for TensorBoard event files. The current writer
+records training loss and last-layer gradient norms; it does not automatically
+log every registered metric. Close it with ``trainer.writer.close()`` after
+training. Last-layer gradient logging assumes a trainable weight and bias.

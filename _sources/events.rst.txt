@@ -1,0 +1,61 @@
+Extend training with events
+===========================
+
+An event is an object with ``on_fire(event_type, trainer, **kwargs)``. Subscribe
+before calling ``fit``. Listeners run in subscription order.
+
+.. code-block:: python
+
+   from tortreinador.Events.event_system import Event, EventType
+
+   class PrintEpoch(Event):
+       def on_fire(self, event_type, trainer, **kwargs):
+           print('Completed epoch', trainer.current_epoch + 1)
+
+   # trainer is the instance created in the quickstart.
+   trainer.subscribe(EventType.TRAIN_EPOCH_END, PrintEpoch())
+
+Callbacks emitted by the current loop
+-------------------------------------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Event
+     - When it fires
+   * - ``TRAIN_INIT``
+     - Before checkpoint setup and the epoch loop; registers built-in listeners.
+   * - ``TRAIN_EPOCH_START``
+     - After setting training mode and the zero-based ``current_epoch``.
+   * - ``TRAIN_BATCH_END``
+     - After an optimizer step; includes ``batch_idx``.
+   * - ``VALIDATION_END``
+     - After all validation batches, only on validation epochs.
+   * - ``TRAIN_EPOCH_END``
+     - After validation and before recorders reset.
+   * - ``BEST_MODEL_DETECTED``
+     - When the detector finds an improvement, if enabled.
+   * - ``INFO``
+     - Configuration, checkpoint and other informational messages.
+
+Several additional enum values are declared but not emitted by ``fit``.
+In particular, ``TRAIN_COMPLETE`` and ``TRAIN_EPOCH_END_RECORD`` are not
+general callback hooks in this snapshot. History works through the
+``VALIDATION_END`` subscription. Use the emitted events in the table or
+explicitly trigger your own event with ``trainer.trigger(...)``.
+
+Learning-rate schedules
+-----------------------
+
+Warmup steps on training batches. Its total iteration count is
+``len(train_loader) * warmup_epochs``. Milestone decay without warmup raises
+an error; cosine restart configuration does not step its scheduler (TT-05/06).
+If scheduling is essential, use an explicit callback with a PyTorch scheduler
+and leave the corresponding built-in schedule disabled.
+
+Logging events
+--------------
+
+``config_generator(logger_on=True, logger_dir=existing_directory)`` enables
+console and rotating-file logs. A custom ``logging.Logger`` may be supplied.
+``logger_file_max_bytes`` and ``logger_file_backup_count`` control rotation.

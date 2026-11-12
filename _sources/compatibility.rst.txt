@@ -1,0 +1,65 @@
+Compatibility and validation
+============================
+
+Audit date: **November 12, 2026**. Source version: **0.2.5**, local checkout
+based on commit ``a3d1265deb4bae915d42a5fbd8b7caa19b020d0e``.
+
+Result
+------
+
+The project installs, imports and performs real CPU training on
+**CPython 3.15.2 with PyTorch 2.15.0+cpu** on Windows x86-64. It cannot yet be
+described as fully stable: the suite reproduces functional defects in resume,
+validation aggregation, preprocessing and scheduling. See :doc:`known-issues`.
+No production implementation was modified in this audit.
+
+The current stable Python version was checked against the
+`Python downloads page <https://www.python.org/downloads/>`_. PyTorch wheel
+availability was checked against `PyPI metadata <https://pypi.org/pypi/torch/json>`_
+and verified by installing the CPU wheel. These observations are dated, not
+a promise about future dependency releases.
+
+Environment
+-----------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Component
+     - Tested version / scope
+   * - Python
+     - 3.15.2, standard CPython build
+   * - PyTorch
+     - 2.15.0+cpu
+   * - NumPy / pandas
+     - 2.5.4 / 3.1.1
+   * - scikit-learn / Optuna
+     - 1.9.1 / 5.0.0
+   * - Platform
+     - Windows x86-64; no Linux/macOS or free-threaded runtime certification
+   * - Accelerator
+     - CPU tested; the CUDA regression is conditional and skipped in this environment
+
+The older local Python 3.9.23 / PyTorch 2.5.1+cu124 environment was used only
+to run the two existing unit-test modules: **12 passed, 1 failed** (Recorder
+dtype handling). This establishes that TT-01 predates the Python upgrade;
+it is not a full compatibility certification for that older environment.
+
+Evidence and limits
+-------------------
+
+The maintained suite contains **118 cases: 102 passed, 15 expected failures
+covering 14 known defects, and 1 CUDA skip**. Line coverage is **86%**
+(1,410 of 1,641 statements executed). Expected failures remain unresolved.
+
+``validation/pytest-315.xml`` and ``validation/pytest-315.txt`` record the
+maintained suite results. ``validation/coverage.xml`` records line coverage,
+and ``validation/environment-315.txt`` captures installed dependencies.
+The downloadable quickstart is executed by the tests and checked for prediction
+accuracy. Packaging was built and installed from an isolated copy, preserving
+the user's existing metadata files.
+
+Successful tests cover actual optimization, MDN gradients, independent numerical
+checks, recorder behavior, event dispatch, CSV/TensorBoard output, checkpoint
+files, preprocessing, clustering, plotting and one real Optuna trial.
+They do not prove every possible input or device combination correct.

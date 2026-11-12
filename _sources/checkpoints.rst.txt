@@ -1,0 +1,62 @@
+Save checkpoints and load predictions
+=====================================
+
+Write model state
+-----------------
+
+Create the directory before training. With the quickstart's explicit metrics:
+
+.. code-block:: python
+
+   from pathlib import Path
+   from tortreinador.train import config_generator
+
+   run_dir = Path('runs/experiment-01')
+   run_dir.mkdir(parents=True, exist_ok=True)
+   config = config_generator(model_save_path=str(run_dir), auto_save=5,
+                             best_loss=float('inf'))
+   history = trainer.fit(train, val, **config)
+
+Periodic saves produce ``<timestamp>_current_model.pth`` and
+``<timestamp>_current_optimizer.pth``. Best-model saves use ``best`` instead
+of ``current``. A ``check_point_<timestamp>.pth`` file stores configuration,
+epoch metadata and paths to those files. Files are overwritten as the same run
+progresses; this is not a separate archive for every epoch.
+
+Both the best-save and periodic-save listener are registered only when
+``auto_save`` and ``model_save_path`` are provided. A best threshold alone
+enables detection, not persistence. A best save resets the periodic counter.
+
+Load weights for inference
+--------------------------
+
+Recreate the same architecture and load the model state dictionary:
+
+.. code-block:: python
+
+   import torch
+   from torch import nn
+
+   model = nn.Linear(1, 1)  # Same architecture as the quickstart.
+   state = torch.load('runs/experiment-01/<timestamp>_best_model.pth',
+                      map_location='cpu', weights_only=True)
+   model.load_state_dict(state)
+   model.eval()
+   with torch.no_grad():
+       predictions = model(torch.tensor([[0.5]]))
+
+Use the actual generated filename in place of ``<timestamp>``. Save any fitted
+input/target scalers alongside your experiment so inference uses identical
+preprocessing.
+
+Resume status
+-------------
+
+Automatic resume is currently broken in two independent places:
+``continue_fit`` calls ``fit`` without the required initial configuration,
+and ``CheckpointRecorder.reload`` expects an optimizer key that saving does
+not create. These are TT-03 and TT-04 in :doc:`known-issues`.
+
+Loading a model state for inference works; it is not equivalent to resuming
+the optimizer, schedulers and epoch counters. Do not rely on the current
+``continue_fit`` path for uninterrupted experiment continuation.
